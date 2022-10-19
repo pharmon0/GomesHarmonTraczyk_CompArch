@@ -3,13 +3,23 @@
  * Instruction Datatype Module */
 
 // Start Header Guard
-#ifndef GHT_INSTRUCTION
-#define GHT_INSTRUCTION
+#ifndef GHT_DATATYPES
+#define GHT_DATATYPES
 
 //============================================
 // Libraries
 //============================================
 #include <cstdint>   //Standard Int Types
+
+//============================================
+// data32_t Datatype
+// - Unifies 32-bit datatypes
+//============================================
+typedef union{
+    uint32_t uinteger;
+    int32_t  integer;
+    float    single;
+} data32_t;
 
 //============================================
 // Instruction Datatype
