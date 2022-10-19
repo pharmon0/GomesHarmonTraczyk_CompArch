@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * Instruction Datatype Module */
 
 // Start Header Guard
-#ifndef HARMON_INSTRUCTION
-#define HARMON_INSTRUCTION
+#ifndef GHT_INSTRUCTION
+#define GHT_INSTRUCTION
 
 //============================================
 // Libraries

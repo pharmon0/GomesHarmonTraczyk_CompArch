@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * ALU Object Module */
 
 // Start Header Guard
-#ifndef HARMON_ALU
-#define HARMON_ALU
+#ifndef GHT_ALU
+#define GHT_ALU
 
 //============================================
 // Libraries

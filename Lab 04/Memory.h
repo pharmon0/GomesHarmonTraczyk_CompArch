@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * Memory Object Module */
 
 // Start Header Guard
-#ifndef HARMON_MEMORY
-#define HARMON_MEMORY
+#ifndef GHT_MEMORY
+#define GHT_MEMORY
 
 //============================================
 // Libraries

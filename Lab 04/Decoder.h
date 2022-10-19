@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * Decode Stage Module */
 
 // Start Header Guard
-#ifndef HARMON_DECODER
-#define HARMON_DECODER
+#ifndef GHT_DECODER
+#define GHT_DECODER
 
 //============================================
 // Libraries

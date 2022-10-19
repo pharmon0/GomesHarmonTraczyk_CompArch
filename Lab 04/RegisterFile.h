@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * Register File Object Module */
 
 // Start Header Guard
-#ifndef HARMON_REGISTER_FILE
-#define HARMON_REGISTER_FILE
+#ifndef GHT_REGISTER_FILE
+#define GHT_REGISTER_FILE
 
 //============================================
 // Libraries

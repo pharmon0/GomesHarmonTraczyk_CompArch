@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * RISC-V Definitions Module */
 
 // Start Header Guard
-#ifndef HARMON_RISCV
-#define HARMON_RISCV
+#ifndef GHT_RISCV
+#define GHT_RISCV
 
 //============================================
 // Constants and Macros

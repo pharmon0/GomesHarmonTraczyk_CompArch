@@ -1,10 +1,10 @@
-/* ECGR 5181 - Computer Architecture
- * Phillip Harmon
+/* ECGR 4181/5181 - Computer Architecture
+ * Stanly Gomes, Phillip Harmon, Gibert Traczyk
  * Helper Functions Module */
 
 // Start Header Guard
-#ifndef HARMON_FUNCTIONS
-#define HARMON_FUNCTIONS
+#ifndef GHT_FUNCTIONS
+#define GHT_FUNCTIONS
 
 //============================================
 // Libraries
