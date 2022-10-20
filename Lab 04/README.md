@@ -20,6 +20,7 @@ Holds an array of 32 integers and an array of 32 floats. This is the Register fi
    - (1bit) rdflop : sets rd as a float value.
  - functions
    - void processRead(void) : tick the register file read ports
+   - void processWrite(void) : tick the register file write port
 ### Datatypes.h
 Provides a collection of datatypes with various uses.
  - datatypes
