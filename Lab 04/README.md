@@ -17,3 +17,6 @@ Holds an array of 32 integers and an array of 32 floats. This is the Register fi
    - (1bit) r1flop : sets rs1 as a float value.
    - (1bit) r2flop : sets rs2 as a float value.
    - (1bit) rdflop : sets rd as a float value.
+ - functions
+   - void processRead(void) : tick the register file read ports
+###
