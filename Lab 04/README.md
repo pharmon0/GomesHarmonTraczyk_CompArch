@@ -24,6 +24,6 @@ Holds an array of 32 integers and an array of 32 floats. This is the Register fi
 Provides a collection of datatypes with various uses.
  - datatypes
    - instruction_t
-      This is a union datatype that contains a uint32_t and a large set of bitmapped values. These bitmaps correspond to the fields in various RISCV instruction types. This allows for easy reading of instruction data in the decode stage.
+     - This is a union datatype that contains a uint32_t and a large set of bitmapped values. These bitmaps correspond to the fields in various RISCV instruction types. This allows for easy reading of instruction data in the decode stage.
    - data32_t
-      This is a union datatype that contains a uint32_t, an int32_t, and a float. This allows for easy handling of type-ambiguous data busses.
+     - This is a union datatype that contains a uint32_t, an int32_t, and a float. This allows for easy handling of type-ambiguous data busses.
