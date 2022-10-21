@@ -205,6 +205,8 @@
 #define OP_sra   0x40005033 //0100|000 X|XXXX| XXXX|X 101| XXXX|X 011|0011
 #define OP_or    0x00006033 //0100|000 X|XXXX| XXXX|X 110| XXXX|X 011|0011
 #define OP_and   0x00007033 //0100|000 X|XXXX| XXXX|X 111| XXXX|X 011|0011
+#define OP_fadd  0x00000053 //0000|000 X|XXXX| XXXX|X 000| XXXX|X 101|0011
+#define OP_fsub  0x04000053 //0000|100 X|XXXX| XXXX|X 000| XXXX|X 101|0011
 //I-type : Arithmatic Variant           [11:0]    rs1  fn3     rd       op
 #define OP_addi  0x00000013 //XXXX|XXX X|XXXX| XXXX|X 000| XXXX|X 001|0011
 #define OP_slti  0x00002013 //XXXX|XXX X|XXXX| XXXX|X 010| XXXX|X 001|0011
@@ -222,10 +224,12 @@
 #define OP_lw    0x00002003 //XXXX|XXX X|XXXX| XXXX|X 010| XXXX|X 000|0011
 #define OP_lbu   0x00004003 //XXXX|XXX X|XXXX| XXXX|X 100| XXXX|X 000|0011
 #define OP_lhu   0x00005003 //XXXX|XXX X|XXXX| XXXX|X 101| XXXX|X 000|0011
+#define OP_flw   0x00002007 //XXXX|XXX X|XXXX| XXXX|X 010| XXXX|X 000|0111
 //S-type                         [11:5]    rs2    rs1  fn3   [4:0]      op
 #define OP_sb    0x00000023 //XXXX|XXX X|XXXX| XXXX|X 000| XXXX|X 010|0011
 #define OP_sh    0x00001023 //XXXX|XXX X|XXXX| XXXX|X 001| XXXX|X 010|0011
 #define OP_sw    0x00002023 //XXXX|XXX X|XXXX| XXXX|X 010| XXXX|X 010|0011
+#define OP_fsw   0x00002027 //XXXX|XXX X|XXXX| XXXX|X 010| XXXX|X 010|0111
 //B-type                       12[10:5]    rs2    rs1 fn3 [4:1]11       op
 #define OP_beq   0x00000063 //XXXX|XXX X|XXXX| XXXX|X 000| XXXX|X 110|0011
 #define OP_bne   0x00001063 //XXXX|XXX X|XXXX| XXXX|X 001| XXXX|X 110|0011
