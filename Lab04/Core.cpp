@@ -17,25 +17,48 @@ Core::Core(void){
 bool Core::process(void){
  //Writeback Stage (Memory Access and Register File Writeback)
    //check portD
+    //TODO memory D-Port
    //writeback
+    this->rf.rfctrl.rfwen = this->ewr.output.rfctrl.rfwen;
+    this->rf.rfctrl.selrd = this->ewr.output.rfctrl.selrd;
+    //this->rf.rd = //TODO;
+    this-rf.processWrite();
    //make request to portD
+    //TODO memory D-Port
+    this->ctrl.stallW = 0; //TODO stall based on D-Port
+
  //Execute Stage (Process Register File and ALU)
    //access register file
+    this->rf.rfctrl = this->der.output.rfctrl;
+    this->rf.processRead();
    //run alu
+    if(this->der.output.bctrl.halt) return 1; //HALT ON EXECUTE OF HALT INSTRUCTION
+    this->alu.A = (this->der.output.aluctrl.aluasel)?(this->der.output.pc):(this->rf.rs1);
+    this->alu.B = (this->der.output.aluctrl.alubsel)?(this->der.output.imm):(this->rf.rs2);
+    this->alu.aluctrl.aluop = this->der.output.aluctrl.aluop;
+    this->alu.aluctrl.alucomp = this->der.output.aluctrl.alucomp;
+    //TODO set ALU float mode
+    this->alu.process();
+    //TODO update ALU to use a counter for floating delay
+    this->ctrl.stallE = 0; //TODO stall based on ALU delay
    //save EWRegister
+    this->ewr.input.aluX = this->alu.X;
+    this->ewr.input.pc   = this->der.output.pc;
+    this->ewr.input.imm  = this->der.output.imm;
+    this->ewr.input.rs2  = this->rf.rs2;
     this->ewr.process();
+
  //Decode Stage (Decode Fetched instructions)
    //run decoder
     //TODO update Decoder to use port->process paradigm instead of process(data)
     this->dec.instruction = this->fdr.output.i;
     this->dec.process();
-   //Process Immediate
-    int32_t immediate = immSignExtendShift(this->decoder.immctrl.value,
+   //save DERegister
+    //TODO handle data hazards
+    this->ctrl.stallD = 0; //TODO stall based on Datahazards
+    this->der.input.imm = immSignExtendShift(this->decoder.immctrl.value,
                                            this->decoder.immctrl.immsize,
                                            this->decoder.immctrl.immshft);
-    //TODO handle data hazards
-    this->ctrl.stallD = 0; //PLACEHOLDER FOR DATAHAZARD CONTROL
-   //save DERegister
     this->der.input.rfctrl  = this->dec.rfctrl;
     this->der.input.aluctrl = this->dec.aluctrl;
     this->der.input.memctrl = this->dec.memctrl;
@@ -47,9 +70,16 @@ bool Core::process(void){
                          || this->ctrl.stallE
                          || this->ctrl.stallW; 
     this->der.process();
+
  //Fetch Stage (Interact with I Port and Update PC)
-   //if memory is busy, stall and wait.
+   //Update PC
+    //TODO update PC
+   //Make Memory Request for next cycle if not busy
     this->ctrl.stallF = this->portI.ctrl.membusy;
+    if(!this->portI.ctrl.membusy){
+        this->portI.address      = this->pc;
+        this->portI.ctrl.membusy = 1;
+    }
    //save FDRegister
     this->fdr.ctrl.no_op  = this->ctrl.stallF;
     this->fdr.ctrl.stall  = this->ctrl.stallF
@@ -59,13 +89,6 @@ bool Core::process(void){
     this->fdr.input.i = this->portI.data;
     this->fdr.input.pc = this->pc;
     this->fdr.process();
-   //Update PC
-    //TODO update PC
-   //Make Memory Request for next cycle
-    if(this->portI.ctrl.membusy){
-        this->portI.address      = this->pc;
-        this->portI.ctrl.membusy = 1;
-    }
-   //return TRUE if halt.
-    return this->dec.bctrl.halt;
+
+    return false;
 }
