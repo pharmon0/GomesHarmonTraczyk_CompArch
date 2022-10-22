@@ -8,8 +8,8 @@
 //============================================
 RegisterFile::RegisterFile(void){
     for(uint16_t i = 0; i < 32; i++){
-        this->iBank[i] = 0x00000000;
-        this->fBank[i] = 0.0;
+        this->iBank[i].integer = 0U;
+        this->fBank[i].integer = 0U;
     }
     this->ctrl.all = 0;
     this->rs1.uinteger = 0U;
@@ -22,16 +22,17 @@ RegisterFile::RegisterFile(void){
 // - processes data through the RF dataports
 //============================================
 void RegisterFile::processRead(void){
-    //load rs1 and rs2 to new values
+    //resolve whether rs1 is float or int
     if(this->ctrl.r1flop){
-        this->rs1.single = this->fBank[this->ctrl.selrs1];
+        this->rs1 = this->fBank[this->ctrl.selrs1];
     }else{
-        this->rs1.uinteger = this->iBank[this->ctrl.selrs1];
+        this->rs1 = this->iBank[this->ctrl.selrs1];
     }
+    //resolve whether rs2 is float or int
     if(this->ctrl.r2flop){
-        this->rs2.single = this->fBank[this->ctrl.selrs2];
+        this->rs2 = this->fBank[this->ctrl.selrs2];
     }else{
-        this->rs1.uinteger = this->iBank[this->ctrl.selrs2];
+        this->rs1 = this->iBank[this->ctrl.selrs2];
     }
 }
 
@@ -40,11 +41,13 @@ void RegisterFile::processRead(void){
 // - processes data through the RF dataports
 //============================================
 void RegisterFile::processWrite(void){
-    //if write enabled, store new rd value
-    if(!this->ctrl.rfwen) return;
+    //don't write if rfwen==0
+    //don't write to rd = X0
+    if((!this->ctrl.rfwen) || (this->ctrl.selrd == 0)) return;
+    //resolve float vs int
     if(this->ctrl.rdflop){
-        this->fBank[this->ctrl.selrd] = this->rd.single;
+        this->fBank[this->ctrl.selrd] = this->rd;
     }else{
-        this->iBank[this->ctrl.selrd] = this->rd.uinteger;
+        this->iBank[this->ctrl.selrd] = this->rd;
     }
 }
