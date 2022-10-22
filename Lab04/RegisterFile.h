@@ -22,8 +22,8 @@
 //============================================
 class RegisterFile{
     //register bank memory allocation
-    int32_t iBank[32];
-    float   fBank[32];
+    data32_t iBank[32];
+    data32_t fBank[32];
 
  public:
     //Constructors
