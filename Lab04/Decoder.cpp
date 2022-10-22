@@ -156,10 +156,20 @@ void Decoder::process(uint32_t input){
                     cout << "LH";
                 break;
                 case F3_LW:
-                    this->memctrl.memrsgn = 1;   //enable sign-extension
-                    this->memctrl.memrsz  = 0b11;//Word size
-                    cout << "LW";
-                break;
+                    switch(i.I.opcode){
+                        case OP_lw:
+                            this->memctrl.memrsgn = 1;   //enable sign-extension
+                            this->memctrl.memrsz  = 0b11;//Word size
+                            cout << "LW";
+                        break;
+                        case OP_flw:
+                            // TODO
+                            // Make flag for determining which register file to use (this instruction needs FP register file)
+                            this->rfctrl.selrf = 1;     //set flag to take registers from FP register file
+                            this->memctrl.memrsz = 0b11;//Word size
+                        break;
+                    }
+                break;    
             }
             cout << " X" << this->rfctrl.selrd
                  << ",X" << this->rfctrl.selrs1

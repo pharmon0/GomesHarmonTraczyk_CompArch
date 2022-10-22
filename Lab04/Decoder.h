@@ -44,6 +44,7 @@ class Decoder{
             uint16_t  selrs2 : 5; //select RS2        |
             uint16_t   selrd : 5; //select RD         |  
             uint16_t   rfwen : 1; //enable write to RD| 0:disable, 1:enable
+            uint16_t   selrf : 1; //select reg file   | 0:integer, 1:float
             uint16_t:0;//union alignment
         };
     } rfctrl; //Register File Control Signals
