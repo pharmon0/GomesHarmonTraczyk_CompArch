@@ -22,13 +22,13 @@
 class FDRegister{
  public:
     struct{  //Register Input Dataports
-        data32_t i;  //fetched instruction
-        data32_t pc; //fetched instruction address 
+        uint32_t i;  //fetched instruction
+        uint32_t pc; //fetched instruction address 
     } input; //Register Input Dataports
 
     struct{  //Register Output Dataports
-        data32_t i;  //fetched instruction
-        data32_t pc; //fetched instruction address 
+        uint32_t i;  //fetched instruction
+        uint32_t pc; //fetched instruction address 
     } output;//Register Output Dataports
 
     union{   //Register Controlports
@@ -53,8 +53,8 @@ class FDRegister{
 class DERegister{
  public:
     struct{  //Register Input Dataports
-        data32_t pc;  //Program Counter Value;
-        data32_t imm; //immediate value;
+        uint32_t pc;  //Program Counter Value;
+        uint32_t imm; //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;
@@ -102,8 +102,8 @@ class DERegister{
     } input; //Register Input Dataports
 
     struct{  //Register Output Dataports
-        data32_t pc;  //Program Counter Value;
-        data32_t imm; //immediate value;
+        uint32_t pc;  //Program Counter Value;
+        uint32_t imm; //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;
@@ -174,8 +174,8 @@ class EWRegister{
     struct{  //Register Input Dataports
         data32_t aluX;//ALU Result
         data32_t rs2; //RS2 Data
-        data32_t pc;  //Program Counter Value;
-        data32_t imm; //immediate value;
+        uint32_t pc;  //Program Counter Value;
+        uint32_t imm; //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;
@@ -223,8 +223,10 @@ class EWRegister{
     } input; //Register Input Dataports
 
     struct{  //Register Output Dataports
-        data32_t pc;  //Program Counter Value;
-        data32_t imm; //immediate value;
+        data32_t aluX;//ALU Result
+        data32_t rs2; //RS2 Data
+        uint32_t pc;  //Program Counter Value;
+        uint32_t imm; //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;

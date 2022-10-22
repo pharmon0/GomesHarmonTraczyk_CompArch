@@ -7,8 +7,8 @@
 // Constructors
 //============================================
 FDRegister::FDRegister(void){
-    this->input.i.integer = 0;
-    this->input.pc.integer = 0;
+    this->input.i = 0;
+    this->input.pc = 0;
     this->output = this->input;
     this->ctrl.all = 0;
 }
@@ -23,7 +23,14 @@ DERegister::DERegister(void){
     this->ctrl.all = 0;
 }
 EWRegister::EWRegister(void){
-        //TODO Fill this in!!!
+    this->input.aluX.integer = 0;
+    this->input.rs2.integer = 0;
+    this->input.imm = 0;
+    this->input.pc = 0;
+    this->input.rfctrl.all = 0;
+    this->input.aluctrl.all = 0;
+    this->input.memctrl.all = 0;
+    this->input.bctrl.all = 0;
     this->output = this->input;
     this->ctrl.all = 0;
 }
@@ -46,7 +53,12 @@ void DERegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        //TODO Fill this in!!!
+        this->input.imm = 0;
+        this->input.pc = 0;
+        this->input.rfctrl.all = 0;
+        this->input.aluctrl.all = 0;
+        this->input.memctrl.all = 0;
+        this->input.bctrl.all = 0;
     } else{
         this->output = this->input;
     }
@@ -56,7 +68,14 @@ void EWRegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        //TODO Fill this in!!!
+        this->input.aluX.integer = 0;
+        this->input.rs2.integer = 0;
+        this->input.imm = 0;
+        this->input.pc = 0;
+        this->input.rfctrl.all = 0;
+        this->input.aluctrl.all = 0;
+        this->input.memctrl.all = 0;
+        this->input.bctrl.all = 0;
     } else{
         this->output = this->input;
     }
