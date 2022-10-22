@@ -77,6 +77,9 @@ void Decoder::process(uint32_t input){
                  << "'" << endl;
             this->printCtrl();
         break;
+        case OPCODE_FR: //instruction is FP R-type
+
+        break;
         case OPCODE_I: //instruction is I-type
             this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
             this->rfctrl.selrd    = i.I.rd;  //get RD  from i
@@ -156,20 +159,10 @@ void Decoder::process(uint32_t input){
                     cout << "LH";
                 break;
                 case F3_LW:
-                    switch(i.I.opcode){
-                        case OP_lw:
-                            this->memctrl.memrsgn = 1;   //enable sign-extension
-                            this->memctrl.memrsz  = 0b11;//Word size
-                            cout << "LW";
-                        break;
-                        case OP_flw:
-                            // TODO
-                            // Make flag for determining which register file to use (this instruction needs FP register file)
-                            this->rfctrl.selrf = 1;     //set flag to take registers from FP register file
-                            this->memctrl.memrsz = 0b11;//Word size
-                        break;
-                    }
-                break;    
+                    this->memctrl.memrsgn = 1;   //enable sign-extension
+                    this->memctrl.memrsz  = 0b11;//Word size
+                    cout << "LW";
+                break;
             }
             cout << " X" << this->rfctrl.selrd
                  << ",X" << this->rfctrl.selrs1
@@ -177,6 +170,8 @@ void Decoder::process(uint32_t input){
                  << "]'" << endl;
             this->printCtrl();
         break;
+        case OPCODE_FL: //instruction is FP-Load type
+            // TODO
         case OPCODE_S: //instruction is S-type
             this->rfctrl.selrs1   = i.S.rs1; //get RS1 from i
             this->rfctrl.selrs2   = i.S.rs2; //get RD  from i
@@ -202,6 +197,9 @@ void Decoder::process(uint32_t input){
                  << "[" << immSignExtendShift(this->immctrl.value,this->immctrl.immsize,this->immctrl.immshft)
                  << "]'" << endl;
             this->printCtrl();
+        break;
+        case OPCODE_FS: //instruction is FP S-type
+
         break;
         case OPCODE_B: //instruction is B-type
             this->rfctrl.selrs1   = i.B.rs1; //get RS1 from i
