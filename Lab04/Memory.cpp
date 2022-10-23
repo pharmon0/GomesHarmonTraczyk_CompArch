@@ -25,7 +25,7 @@ void Memory::processPortI(void){
     }else{
         this->portI.memctrl.counter = 0; //memory done.
         this->portI.memctrl.ack = 1;
-        this->portI.data = this->read(this->portI.address,0b11); //read 32bits
+        this->portI.data = this->read(this->portI.address, 0b11); //read 32bits
     }
 }
 
@@ -35,14 +35,19 @@ void Memory::processPortI(void){
 //============================================
 void Memory::processPortD(void){
     if(this->portD.memctrl.memrsz == this->portD.memctrl.memwsz) return;
-    if(this->portD.memctrl.memrsz > this->portD.memctrl.memwsz){ //Load
-        if(!this->portD.memctrl.counter){
-            this->portD.memctrl.counter++; //count one cycle
-        }else{
-            this->portD.memctrl.counter = 0; //memory done.
-        }
+    if(!this->portD.memctrl.counter){
+        this->portD.memctrl.counter++; //count one cycle
+    }else if(this->portD.memctrl.memrsz > this->portD.memctrl.memwsz){ //Load
+        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.memctrl.ack = 1;
+        this->portD.data = this->read(this->portD.address,
+                                        this->portD.memctrl.memrsz);
     }else{ //Store
-
+        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.memctrl.ack = 1;
+        this->write(this->portD.address,
+                    this->portD.data,
+                    this->portD.memctrl.memrsz);
     }
 }
 
