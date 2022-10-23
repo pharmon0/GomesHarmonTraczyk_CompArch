@@ -39,8 +39,7 @@ bool Core::process(void){
     this->alu.aluctrl.alucomp = this->der.output.aluctrl.alucomp;
     //TODO set ALU float mode
     this->alu.process();
-    //TODO update ALU to use a counter for floating delay
-    this->ctrl.stallE = 0; //TODO stall based on ALU delay
+    this->ctrl.stallE = alu.aluctrl.busy;
    //save EWRegister
     this->ewr.input.aluX = this->alu.X;
     this->ewr.input.pc   = this->der.output.pc;
@@ -54,8 +53,15 @@ bool Core::process(void){
     this->dec.instruction = this->fdr.output.i;
     this->dec.process();
    //save DERegister
-    //TODO handle data hazards
-    this->ctrl.stallD = 0; //TODO stall based on Datahazards
+    //TEST data hazards
+    //TODO update for floating points
+    if(der.output.rfctrl.selrd == dec.rfctrl.rs1 || der.output.rfctrl.selrd == dec.rfctrl.rs2){
+      this->ctrl.stallD = 1;
+      if(der.output.rfctrl.selrd == 0){
+        this->ctrl.stallD = 0;
+      }
+    }
+      
     this->der.input.imm = immSignExtendShift(this->decoder.immctrl.value,
                                            this->decoder.immctrl.immsize,
                                            this->decoder.immctrl.immshft);
