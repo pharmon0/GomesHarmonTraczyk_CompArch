@@ -72,8 +72,6 @@ bool Core::process(void){
     this->der.process();
 
  //Fetch Stage (Interact with I Port and Update PC)
-   //Update PC
-    //TODO update PC
    //Make Memory Request for next cycle if not busy
     this->ctrl.stallF = this->portI.ctrl.membusy;
     if(!this->portI.ctrl.membusy){
@@ -82,13 +80,14 @@ bool Core::process(void){
     }
    //save FDRegister
     this->fdr.ctrl.no_op  = this->ctrl.stallF;
-    this->fdr.ctrl.stall  = this->ctrl.stallF
-                         || this->ctrl.stallD
+    this->fdr.ctrl.stall  = this->ctrl.stallD
                          || this->ctrl.stallE
                          || this->ctrl.stallW; 
     this->fdr.input.i = this->portI.data;
     this->fdr.input.pc = this->pc;
     this->fdr.process();
-
+   //Update PC
+    if(!this->fdr.ctrl.stall && !this->ctrl.stallF)
+      this->pc += 4U;
     return false;
 }
