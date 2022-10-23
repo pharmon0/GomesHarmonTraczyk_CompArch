@@ -37,7 +37,7 @@ class Core{
     DERegister der;
     EWRegister ewr;
     ArithmaticLogicUnit alu;
-    uint32_t pc;
+    uint32_t pc;    //CPU program counter
     //CPU Control
     union{
         uint8_t all;
