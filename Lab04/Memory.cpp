@@ -11,60 +11,86 @@ Memory::Memory(void){
     this->address = 0;
     this->data = 0;
     this->bank.clear();
+    this->counter = 0;
 }
 
-/*
 //============================================
-// Memory::processLoad
-//  Load data in dataport 'loaded' if memory read enabled
+// Memory::processPortI
+//  Read-only 32-bit word instructions
 //============================================
-void Memory::processLoad(void){
-    this->data = 0x0;
-    switch(this->ctrl.memrsz){
-        case 0b11: //Word-size
-            if(this->bank.find(this->address+3) != this->bank.end()){
-                this->data  = 0xFF000000 & (this->bank[this->address+3] << 24);
-            }
-            if(this->bank.find(this->address+2) != this->bank.end()){
-                this->data |= 0x00FF0000 & (this->bank[this->address+2] << 16);
-            }
-        case 0b10: //Half-size
-            if(this->bank.find(this->address+1) != this->bank.end()){
-                this->data |= 0x0000FF00 & (this->bank[this->address+1] << 8);
-            }
-        case 0b01: //Byte-size
-            if(this->bank.find(this->address) != this->bank.end()){
-                this->data |= 0x000000FF & (this->bank[this->address]);
-            }
-        break;
+void Memory::processPortI(void){
+    if(!this->portI.memctrl.request) return;
+    if(!this->portI.memctrl.counter){
+        this->portI.memctrl.counter++; //count one cycle
+    }else{
+        this->portI.memctrl.counter = 0; //memory done.
+        this->portI.memctrl.ack = 1;
+        this->portI.data = this->read(this->portI.address, 0b11); //read 32bits
     }
 }
 
 //============================================
-// Memory::processStore
-//  Store data 'store' in memory if memory write enabled
+// Memory::processPortD
+//  Read/Write 8,16,32-bit data
 //============================================
-void Memory::processStore(void){
-    switch(this->ctrl.memwsz){
-        case 0b11: //Word-size
-            this->bank[this->address+3] = ((uint8_t)((this->data>>24)&0xFF));
-            this->bank[this->address+2] = ((uint8_t)((this->data>>16)&0xFF));
-        case 0b10: //Half-size
-            this->bank[this->address+1] = ((uint8_t)((this->data>>8)&0xFF));
-        case 0b01: //Byte-size
-            this->bank[this->address]   = ((uint8_t)(this->data&0xFF));
-        break;
+void Memory::processPortD(void){
+    if(this->portD.memctrl.memrsz == this->portD.memctrl.memwsz) return;
+    if(!this->portD.memctrl.counter){
+        this->portD.memctrl.counter++; //count one cycle
+    }else if(this->portD.memctrl.memrsz > this->portD.memctrl.memwsz){ //Load
+        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.memctrl.ack = 1;
+        this->portD.data = this->read(this->portD.address,
+                                        this->portD.memctrl.memrsz);
+    }else{ //Store
+        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.memctrl.ack = 1;
+        this->write(this->portD.address,
+                    this->portD.data,
+                    this->portD.memctrl.memrsz);
     }
 }
-*/
 
 //============================================
-// Memory::process
-//  contains a statemachine to handle
-//  - Load or Store selection
-//  - Item Width
-//  - Artificial Delay
+// Memory::read (private)
+//  returns memory data
 //============================================
-void Memory::process(void){
+uint32_t Memory::read(uint32_t addr, uint8_t size){
+    uint32_t value = 0;
+    //access memory byte-wise and check if nonzero data is present.
+    switch(size){
+        case 0b11://WORD
+            if(this->bank.find(addr+3) != this->bank.end())
+                value |= ((uint32_t)(this->bank[addr+3])) << 24;
+            if(this->bank.find(addr+2) != this->bank.end())
+                value |= ((uint32_t)(this->bank[addr+2])) << 16;
+        case 0b10://HALF
+            if(this->bank.find(addr+1) != this->bank.end())
+                value |= ((uint32_t)(this->bank[addr+1])) << 8;
+        case 0b01://BYTE
+            if(this->bank.find(addr) != this->bank.end())
+                value |= (uint32_t)(this->bank[addr]);
+    }
+    return value;
+}
 
+//============================================
+// Memory::write (private)
+//  stores memory data
+//============================================
+void Memory::write(uint32_t addr, uint32_t value, uint8_t size){
+    switch(size){
+        //access memory bytewise and delete zeroed data
+        case 0b11://WORD
+            this->bank[addr+3] = 0xFF & (value >> 24);
+            if(this->bank[addr+3] == 0) this->bank.erase(addr+3)
+            this->bank[addr+2] = 0xFF & (value >> 16);
+            if(this->bank[addr+2] == 0) this->bank.erase(addr+2)
+        case 0b10://HALF
+            this->bank[addr+1] = 0xFF & (value >> 8);
+            if(this->bank[addr+1] == 0) this->bank.erase(addr+1)
+        case 0b01://BYTE
+            this->bank[addr] = 0xFF & value;
+            if(this->bank[addr] == 0) this->bank.erase(addr)
+    }
 }
