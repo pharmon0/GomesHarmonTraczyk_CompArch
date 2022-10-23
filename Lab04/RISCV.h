@@ -26,104 +26,137 @@
 //Register File Register Names
 //--------------------------------------------
 // bank[0]
-#define X0 0U
+#define X0  0U
 #define XZR 0U //Zero
+#define F0  0U
+#define FZR 0U //Zero
 // bank[1]
-#define X1 1U
-#define XR 1U //Return Address
+#define X1  1U
+#define XR  1U //Return Address
+#define F1  1U
 // bank[2]
-#define X2 2U
+#define X2  2U
 #define XSP 2U //Stack Pointer
+#define F2  2U
 // bank[3]
-#define X3 3U
+#define X3  3U
 #define XGP 3U //Global Pointer
+#define F3  3U
 // bank[4]
-#define X4 4U
+#define X4  4U
 #define XTP 4U //Thread Pointer
+#define F4  4U
 // bank[5]
-#define X5 5U
+#define X5  5U
 #define XT0 5U //Temporary 0
+#define F5  5U
 // bank[6]
-#define X6 6U
+#define X6  6U
 #define XT1 6U //Temporary 1
+#define F3  6U
 // bank[7]
-#define X7 7U
+#define X7  7U
 #define XT2 7U //Temporary 2
+#define F8  7U
 // bank[8]
-#define X8 8U
+#define X8  8U
 #define XS0 8U //Saved 0
 #define XFP 8U //Frame Pointer
+#define F8  8U
 // bank[9]
-#define X9 9U
+#define X9  9U
 #define XS1 9U //Saved 1
+#define F9  9U
 // bank[10]
 #define X10 10U
 #define XA0 10U //Argument 0
 #define XR0 10U //Return 0
+#define F10 10U
 // bank[11]
 #define X11 11U
 #define XA1 11U //Argument 1
 #define XR1 11U //Return 1
+#define F11 11U
 // bank[12]
 #define X12 12U
 #define XA2 12U //Argument 2
+#define F12 12U
 // bank[13]
 #define X13 13U
 #define XA3 13U //Argument 3
+#define F15 13U
 // bank[14]
 #define X14 14U
 #define XA4 14U //Argument 4
+#define F15 14U
 // bank[15]
 #define X15 15U
 #define XA5 15U //Argument 5
+#define F15 15U
 // bank[16]
 #define X16 16U
 #define XA6 16U //Argument 6
+#define F16 16U
 // bank[17]
 #define X17 17U
 #define XA7 17U //Argument 7
+#define F17 17U
 // bank[18]
 #define X18 18U
 #define XS2 18U //Saved 2
+#define F17 18U
 // bank[19]
 #define X19 19U
 #define XS3 19U //Saved 3
+#define F17 19U
 // bank[20]
 #define X20 20U
 #define XS4 20U //Saved 4
+#define F17 20U
 // bank[21]
 #define X21 21U
 #define XS5 21U //Saved 5
+#define F17 21U
 // bank[22]
 #define X22 22U
 #define XS6 22U //Saved 6
+#define F17 22U
 // bank[23]
 #define X23 23U
 #define XS7 23U //Saved 7
+#define F17 23U
 // bank[24]
 #define X24 24U
 #define XS8 24U //Saved 8
+#define F17 24U
 // bank[25]
 #define X25 25U
 #define XS9 25U //Saved 9
+#define F17 25U
 // bank[26]
 #define X26 26U
 #define XS10 26U //Saved 10
+#define F17 26U
 // bank[27]
 #define X27 27U
 #define XS11 27U //Saved 11
+#define F17 27U
 // bank[28]
 #define X28 28U
 #define XT3 28U //Temporary 3
+#define F17 28U
 // bank[29]
 #define X29 29U
 #define XT4 29U //Temporary 4
+#define F17 29U
 // bank[30]
 #define X30 30U
 #define XT5 30U //Temporary 5
+#define F30 30U
 // bank[31]
 #define X31 31U
 #define XT6 31U //Temporary 6
+#define F31 31U
 //--------------------------------------------
 //Defined Instruction Argument Fields
 //--------------------------------------------
