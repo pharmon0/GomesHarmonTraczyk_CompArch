@@ -15,10 +15,11 @@
 // Constructors
 //============================================
 ArithmaticLogicUnit::ArithmaticLogicUnit(void){
+    this->counter    = 0;
     this->A.uinteger = 0;
     this->B.uinteger = 0;
     this->X.uinteger = 0;
-    this->ctrl.all   = 0;
+    this->aluctrl.all   = 0;
 }
 
 //============================================
@@ -27,13 +28,20 @@ ArithmaticLogicUnit::ArithmaticLogicUnit(void){
 //============================================
 void ArithmaticLogicUnit::process(void){
     if(this->ctrl.alufp){
-        switch(this->ctrl.aluop){
-            case ALU_ADD :
-                this->X.single = this->A.single + this->B.single;
-            break;
-            case ALU_SUB :
-                this->X.single = this->A.single - this->B.single;
-            break;
+        this->counter++;       //increment counter
+        if(this->counter < 5){ //if flop not done, stay busy.
+            this->aluctrl.busy = 1;
+        }else{                 //once flop counter is done (5cc) return operation
+            switch(this->ctrl.aluop){
+                case ALU_ADD :
+                    this->X.single = this->A.single + this->B.single;
+                break;
+                case ALU_SUB :
+                    this->X.single = this->A.single - this->B.single;
+                break;
+            }
+            this->counter      = 0; //reset counter
+            this->aluctrl.busy = 0; //not busy
         }
     }else{
         switch(this->ctrl.aluop){
