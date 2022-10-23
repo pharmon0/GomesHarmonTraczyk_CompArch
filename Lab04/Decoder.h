@@ -38,28 +38,28 @@ class Decoder{
     } immctrl;//Immediate Control Signals
 
     union{    //Register File Control Signals
-        uint16_t all;
+        uint32_t all;
         struct{
-            uint16_t  selrs1 : 5; //select RS1        |
-            uint16_t  selrs2 : 5; //select RS2        |
-            uint16_t   selrd : 5; //select RD         |  
-            uint16_t   rfwen : 1; //enable write to RD| 0:disable, 1:enable
-            uint16_t  r1flop : 1; //ctrlPort : Select floating-point register for rs1
-            uint16_t  r2flop : 1; //ctrlPort : Select floating-point register for rs2
-            uint16_t  rdflop : 1; //ctrlPort : Select floating-point register for rd
-            uint16_t:0;//union alignment
+            uint32_t  selrs1 : 5; //select RS1        |
+            uint32_t  selrs2 : 5; //select RS2        |
+            uint32_t   selrd : 5; //select RD         |  
+            uint32_t   rfwen : 1; //enable write to RD| 0:disable, 1:enable
+            uint32_t  r1flop : 1; //ctrlPort : Select floating-point register for rs1
+            uint32_t  r2flop : 1; //ctrlPort : Select floating-point register for rs2
+            uint32_t  rdflop : 1; //ctrlPort : Select floating-point register for rd
+            uint32_t:0;//union alignment
         };
     } rfctrl; //Register File Control Signals
 
     union{    //ALU Control Signals
-        uint8_t all;
+        uint16_t all;
         struct{
-            uint8_t   aluop : 4; //select ALU Operation      |
-            uint8_t alucomp : 2; //select ALU Comparison Type|
-            uint8_t aluasel : 1; //select ALU A Source       | 0:RS1, 1:PC
-            uint8_t alubsel : 1; //select ALU B Source       | 0:RS2, 1:Immediate
-            uint8_t   alufp : 1; //select ALU FP Operation   | 0:i,   1:float
-            uint8_t:0;//union alignment
+            uint16_t   aluop : 4; //select ALU Operation      |
+            uint16_t alucomp : 2; //select ALU Comparison Type|
+            uint16_t aluasel : 1; //select ALU A Source       | 0:RS1, 1:PC
+            uint16_t alubsel : 1; //select ALU B Source       | 0:RS2, 1:Immediate
+            uint16_t   alufp : 1; //select ALU FP Operation   | 0:i,   1:float
+            uint16_t:0;//union alignment
         };
     } aluctrl;//ALU Control Signals
 
@@ -81,7 +81,7 @@ class Decoder{
             uint8_t jtype : 1; //Send ALU result to PC and store PC+4 in RD
             uint8_t:0;//union alignment
         };
-    } ctrl;   //Miscellaneous Control Signals
+    } bctrl;   //Miscellaneous Control Signals
 
     //constructor
     Decoder(void);
