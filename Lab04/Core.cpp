@@ -62,8 +62,8 @@ bool Core::process(void){
     }
       
     this->der.input.imm = immSignExtendShift(this->decoder.immctrl.value,
-                                           this->decoder.immctrl.immsize,
-                                           this->decoder.immctrl.immshft);
+                                             this->decoder.immctrl.immsize,
+                                             this->decoder.immctrl.immshft);
     this->der.input.rfctrl  = this->dec.rfctrl;
     this->der.input.aluctrl = this->dec.aluctrl;
     this->der.input.memctrl = this->dec.memctrl;
