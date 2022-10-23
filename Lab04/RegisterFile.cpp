@@ -11,7 +11,7 @@ RegisterFile::RegisterFile(void){
         this->iBank[i].integer = 0U;
         this->fBank[i].integer = 0U;
     }
-    this->ctrl.all = 0;
+    this->rfctrl.all = 0;
     this->rs1.uinteger = 0U;
     this->rs2.uinteger = 0U;
     this->rd.uinteger = 0U;
@@ -23,16 +23,16 @@ RegisterFile::RegisterFile(void){
 //============================================
 void RegisterFile::processRead(void){
     //resolve whether rs1 is float or int
-    if(this->ctrl.r1flop){
-        this->rs1 = this->fBank[this->ctrl.selrs1];
+    if(this->rfctrl.r1flop){
+        this->rs1 = this->fBank[this->rfctrl.selrs1];
     }else{
-        this->rs1 = this->iBank[this->ctrl.selrs1];
+        this->rs1 = this->iBank[this->rfctrl.selrs1];
     }
     //resolve whether rs2 is float or int
-    if(this->ctrl.r2flop){
-        this->rs2 = this->fBank[this->ctrl.selrs2];
+    if(this->rfctrl.r2flop){
+        this->rs2 = this->fBank[this->rfctrl.selrs2];
     }else{
-        this->rs1 = this->iBank[this->ctrl.selrs2];
+        this->rs1 = this->iBank[this->rfctrl.selrs2];
     }
 }
 
@@ -43,11 +43,11 @@ void RegisterFile::processRead(void){
 void RegisterFile::processWrite(void){
     //don't write if rfwen==0
     //don't write to rd = X0
-    if((!this->ctrl.rfwen) || (this->ctrl.selrd == 0)) return;
+    if((!this->rfctrl.rfwen) || (this->rfctrl.selrd == 0)) return;
     //resolve float vs int
-    if(this->ctrl.rdflop){
-        this->fBank[this->ctrl.selrd] = this->rd;
+    if(this->rfctrl.rdflop){
+        this->fBank[this->rfctrl.selrd] = this->rd;
     }else{
-        this->iBank[this->ctrl.selrd] = this->rd;
+        this->iBank[this->rfctrl.selrd] = this->rd;
     }
 }
