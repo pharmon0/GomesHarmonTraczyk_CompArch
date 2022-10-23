@@ -146,9 +146,12 @@
 //Defined Decoding Opcodes
 //--------------------------------------------
 #define OPCODE_R 0x33
+#define OPCODE_FR 0x53
 #define OPCODE_I 0x13
 #define OPCODE_L 0x03
+#define OPCODE_FL 0x07
 #define OPCODE_S 0x23
+#define OPCODE_FS 0x27
 #define OPCODE_B 0x63
 #define OPCODE_LUI 0x37
 #define OPCODE_AUIPC 0x17

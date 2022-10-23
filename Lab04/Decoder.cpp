@@ -77,12 +77,30 @@ void Decoder::process(uint32_t input){
                  << "'" << endl;
             this->printCtrl();
         break;
+        case OPCODE_FR: //instruction is FP R-type
+            this->rfctrl.selrs1 = i.R.rs1; //get RS1 from i
+            this->rfctrl.selrs2 = i.R.rs2; //get RS2 from i
+            this->rfctrl.selrd  = i.R.rd;  //get RD  from i
+            this->rfctrl.rfwen  = 1;       //enable RF Writeback
+            this->rfctrl.r1flop = 1;       //enable FP register for r1
+            this->rfctrl.r2flop = 1;       //enable FP register for r2
+            this->rfctrl.rdflop = 1;       //enable FP register for rd
+            this->aluctrl.alufp = 1;       //enable ALU FP operation
+            cout << "Decoded :: R-Type Instruction\n Instruction: '";
+            switch(i.I.funct3){
+                case F3_ADD: //FADD or FSUB
+                    this->aluctrl.aluop = (i.R.funct7 == 0)?(ALU_ADD):(ALU_SUB);
+                    if(i.R.funct7==0){cout << "ADD";}
+                    else {cout <<"SUB";}
+                break;
+            }
+        break;
         case OPCODE_I: //instruction is I-type
             this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
             this->rfctrl.selrd    = i.I.rd;  //get RD  from i
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
-            this->immctrl.value = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
+            this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
             cout << "Decoded :: I-Type Instruction\n Instruction: '";
             switch(i.I.funct3){//Determine ALUOP from funct3, funct7
                 case F3_ADD: //ADDI or SUBI
@@ -132,7 +150,7 @@ void Decoder::process(uint32_t input){
             this->rfctrl.selrd    = i.I.rd;  //get RD  from i
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
-            this->immctrl.value = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
+            this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
             cout << "Decoded :: I-Type Instruction\n Instruction: '";
             switch(i.I.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_LBU:
@@ -167,11 +185,34 @@ void Decoder::process(uint32_t input){
                  << "]'" << endl;
             this->printCtrl();
         break;
+        case OPCODE_FL: //instruction is FP-Load type
+            // TODO
+            this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
+            this->rfctrl.selrd    = i.I.rd;  //get RD  from i
+            this->rfctrl.rfwen    = 1;       //enable RF Writeback
+            this->rfctrl.r1flop   = 1;       //enable FP register for r1
+            this->rfctrl.rdflop   = 1;       //enable FP register for rd
+            this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
+            this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
+            cout << "Decoded :: I-Type Instruction\n Instruction: '";
+            switch(i.I.funct3){ //determine sign-extension and shift amount by funct3
+                case F3_LW:
+                    this->memctrl.memrsgn = 1;   //enable sign-extension
+                    this->memctrl.memrsz  = 0b11;//Word size
+                    cout << "FLW";
+                break;
+            }
+            cout << " X" << this->rfctrl.selrd
+                 << ",X" << this->rfctrl.selrs1
+                 << "[" << immSignExtendShift(this->immctrl.value,this->immctrl.immsize,this->immctrl.immshft)
+                 << "]'" << endl;
+            this->printCtrl();
+        break;
         case OPCODE_S: //instruction is S-type
             this->rfctrl.selrs1   = i.S.rs1; //get RS1 from i
             this->rfctrl.selrs2   = i.S.rs2; //get RD  from i
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
-            this->immctrl.value = (i.S.im11_5<<5) | i.S.im4_0; //imm[11:0]->imm[11:0]
+            this->immctrl.value   = (i.S.im11_5<<5) | i.S.im4_0; //imm[11:0]->imm[11:0]
             cout << "Decoded :: S-Type Instruction\n Instruction: '";
             switch(i.S.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_SB:
@@ -182,6 +223,26 @@ void Decoder::process(uint32_t input){
                     this->memctrl.memwsz  = 0b10;//Halfword size
                     cout << "SH";
                 break;
+                case F3_SW:
+                    this->memctrl.memwsz  = 0b11;//Word size
+                    cout << "SW";
+                break;
+            }
+            cout << " X" << this->rfctrl.selrs2
+                 << ",X" << this->rfctrl.selrs1
+                 << "[" << immSignExtendShift(this->immctrl.value,this->immctrl.immsize,this->immctrl.immshft)
+                 << "]'" << endl;
+            this->printCtrl();
+        break;
+        case OPCODE_FS: //instruction is FP S-type
+            this->rfctrl.selrs1   = i.S.rs1; //get RS1 from i
+            this->rfctrl.selrs2   = i.S.rs2; //get RS2  from i
+            this->rfctrl.r1flop   = 1;       //enable FP register for r1
+            this->rfctrl.r2flop   = 1;       //enable FP register for r2
+            this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
+            this->immctrl.value   = (i.S.im11_5<<5) | i.S.im4_0; //imm[11:0]->imm[11:0]
+            cout << "Decoded :: S-Type Instruction\n Instruction: '";
+            switch(i.S.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_SW:
                     this->memctrl.memwsz  = 0b11;//Word size
                     cout << "SW";

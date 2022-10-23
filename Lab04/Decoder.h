@@ -44,6 +44,9 @@ class Decoder{
             uint16_t  selrs2 : 5; //select RS2        |
             uint16_t   selrd : 5; //select RD         |  
             uint16_t   rfwen : 1; //enable write to RD| 0:disable, 1:enable
+            uint16_t  r1flop : 1; //ctrlPort : Select floating-point register for rs1
+            uint16_t  r2flop : 1; //ctrlPort : Select floating-point register for rs2
+            uint16_t  rdflop : 1; //ctrlPort : Select floating-point register for rd
             uint16_t:0;//union alignment
         };
     } rfctrl; //Register File Control Signals
@@ -55,6 +58,7 @@ class Decoder{
             uint8_t alucomp : 2; //select ALU Comparison Type|
             uint8_t aluasel : 1; //select ALU A Source       | 0:RS1, 1:PC
             uint8_t alubsel : 1; //select ALU B Source       | 0:RS2, 1:Immediate
+            uint8_t   alufp : 1; //select ALU FP Operation   | 0:i,   1:float
             uint8_t:0;//union alignment
         };
     } aluctrl;//ALU Control Signals
