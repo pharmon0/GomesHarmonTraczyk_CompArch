@@ -37,7 +37,6 @@ bool Core::process(void){
     this->alu.B = (this->der.output.aluctrl.alubsel)?(this->der.output.imm):(this->rf.rs2);
     this->alu.aluctrl.aluop = this->der.output.aluctrl.aluop;
     this->alu.aluctrl.alucomp = this->der.output.aluctrl.alucomp;
-    //TODO set ALU float mode
     this->alu.process();
     this->ctrl.stallE = alu.aluctrl.busy;
    //save EWRegister
@@ -92,8 +91,11 @@ bool Core::process(void){
     this->fdr.input.i = this->portI.data;
     this->fdr.input.pc = this->pc;
     this->fdr.process();
-   //Update PC
+    //Update PC value based on branch
+    uint32_t pcplus = (this->der.output.bctrl.btype && this->alu.X)?(immediate):(4U);
+    pcplus += this->pc;
+   //Update PC if not stalled
     if(!this->fdr.ctrl.stall && !this->ctrl.stallF)
-      this->pc += 4U;
+      this->pc = (this->decoder.ctrl.jtype)?(dataout):(pcplus);
     return false;
 }
