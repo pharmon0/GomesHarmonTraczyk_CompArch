@@ -22,8 +22,8 @@
 //============================================
 class RegisterFile{
     //register bank memory allocation
-    data32_t iBank[32];
-    data32_t fBank[32];
+    int32_t iBank[32];
+    float   fBank[32];
 
  public:
     //Constructors
@@ -41,7 +41,7 @@ class RegisterFile{
             uint32_t rdflop : 1; //ctrlPort : Select floating-point register for rd
             uint32_t:0;//union alignment
         };
-    } ctrl;      
+    } rfctrl;      
     data32_t rs1,    //dataPort : Value-to-read from source 1
              rs2,    //dataPort : Value-to-read from source 2
              rd;     //dataPort : Value-to-write

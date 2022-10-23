@@ -186,11 +186,9 @@ void Decoder::process(uint32_t input){
             this->printCtrl();
         break;
         case OPCODE_FL: //instruction is FP-Load type
-            // TODO
             this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
             this->rfctrl.selrd    = i.I.rd;  //get RD  from i
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
-            this->rfctrl.r1flop   = 1;       //enable FP register for r1
             this->rfctrl.rdflop   = 1;       //enable FP register for rd
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
             this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
@@ -237,7 +235,6 @@ void Decoder::process(uint32_t input){
         case OPCODE_FS: //instruction is FP S-type
             this->rfctrl.selrs1   = i.S.rs1; //get RS1 from i
             this->rfctrl.selrs2   = i.S.rs2; //get RS2  from i
-            this->rfctrl.r1flop   = 1;       //enable FP register for r1
             this->rfctrl.r2flop   = 1;       //enable FP register for r2
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
             this->immctrl.value   = (i.S.im11_5<<5) | i.S.im4_0; //imm[11:0]->imm[11:0]
