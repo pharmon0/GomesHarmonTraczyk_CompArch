@@ -29,7 +29,7 @@ int main(void){
     do{}while(system.process());
     long int clock = system.cpu.clock;
     long int instructions = system.cpu.instcnt;
-    int cpi = clock / instructions;
+    float cpi = clock / instructions;
     int ticks = clock * 10;
     cout << "With a total of " << clock
          << " Clock Cycles and " << instructions
