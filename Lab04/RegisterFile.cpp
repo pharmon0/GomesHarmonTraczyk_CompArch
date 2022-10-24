@@ -33,7 +33,7 @@ void RegisterFile::processRead(void){
     if(this->rfctrl.r2flop){
         this->rs2.single = this->fBank[this->rfctrl.selrs2];
     }else{
-        this->rs1.integer = this->iBank[this->rfctrl.selrs2];
+        this->rs2.integer = this->iBank[this->rfctrl.selrs2];
     }
 }
 

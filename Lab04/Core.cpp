@@ -328,8 +328,8 @@ bool Core::process(void){
          << endl;
 
     //DEBUG stop the clock after too long
-    //if(this->clock > 100)
-    //  return false;
+    if(this->clock > 20)
+      return false;
 
     return true; //No Halt, Return True.
 }

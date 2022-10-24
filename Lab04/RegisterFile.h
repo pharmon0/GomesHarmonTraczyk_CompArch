@@ -12,6 +12,9 @@
 #include <cstdint>    //Standard Int Types
 #include "Datatypes.h"//Custom Datatypes Header
 #include "RISCV.h"    //RISCV Definitions Header
+#include <iostream>
+using std::cout;
+using std::endl;
 
 //============================================
 // Constants and Macros
