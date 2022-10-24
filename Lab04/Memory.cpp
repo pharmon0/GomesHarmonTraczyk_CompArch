@@ -108,23 +108,45 @@ void Memory::memWrite(uint32_t addr, uint32_t value, uint8_t size){
 }
 
 //============================================
-// Memory::populate
+// Memory::populateFloat
 //  prepopulates memory
 //============================================
-void Memory::populate(string filename, uint32_t start){
+void Memory::populateFloat(string filename, uint32_t start){
     ifstream file;
     file.open(filename);
     vector<uint32_t> values;
     data32_t val;
     while(file >> val.single){
         values.push_back(val.uinteger);
-        cout << "Read : val = " << val.single << endl;
+        //cout << "Read : val = " << val.single << endl;
     }
     file.close();
     uint32_t length = values.size();
     for(uint32_t i = 0; i < length * 4; i+= 4){
         this->memWrite(start + i, values.at(0), 0b11);
-        cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
+        //cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
+        values.erase(values.begin());
+    }
+}
+
+//============================================
+// Memory::populateInt
+//  prepopulates memory
+//============================================
+void Memory::populateInt(string filename, uint32_t start){
+    ifstream file;
+    file.open(filename);
+    vector<uint32_t> values;
+    data32_t val;
+    while(file >> val.uinteger){
+        values.push_back(val.uinteger);
+        //cout << "Read : val = " << bitset<32>(val.uinteger) << endl;
+    }
+    file.close();
+    uint32_t length = values.size();
+    for(uint32_t i = 0; i < length * 4; i+= 4){
+        this->memWrite(start + i, values.at(0), 0b11);
+        //cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
         values.erase(values.begin());
     }
 }

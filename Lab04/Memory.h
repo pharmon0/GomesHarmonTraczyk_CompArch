@@ -87,7 +87,8 @@ class Memory{
     void processPortD(void); //read/write 8,16,32-bit data
 
     //init
-    void populate(string,uint32_t);
+    void populateFloat(string,uint32_t);
+    void populateInt(string,uint32_t);
     void printToFile(string);
 };
 

@@ -44,6 +44,7 @@ void ALU::process(void){
             this->aluctrl.busy = 0; //not busy
         }
     }else{
+        this->aluctrl.busy = 0;
         switch(this->aluctrl.aluop){
             case ALU_ADD :
                 this->X.integer = this->A.integer + this->B.integer;

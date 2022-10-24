@@ -32,6 +32,10 @@ bool Core::process(void){
   this->fdr.ctrl.all = 0;
   this->der.ctrl.all = 0;
   this->ewr.ctrl.all = 0;
+  this->ctrl.stallW = 0;
+  this->ctrl.stallE = 0;
+  this->ctrl.stallD = 0;
+  this->ctrl.stallF = 0;
  //---------------------------------------------
  //Fetch Stage (Interact with I Port and Update PC)
  //---------------------------------------------
@@ -159,11 +163,6 @@ bool Core::process(void){
     cout << " (" << hexString(this->rf.rs2.integer) << ")" << endl;
 
    //Run ALU
-    if(this->der.output.bctrl.halt){
-      //HALT ON EXECUTE OF HALT INSTRUCTION
-      cout << "HALT INSTRUCTION EXECUTED!!!\n --> EXITING CPU LOOP\n" << endl;
-      return false;
-    }
     if(this->der.output.aluctrl.aluasel){
       //use PC
       this->alu.A.integer = this->der.output.pc;
@@ -250,7 +249,14 @@ bool Core::process(void){
       cout << " Port-D No Memory Access" << endl;
     }
 
-    if(this->ctrl.stallW) cout << " WAITING ON MEMORY PORT-D! STALLING WRITEBACK!"
+    if(this->ctrl.stallW) cout << " WAITING ON MEMORY PORT-D! STALLING WRITEBACK!" << endl;
+
+   //check for halt
+    if(this->ewr.output.bctrl.halt){
+      //HALT ON EXECUTE OF HALT INSTRUCTION
+      cout << "HALT INSTRUCTION IN WRITEBACK!!!\n --> EXITING CPU LOOP\n" << endl;
+      return false;
+    }
 
    //writeback
     this->rf.rfctrl.rfwen  = this->ewr.output.rfctrl.rfwen
@@ -260,13 +266,13 @@ bool Core::process(void){
     this->rf.rfctrl.selrd  = this->ewr.output.rfctrl.selrd;
     if(this->ewr.output.bctrl.jtype){
       this->rf.rd.integer = this->ewr.output.pcplus;
-      cout << " rd <- pc+4"
+      cout << " rd <- pc+4" << endl;
     }else if(loading){
       this->rf.rd.integer = this->portD.data;
-      cout << " rd <- load from memory"
+      cout << " rd <- load from memory" << endl;
     }else{
       this->rf.rd = this->ewr.output.aluX;
-      cout << " rd <- ALU result"
+      cout << " rd <- ALU result" << endl;
     }
     this->rf.processWrite();
 
@@ -313,6 +319,17 @@ bool Core::process(void){
     this->fdr.process();
     this->der.process();
     this->ewr.process();
+
+    cout << "CPU Status:"
+         << " stallF : " << bitset<1>(this->ctrl.stallF)
+         << " stallD : " << bitset<1>(this->ctrl.stallD)
+         << " stallE : " << bitset<1>(this->ctrl.stallE)
+         << " stallW : " << bitset<1>(this->ctrl.stallW)
+         << endl;
+
+    //DEBUG stop the clock after too long
+    //if(this->clock > 100)
+    //  return false;
 
     return true; //No Halt, Return True.
 }

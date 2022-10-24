@@ -63,12 +63,12 @@ void DERegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        this->input.imm          = 0;
-        this->input.pc           = 0;
-        this->input.rfctrl.all   = 0;
-        this->input.aluctrl.all  = 0;
-        this->input.memctrl.all  = 0;
-        this->input.bctrl.all    = 0;
+        this->output.imm          = 0;
+        this->output.pc           = 0;
+        this->output.rfctrl.all   = 0;
+        this->output.aluctrl.all  = 0;
+        this->output.memctrl.all  = 0;
+        this->output.bctrl.all    = 0;
     } else{
         this->output.imm         = this->input.imm; 
         this->output.pc          = this->input.pc;
@@ -83,12 +83,12 @@ void EWRegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        this->input.aluX.integer  = 0;
-        this->input.rs2.integer   = 0;
-        this->input.pcplus        = 0;
-        this->input.rfctrl.all    = 0;
-        this->input.memctrl.all   = 0;
-        this->input.bctrl.all     = 0;
+        this->output.aluX.integer  = 0;
+        this->output.rs2.integer   = 0;
+        this->output.pcplus        = 0;
+        this->output.rfctrl.all    = 0;
+        this->output.memctrl.all   = 0;
+        this->output.bctrl.all     = 0;
     } else{
         this->output.aluX.integer = this->input.aluX.integer;
         this->output.rs2.integer  = this->input.rs2.integer; 
