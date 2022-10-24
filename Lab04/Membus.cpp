@@ -7,5 +7,16 @@
 // Constructor
 //============================================
 Membus::Membus(void){
-    
+}
+
+//============================================
+// Membus::process
+//============================================
+bool Membus::process(void){
+    if(!this->cpu.process()){
+        return false;
+    }
+    //TODO map cpu dataports to ram dataports
+    this->ram.processPortI();
+    this->ram.processPortD();
 }

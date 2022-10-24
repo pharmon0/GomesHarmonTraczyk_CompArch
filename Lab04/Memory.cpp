@@ -16,16 +16,24 @@ Memory::Memory(void){
 
 //============================================
 // Memory::processPortI
-//  Read-only 32-bit word instructions
+//  Same Operation as PortD fundamentally,
+//   but in practice, read-only 32bit
 //============================================
 void Memory::processPortI(void){
-    if(!this->portI.memctrl.request) return;
-    if(!this->portI.memctrl.counter){
-        this->portI.memctrl.counter++; //count one cycle
-    }else{
-        this->portI.memctrl.counter = 0; //memory done.
+    if(this->portI.memctrl.memrsz == this->portI.memctrl.memwsz) return;
+    if(!this->portI.counter){
+        this->portI.counter++; //count one cycle
+    }else if(this->portI.memctrl.memrsz > this->portI.memctrl.memwsz){ //Load
+        this->portI.counter = 0; //memory done.
         this->portI.memctrl.ack = 1;
-        this->portI.data = this->read(this->portI.address, 0b11); //read 32bits
+        this->portI.data = this->read(this->portI.address,
+                                        this->portI.memctrl.memrsz);
+    }else{ //Store
+        this->portI.counter = 0; //memory done.
+        this->portI.memctrl.ack = 1;
+        this->write(this->portI.address,
+                    this->portI.data,
+                    this->portI.memctrl.memrsz);
     }
 }
 
@@ -35,15 +43,15 @@ void Memory::processPortI(void){
 //============================================
 void Memory::processPortD(void){
     if(this->portD.memctrl.memrsz == this->portD.memctrl.memwsz) return;
-    if(!this->portD.memctrl.counter){
-        this->portD.memctrl.counter++; //count one cycle
+    if(!this->portD.counter){
+        this->portD.counter++; //count one cycle
     }else if(this->portD.memctrl.memrsz > this->portD.memctrl.memwsz){ //Load
-        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.counter = 0; //memory done.
         this->portD.memctrl.ack = 1;
         this->portD.data = this->read(this->portD.address,
                                         this->portD.memctrl.memrsz);
     }else{ //Store
-        this->portD.memctrl.counter = 0; //memory done.
+        this->portD.counter = 0; //memory done.
         this->portD.memctrl.ack = 1;
         this->write(this->portD.address,
                     this->portD.data,

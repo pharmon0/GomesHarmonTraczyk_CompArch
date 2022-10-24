@@ -15,6 +15,7 @@ RegisterFile::RegisterFile(void){
     this->rs1.uinteger = 0U;
     this->rs2.uinteger = 0U;
     this->rd.uinteger = 0U;
+    this->iBank[XSP] = 0x2FF;//SP Range 0x200 - 0x2FF
 }
 
 //============================================

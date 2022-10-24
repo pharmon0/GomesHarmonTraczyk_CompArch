@@ -27,6 +27,8 @@ using std::bitset;
 //============================================
 class Decoder{
  public:
+    uint32_t instruction;
+
     union{    //Immediate Control Signals
         uint32_t all;
         struct{
@@ -87,7 +89,7 @@ class Decoder{
     Decoder(void);
 
     //Process Decoder DataPorts
-    void process(uint32_t);
+    void process(void);
 
     //debug printer
     void printCtrl(void);
