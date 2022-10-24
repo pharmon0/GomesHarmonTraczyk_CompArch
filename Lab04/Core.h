@@ -3,8 +3,8 @@
  * CPU Core Object Module */
 
 // Start Header Guard
-#ifndef GHT_ALU
-#define GHT_ALU
+#ifndef GHT_CPUCORE
+#define GHT_CPUCORE
 
 //============================================
 // Libraries
@@ -36,18 +36,19 @@ class Core{
     FDRegister fdr;
     DERegister der;
     EWRegister ewr;
-    ArithmaticLogicUnit alu;
+    ALU alu;
     uint32_t pc;    //CPU program counter
     //CPU Control
     union{
         uint8_t all;
         struct{
-            uint8_t stallF : 1;
-            uint8_t stallD : 1;
-            uint8_t stallE : 1;
-            uint8_t stallW : 1;
+            uint8_t   stallF : 1;
+            uint8_t   stallD : 1;
+            uint8_t   stallE : 1;
+            uint8_t   stallW : 1;
+            uint8_t branched : 1;
             uint8_t:0; //union alignment
-        }
+        };
     } ctrl;
 
  public:
@@ -58,15 +59,12 @@ class Core{
         union{
             uint8_t all;
             struct{
-                // I-Port Conceptual Operation
-                // Memory::request and Core::membusy both are the set output of
-                //  an RS Latch. Memory::ack is the reset line and
-                //   Core::request is the set line.
-                // Memory::ack and Core::request auto reset on clock
-                uint8_t request : 1; //output: request memory access
-                uint8_t membusy : 1; //input: waiting for memory
+                uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
+                uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
+                uint8_t request : 1; //has a memory request been made?
+                uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portI;
 
@@ -79,9 +77,10 @@ class Core{
             struct{
                 uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
                 uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t membusy : 1; //wait for value to fall to 0
+                uint8_t request : 1; //has a memory request been made?
+                uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portD;
 

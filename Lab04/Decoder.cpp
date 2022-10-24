@@ -11,19 +11,19 @@ Decoder::Decoder(void){
     this->rfctrl.all  = 0;
     this->aluctrl.all = 0;
     this->memctrl.all = 0;
-    this->ctrl.all    = 0;
+    this->bctrl.all    = 0;
 }
 
 //============================================
 // Decoder::process
 // - Updates Decoder DataPorts based on CtrlPorts
 //============================================
-void Decoder::process(uint32_t input){
-    //load input data as instruction
+void Decoder::process(void){
+    //load input data as instruction_t
     instruction_t i;
-    i.value = input;
+    i.value = this->instruction;
     //clear all ctrlpaths
-    this->ctrl.all    = 0;
+    this->bctrl.all    = 0;
     this->rfctrl.all  = 0;
     this->memctrl.all = 0;
     this->immctrl.all = 0;
@@ -86,14 +86,19 @@ void Decoder::process(uint32_t input){
             this->rfctrl.r2flop = 1;       //enable FP register for r2
             this->rfctrl.rdflop = 1;       //enable FP register for rd
             this->aluctrl.alufp = 1;       //enable ALU FP operation
-            cout << "Decoded :: R-Type Instruction\n Instruction: '";
+            cout << "Decoded :: FR-Type Instruction\n Instruction: '";
             switch(i.I.funct3){
                 case F3_ADD: //FADD or FSUB
                     this->aluctrl.aluop = (i.R.funct7 == 0)?(ALU_ADD):(ALU_SUB);
-                    if(i.R.funct7==0){cout << "ADD";}
-                    else {cout <<"SUB";}
+                    if(i.R.funct7==0){cout << "FADD";}
+                    else {cout <<"FSUB";}
                 break;
             }
+            cout << " F" << this->rfctrl.selrd
+                 << ",F" << this->rfctrl.selrs1
+                 << ",F" << this->rfctrl.selrs2
+                 << "'" << endl;
+            this->printCtrl();
         break;
         case OPCODE_I: //instruction is I-type
             this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
@@ -151,7 +156,7 @@ void Decoder::process(uint32_t input){
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
             this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
-            cout << "Decoded :: I-Type Instruction\n Instruction: '";
+            cout << "Decoded :: I-Type Instruction, Load Subtype\n Instruction: '";
             switch(i.I.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_LBU:
                     this->memctrl.memrsgn = 0;   //disable sign-extension
@@ -192,7 +197,7 @@ void Decoder::process(uint32_t input){
             this->rfctrl.rdflop   = 1;       //enable FP register for rd
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
             this->immctrl.value   = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
-            cout << "Decoded :: I-Type Instruction\n Instruction: '";
+            cout << "Decoded :: FL-Type Instruction\n Instruction: '";
             switch(i.I.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_LW:
                     this->memctrl.memrsgn = 1;   //enable sign-extension
@@ -200,7 +205,7 @@ void Decoder::process(uint32_t input){
                     cout << "FLW";
                 break;
             }
-            cout << " X" << this->rfctrl.selrd
+            cout << " F" << this->rfctrl.selrd
                  << ",X" << this->rfctrl.selrs1
                  << "[" << immSignExtendShift(this->immctrl.value,this->immctrl.immsize,this->immctrl.immshft)
                  << "]'" << endl;
@@ -238,14 +243,14 @@ void Decoder::process(uint32_t input){
             this->rfctrl.r2flop   = 1;       //enable FP register for r2
             this->aluctrl.alubsel = 1;       //set ALU B SRC to immediate
             this->immctrl.value   = (i.S.im11_5<<5) | i.S.im4_0; //imm[11:0]->imm[11:0]
-            cout << "Decoded :: S-Type Instruction\n Instruction: '";
+            cout << "Decoded :: FS-Type Instruction\n Instruction: '";
             switch(i.S.funct3){ //determine sign-extension and shift amount by funct3
                 case F3_SW:
                     this->memctrl.memwsz  = 0b11;//Word size
-                    cout << "SW";
+                    cout << "FSW";
                 break;
             }
-            cout << " X" << this->rfctrl.selrs2
+            cout << " F" << this->rfctrl.selrs2
                  << ",X" << this->rfctrl.selrs1
                  << "[" << immSignExtendShift(this->immctrl.value,this->immctrl.immsize,this->immctrl.immshft)
                  << "]'" << endl;
@@ -254,7 +259,7 @@ void Decoder::process(uint32_t input){
         case OPCODE_B: //instruction is B-type
             this->rfctrl.selrs1   = i.B.rs1; //get RS1 from i
             this->rfctrl.selrs2   = i.B.rs2; //get RS2 from i
-            this->ctrl.btype      = 1;       //Attempt Branch
+            this->bctrl.btype      = 1;       //Attempt Branch
             this->immctrl.value = (i.B.im12<<11) | (i.B.im11<<10) //imm[12:1]->imm[11:0]
                                 | (i.B.im10_5<<4)| (i.B.im4_1);
             cout << "Decoded :: B-Type Instruction\n Instruction: '";
@@ -316,7 +321,7 @@ void Decoder::process(uint32_t input){
         case OPCODE_JAL: //instruction is JAL
             this->rfctrl.selrd    = i.J.rd;  //get RD from i
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
-            this->ctrl.jtype      = 1;       //enable unconditional-jump mode
+            this->bctrl.jtype      = 1;       //enable unconditional-jump mode
             this->aluctrl.aluasel = 1;       //ALU A Source is PC
             this->aluctrl.alubsel = 1;       //ALU B Source is immediate
             this->aluctrl.aluop   = ALU_ADD; //ALU OP: X = A + B
@@ -333,7 +338,7 @@ void Decoder::process(uint32_t input){
             this->rfctrl.selrs1   = i.I.rs1; //get RS1 from i
             this->rfctrl.selrd    = i.J.rd;  //get RD  from i
             this->rfctrl.rfwen    = 1;       //enable RF Writeback
-            this->ctrl.jtype      = 1;       //enable unconditional-jump mode
+            this->bctrl.jtype      = 1;       //enable unconditional-jump mode
             this->aluctrl.alubsel = 1;       //ALU B Source is immediate
             this->aluctrl.aluop   = ALU_ADD; //ALU OP: X = A + B
             this->immctrl.value = (i.I.im11_5<<5) | i.I.im4_0; //imm[11:0]
@@ -345,7 +350,7 @@ void Decoder::process(uint32_t input){
             this->printCtrl();
         break;
         case OPCODE_HALT: //instruction is Custom HALT
-            this->ctrl.halt = 1;//Halt Program
+            this->bctrl.halt = 1;//Halt Program
             cout << "Decoded :: HALT Instruction\n Instruction: 'HALT'" << endl;
             this->printCtrl();
         break;
@@ -360,23 +365,27 @@ void Decoder::process(uint32_t input){
 // - Returns string form of controlpaths
 //============================================
 void Decoder::printCtrl(void){
-    cout << "  Control Signals:"
-         << "\n\tselrs1 : " << bitset<5>(this->rfctrl.selrs1)
-         << "   selrs2 : " << bitset<5>(this->rfctrl.selrs2)
-         << "   selrd : " << bitset<5>(this->rfctrl.selrd)
-         << "   rfwen : " << bitset<1>(this->rfctrl.rfwen)
-         << "\n\taluop : " << bitset<4>(this->aluctrl.aluop)
-         << "   alucomp : " << bitset<2>(this->aluctrl.alucomp)
-         << "   aluasel : " << bitset<1>(this->aluctrl.aluasel)
-         << "   alubsel : " << bitset<1>(this->aluctrl.alubsel)
-         << "\n\tmemwsz : " << bitset<2>(this->memctrl.memwsz)
-         << "   memrsz : " << bitset<2>(this->memctrl.memrsz)
-         << "   memrsgn : " << bitset<1>(this->memctrl.memrsgn)
-         << "\n\timmsize : " << bitset<1>(this->immctrl.immsize)
-         << "   immshft : " << bitset<1>(this->immctrl.immshft)
+    cout << "  Decoded Control Signals:"
+         << "\n\tselrs1 : "       << bitset<5>(this->rfctrl.selrs1)
+         << "   selrs2 : "        << bitset<5>(this->rfctrl.selrs2)
+         << "   selrd : "         << bitset<5>(this->rfctrl.selrd)
+         << "   rfwen : "         << bitset<1>(this->rfctrl.rfwen)
+         << "   r1flop : "        << bitset<1>(this->rfctrl.r1flop)
+         << "   r2flop : "        << bitset<1>(this->rfctrl.r2flop)
+         << "   rdflop : "        << bitset<1>(this->rfctrl.rdflop)
+         << "\n\taluop : "        << bitset<4>(this->aluctrl.aluop)
+         << "   alucomp : "       << bitset<2>(this->aluctrl.alucomp)
+         << "   aluasel : "       << bitset<1>(this->aluctrl.aluasel)
+         << "   alubsel : "       << bitset<1>(this->aluctrl.alubsel)
+         << "   alufp : "         << bitset<1>(this->aluctrl.alufp)
+         << "\n\tmemwsz : "       << bitset<2>(this->memctrl.memwsz)
+         << "   memrsz : "        << bitset<2>(this->memctrl.memrsz)
+         << "   memrsgn : "       << bitset<1>(this->memctrl.memrsgn)
+         << "\n\timmsize : "      << bitset<1>(this->immctrl.immsize)
+         << "   immshft : "       << bitset<1>(this->immctrl.immshft)
          << "\n\t   immediate : " << bitset<20>(this->immctrl.value)
-         << "\n\tbtype : " << bitset<1>(this->ctrl.btype)
-         << "   jtype : " << bitset<1>(this->ctrl.jtype)
-         << "   halt : " << bitset<1>(this->ctrl.halt)
+         << "\n\tbtype : "        << bitset<1>(this->bctrl.btype)
+         << "   jtype : "         << bitset<1>(this->bctrl.jtype)
+         << "   halt : "          << bitset<1>(this->bctrl.halt)
          << endl;
 }

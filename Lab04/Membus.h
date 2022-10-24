@@ -6,5 +6,31 @@
 #ifndef GHT_MEMBUS
 #define GHT_MEMBUS
 
+//============================================
+// Libraries
+//============================================
+#include "Memory.h"
+#include "Core.h"
+#include <cstdint>
+#include "RISCV.h"
+
+//============================================
+// Constants and Macros
+//============================================
+
+//============================================
+// Memory Controller Class
+//============================================
+class Membus{
+    Core   cpu;
+    Memory ram;
+  public:
+    //constructor
+    Membus(void);
+
+    //Clock Cycle Process
+    bool process(void);
+};
+
 // End Header Guard
 #endif

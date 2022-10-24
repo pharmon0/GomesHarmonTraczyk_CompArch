@@ -7,31 +7,40 @@
 // Constructors
 //============================================
 FDRegister::FDRegister(void){
-    this->input.i = 0;
-    this->input.pc = 0;
-    this->output = this->input;
-    this->ctrl.all = 0;
+    this->input.i   = 0;
+    this->input.pc  = 0;
+    this->output.i  = 0;
+    this->output.pc = 0;
+    this->ctrl.all  = 0;
 }
 DERegister::DERegister(void){
-    this->input.imm = 0;
-    this->input.pc = 0;
-    this->input.rfctrl.all = 0;
-    this->input.aluctrl.all = 0;
-    this->input.memctrl.all = 0;
-    this->input.bctrl.all = 0;
-    this->output = this->input;
+    this->input.imm          = 0;
+    this->input.pc           = 0;
+    this->input.rfctrl.all   = 0;
+    this->input.aluctrl.all  = 0;
+    this->input.memctrl.all  = 0;
+    this->input.bctrl.all    = 0;
+    this->output.imm         = 0; 
+    this->output.pc          = 0;
+    this->output.rfctrl.all  = 0;
+    this->output.aluctrl.all = 0;
+    this->output.memctrl.all = 0;
+    this->output.bctrl.all   = 0;
     this->ctrl.all = 0;
 }
 EWRegister::EWRegister(void){
-    this->input.aluX.integer = 0;
-    this->input.rs2.integer = 0;
-    this->input.imm = 0;
-    this->input.pc = 0;
-    this->input.rfctrl.all = 0;
-    this->input.aluctrl.all = 0;
-    this->input.memctrl.all = 0;
-    this->input.bctrl.all = 0;
-    this->output = this->input;
+    this->input.aluX.integer  = 0;
+    this->input.rs2.integer   = 0;
+    this->input.pcplus        = 0;
+    this->input.rfctrl.all    = 0;
+    this->input.memctrl.all   = 0;
+    this->input.bctrl.all     = 0;
+    this->output.aluX.integer = 0;
+    this->output.rs2.integer  = 0;
+    this->output.pcplus       = 0;
+    this->output.rfctrl.all   = 0;
+    this->output.memctrl.all  = 0;
+    this->output.bctrl.all    = 0;
     this->ctrl.all = 0;
 }
 //============================================
@@ -45,7 +54,8 @@ void FDRegister::process(void){
         this->output.i = 0;
         this->output.pc = 0;
     } else{
-        this->output = this->input;
+        this->output.i  = this->input.i;
+        this->output.pc = this->input.pc;
     }
 }
 void DERegister::process(void){
@@ -53,14 +63,19 @@ void DERegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        this->input.imm = 0;
-        this->input.pc = 0;
-        this->input.rfctrl.all = 0;
-        this->input.aluctrl.all = 0;
-        this->input.memctrl.all = 0;
-        this->input.bctrl.all = 0;
+        this->input.imm          = 0;
+        this->input.pc           = 0;
+        this->input.rfctrl.all   = 0;
+        this->input.aluctrl.all  = 0;
+        this->input.memctrl.all  = 0;
+        this->input.bctrl.all    = 0;
     } else{
-        this->output = this->input;
+        this->output.imm         = this->input.imm; 
+        this->output.pc          = this->input.pc;
+        this->output.rfctrl.all  = this->input.rfctrl.all;
+        this->output.aluctrl.all = this->input.aluctrl.all;
+        this->output.memctrl.all = this->input.memctrl.all;
+        this->output.bctrl.all   = this->input.bctrl.all;
     }
 }
 void EWRegister::process(void){
@@ -68,15 +83,18 @@ void EWRegister::process(void){
     if(this->ctrl.stall) return;
     //if no_op, load noop instead of input.
     if(this->ctrl.no_op){
-        this->input.aluX.integer = 0;
-        this->input.rs2.integer = 0;
-        this->input.imm = 0;
-        this->input.pc = 0;
-        this->input.rfctrl.all = 0;
-        this->input.aluctrl.all = 0;
-        this->input.memctrl.all = 0;
-        this->input.bctrl.all = 0;
+        this->input.aluX.integer  = 0;
+        this->input.rs2.integer   = 0;
+        this->input.pcplus        = 0;
+        this->input.rfctrl.all    = 0;
+        this->input.memctrl.all   = 0;
+        this->input.bctrl.all     = 0;
     } else{
-        this->output = this->input;
+        this->output.aluX.integer = this->input.aluX.integer;
+        this->output.rs2.integer  = this->input.rs2.integer; 
+        this->output.pcplus       = this->input.pcplus;
+        this->output.rfctrl.all   = this->input.rfctrl.all;
+        this->output.memctrl.all  = this->input.memctrl.all;
+        this->output.bctrl.all    = this->input.bctrl.all;
     }
 }
