@@ -8,6 +8,7 @@
 //============================================
 Core::Core(void){
   this->clock = 0;
+  this->pc = 0;
   this->instcnt = 0;
   this->ctrl.all = 0;
   this->portI.memctrl.all = 0;
@@ -198,6 +199,8 @@ bool Core::process(void){
                              (this->der.output.pc + this->der.output.imm):
                              (this->der.output.pc + 4U);
     this->ewr.input.bctrl.branch = branched;
+    this->ewr.input.bctrl.jtype = this->der.output.bctrl.jtype;
+    this->ewr.input.bctrl.halt = this->der.output.bctrl.halt;
     if(branched){
       cout << " Branch Confirmed. Preparing to Branch." << endl;
       cout << " Branch Destination : " << hexString(this->ewr.input.pcplus) << endl;
@@ -277,11 +280,21 @@ bool Core::process(void){
     this->rf.processWrite();
 
     uint32_t pcbranch = 0;
+    cout << "DEBUG cbranch : " << pcbranch << endl;
     if(this->ewr.output.bctrl.branch){
+      cout << "DEBUG - 1 - pcbranch : " << pcbranch << endl;
       pcbranch = this->ewr.output.pcplus;
     }else if(this->ewr.output.bctrl.jtype){
+      cout << "DEBUG - 2 - pcbranch : " << pcbranch << endl;
       pcbranch = this->ewr.output.aluX.uinteger;
     }
+    if(this->ewr.output.bctrl.jtype || this->ewr.output.bctrl.branch){
+      this->ctrl.stallF = 0;
+      this->ctrl.stallD = 0;
+      this->ctrl.stallE = 0;
+      this->ctrl.stallW = 0;
+    }
+    cout << "pcbranch : " << pcbranch << endl;
 
  //Update PC and Advance Pipeline (or stall)
    //Pipeline Register Control
@@ -298,10 +311,14 @@ bool Core::process(void){
    //Update PC
     if(((!this->ctrl.stallW) && (!this->ctrl.stallE)) 
      && ((!this->ctrl.stallD) && (!this->ctrl.stallF))){
+      cout << "PC IS NOT STALLED!" << endl;
       //Not stalling, okay to update PC
       if(this->ctrl.branched){
+        cout << "PC IS Branching!" << endl;
         //branched -> load branch
+        cout << "\tPC = " << this->pc << endl;
         this->pc = pcbranch;
+        cout << "\tPC = " << this->pc << endl;
         //flush pipeline
         this->fdr.ctrl.no_op = 1;
         this->der.ctrl.no_op = 1;
@@ -309,10 +326,15 @@ bool Core::process(void){
         //remove fetch, decode, and execute instructions from counter
         this->instcnt -= 3;
       }else{
+        cout << "PC IS Normal!" << endl;
         //Normal Operation, PC+=4
+        cout << "\tPC = " << this->pc << endl;
         this->pc += 4;
+        cout << "\tPC = " << this->pc << endl;
         this->instcnt++;
       }
+    } else{
+      cout << "PC IS STALLED!" << endl;
     }
 
    //Update the pipeline Registers
@@ -328,8 +350,13 @@ bool Core::process(void){
          << endl;
 
     //DEBUG stop the clock after too long
-    if(this->clock > 20)
+    //if(this->clock > 40)
+    //  return false;
+
+    if(this->pc > 0x30){
+      cout << "DEBUG PC OVERFLOW!!!" << endl;
       return false;
+    }
 
     return true; //No Halt, Return True.
 }

@@ -136,17 +136,20 @@ void Memory::populateFloat(string filename, uint32_t start){
 void Memory::populateInt(string filename, uint32_t start){
     ifstream file;
     file.open(filename);
+    cout << "DEBUG CHECKIN" << endl;
+    if(!file.is_open())
+        cout << "FILE '" << filename << "' DID NOT OPEN" << endl;
     vector<uint32_t> values;
     data32_t val;
     while(file >> val.uinteger){
         values.push_back(val.uinteger);
-        //cout << "Read : val = " << bitset<32>(val.uinteger) << endl;
+        cout << "Read : val = " << bitset<32>(val.uinteger) << endl;
     }
     file.close();
     uint32_t length = values.size();
     for(uint32_t i = 0; i < length * 4; i+= 4){
         this->memWrite(start + i, values.at(0), 0b11);
-        //cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
+        cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
         values.erase(values.begin());
     }
 }

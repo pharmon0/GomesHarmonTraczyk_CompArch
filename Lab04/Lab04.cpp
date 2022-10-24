@@ -22,7 +22,9 @@ int main(void){
     Membus system;
     system.ram.populateFloat("A.txt",0x400); //populate A array
     system.ram.populateFloat("B.txt",0x800); //populate B array
-    system.ram.populateInt("asm.txt",0); //program
+    cout << "ABOUT TO POPULATE INSTRUCTIONS" << endl;
+    system.ram.populateInt("asm2.txt",0); //program
+    cout << "DONE POPULATING INSTRUCTIONS" << endl;
     system.ram.printToFile("ramReadout");
     do{}while(system.process());
     long int clock = system.cpu.clock;

@@ -265,8 +265,8 @@ void Decoder::process(void){
             this->rfctrl.selrs1   = i.B.rs1; //get RS1 from i
             this->rfctrl.selrs2   = i.B.rs2; //get RS2 from i
             this->bctrl.btype      = 1;       //Attempt Branch
-            this->immctrl.value = (i.B.im12<<11) | (i.B.im11<<10) //imm[12:1]->imm[11:0]
-                                | (i.B.im10_5<<4)| (i.B.im4_1);
+            this->immctrl.value = (i.B.im12<<12) | (i.B.im11<<11) //imm[12:1]->imm[11:0]
+                                | (i.B.im10_5<<5)| (i.B.im4_1<<1);
             cout << "Decoded :: B-Type Instruction\n Instruction: '";
             switch(i.B.funct3){
                 case 0b000: //BEQ
