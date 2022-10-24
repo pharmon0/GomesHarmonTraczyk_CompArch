@@ -36,7 +36,7 @@ bool Core::process(void){
       //waiting on memory, stall.
       this->ctrl.stallF = 1;
     }else if(this->ctrl.branched){
-      if(!this->portI.request){
+      if(!this->portI.memctrl.request){
         //CPU Branched, no active instruction fetch.
         //Get new data and wait.
         this->portI.memctrl.request = 1;
@@ -76,9 +76,9 @@ bool Core::process(void){
     this->der.input.bctrl.all   = this->dec.bctrl.all;
 
    //Process Immediate
-    this->der.input.imm = immSignExtendShift(this->decoder.immctrl.value,
-                                             this->decoder.immctrl.immsize,
-                                             this->decoder.immctrl.immshft);
+    this->der.input.imm = immSignExtendShift(this->dec.immctrl.value,
+                                             this->dec.immctrl.immsize,
+                                             this->dec.immctrl.immshft);
    //Check Datahazards
     if(this->dec.rfctrl.selrs1 != X0){
       if(this->dec.rfctrl.selrs1 == this->der.output.rfctrl.selrd){
@@ -113,12 +113,20 @@ bool Core::process(void){
 
    //Run ALU
     if(this->der.output.bctrl.halt) return false; //HALT ON EXECUTE OF HALT INSTRUCTION
-    this->alu.A = (this->der.output.aluctrl.aluasel)? //PC or RS1?
-                  (this->der.output.pc):
-                  (this->rf.rs1);
-    this->alu.B = (this->der.output.aluctrl.alubsel)? //Immediate or RS2?
-                  (this->der.output.imm):
-                  (this->rf.rs2);
+    if(this->der.output.aluctrl.aluasel){
+      //use PC
+      this->alu.A.integer = this->der.output.pc;
+    }else{
+      //use RS1
+      this->alu.A = this->rf.rs1;
+    }
+    if(this->der.output.aluctrl.alubsel){
+      //use Immediate
+      this->alu.B.integer = this->der.output.imm;
+    }else{
+      //use RS2
+      this->alu.B = this->rf.rs2;
+    }
     this->alu.aluctrl.aluop   = this->der.output.aluctrl.aluop;
     this->alu.aluctrl.alucomp = this->der.output.aluctrl.alucomp;
     this->alu.aluctrl.alufp   = this->der.output.aluctrl.alufp;
@@ -127,7 +135,7 @@ bool Core::process(void){
     this->ctrl.stallE = alu.aluctrl.busy;
 
    //Run PCplus/Branch Logic
-    bool branched = (this->der.output.bctrl.btype && (0b1 & this->alu.X));
+    bool branched = (this->der.output.bctrl.btype && (0b1 & this->alu.X.integer));
     this->ewr.input.pcplus = (branched)?
                              (this->der.output.pc + this->der.output.imm):
                              (this->der.output.pc + 4U);
@@ -161,7 +169,7 @@ bool Core::process(void){
         this->ctrl.stallW = 1;
       }else{
         //make a request and stall
-        this->portD.address = this->ewr.output.aluX;
+        this->portD.address = this->ewr.output.aluX.uinteger;
         this->portD.memctrl.request = 1;
         this->ctrl.stallW = 1;
       }
@@ -176,19 +184,19 @@ bool Core::process(void){
     this->rf.rfctrl.rdflop = this->ewr.output.rfctrl.rdflop;
     this->rf.rfctrl.selrd  = this->ewr.output.rfctrl.selrd;
     if(this->ewr.output.bctrl.jtype){
-      this->rf.rd = this->ewr.output.pcplus;
+      this->rf.rd.integer = this->ewr.output.pcplus;
     }else if(loading){
-      this->rf.rd = this->portD.data;
+      this->rf.rd.integer = this->portD.data;
     }else{
       this->rf.rd = this->ewr.output.aluX;
     }
-    this-rf.processWrite();
+    this->rf.processWrite();
 
     uint32_t pcbranch = 0;
     if(this->ewr.output.bctrl.branch){
       pcbranch = this->ewr.output.pcplus;
-    }else if(this->ewr.output.jtype){
-      pcbranch = this->ewr.output.aluX;
+    }else if(this->ewr.output.bctrl.jtype){
+      pcbranch = this->ewr.output.aluX.uinteger;
     }
 
  //Update PC and Advance Pipeline (or stall)

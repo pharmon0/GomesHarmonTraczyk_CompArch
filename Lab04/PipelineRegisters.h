@@ -41,7 +41,7 @@ class FDRegister{
             uint8_t stall : 1; //blocks register write
             uint8_t no_op : 1; //loads noop data instead of input data
             uint8_t:0;//union alignment
-        }
+        };
     } ctrl;  //Register Controlports
  
     //Constructors
@@ -170,7 +170,7 @@ class DERegister{
             uint8_t stall : 1; //blocks register write
             uint8_t no_op : 1; //loads noop data instead of input data
             uint8_t:0;//union alignment
-        }
+        };
     } ctrl;  //Register Controlports
  
     //Constructors
@@ -278,7 +278,7 @@ class EWRegister{
             uint8_t stall : 1; //blocks register write
             uint8_t no_op : 1; //loads noop data instead of input data
             uint8_t:0;//union alignment
-        }
+        };
     } ctrl;  //Register Controlports
  
     //Constructors

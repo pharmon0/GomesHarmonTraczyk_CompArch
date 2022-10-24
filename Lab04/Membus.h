@@ -12,7 +12,7 @@
 #include "Memory.h"
 #include "Core.h"
 #include <cstdint>
-#include <RISCV.h>
+#include "RISCV.h"
 
 //============================================
 // Constants and Macros
@@ -29,7 +29,7 @@ class Membus{
     Membus(void);
 
     //Clock Cycle Process
-    void process(void);
+    bool process(void);
 };
 
 // End Header Guard

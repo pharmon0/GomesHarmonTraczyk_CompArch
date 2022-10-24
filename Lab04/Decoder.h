@@ -14,9 +14,8 @@
 #include <string>       //string datatype
 #include <bitset>       //print binary
 #include "RISCV.h"      //RISCV Definitions Header
-#include "Instruction.h"//Instruction Datatype
-#include "BinOps.h"     //Binary Helper Functions
-#include "SignExtend.h" //Sign Extension
+#include "Datatypes.h"  //Instruction Datatype
+#include "Functions.h"  //Binary Helper Functions
 using std::cout;
 using std::string;
 using std::endl;

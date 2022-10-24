@@ -53,11 +53,11 @@
 // bank[6]
 #define X6  6U
 #define XT1 6U //Temporary 1
-#define F3  6U
+#define F6  6U
 // bank[7]
 #define X7  7U
 #define XT2 7U //Temporary 2
-#define F8  7U
+#define F7  7U
 // bank[8]
 #define X8  8U
 #define XS0 8U //Saved 0
@@ -84,11 +84,11 @@
 // bank[13]
 #define X13 13U
 #define XA3 13U //Argument 3
-#define F15 13U
+#define F13 13U
 // bank[14]
 #define X14 14U
 #define XA4 14U //Argument 4
-#define F15 14U
+#define F14 14U
 // bank[15]
 #define X15 15U
 #define XA5 15U //Argument 5
@@ -104,51 +104,51 @@
 // bank[18]
 #define X18 18U
 #define XS2 18U //Saved 2
-#define F17 18U
+#define F18 18U
 // bank[19]
 #define X19 19U
 #define XS3 19U //Saved 3
-#define F17 19U
+#define F19 19U
 // bank[20]
 #define X20 20U
 #define XS4 20U //Saved 4
-#define F17 20U
+#define F20 20U
 // bank[21]
 #define X21 21U
 #define XS5 21U //Saved 5
-#define F17 21U
+#define F21 21U
 // bank[22]
 #define X22 22U
 #define XS6 22U //Saved 6
-#define F17 22U
+#define F22 22U
 // bank[23]
 #define X23 23U
 #define XS7 23U //Saved 7
-#define F17 23U
+#define F23 23U
 // bank[24]
 #define X24 24U
 #define XS8 24U //Saved 8
-#define F17 24U
+#define F24 24U
 // bank[25]
 #define X25 25U
 #define XS9 25U //Saved 9
-#define F17 25U
+#define F25 25U
 // bank[26]
 #define X26 26U
 #define XS10 26U //Saved 10
-#define F17 26U
+#define F26 26U
 // bank[27]
 #define X27 27U
 #define XS11 27U //Saved 11
-#define F17 27U
+#define F27 27U
 // bank[28]
 #define X28 28U
 #define XT3 28U //Temporary 3
-#define F17 28U
+#define F28 28U
 // bank[29]
 #define X29 29U
 #define XT4 29U //Temporary 4
-#define F17 29U
+#define F29 29U
 // bank[30]
 #define X30 30U
 #define XT5 30U //Temporary 5

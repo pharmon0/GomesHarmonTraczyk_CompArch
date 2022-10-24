@@ -3,8 +3,8 @@
  * CPU Core Object Module */
 
 // Start Header Guard
-#ifndef GHT_ALU
-#define GHT_ALU
+#ifndef GHT_CPUCORE
+#define GHT_CPUCORE
 
 //============================================
 // Libraries
@@ -36,7 +36,7 @@ class Core{
     FDRegister fdr;
     DERegister der;
     EWRegister ewr;
-    ArithmaticLogicUnit alu;
+    ALU alu;
     uint32_t pc;    //CPU program counter
     //CPU Control
     union{
@@ -48,7 +48,7 @@ class Core{
             uint8_t   stallW : 1;
             uint8_t branched : 1;
             uint8_t:0; //union alignment
-        }
+        };
     } ctrl;
 
  public:
@@ -64,7 +64,7 @@ class Core{
                 uint8_t request : 1; //has a memory request been made?
                 uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portI;
 
@@ -80,7 +80,7 @@ class Core{
                 uint8_t request : 1; //has a memory request been made?
                 uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portD;
 

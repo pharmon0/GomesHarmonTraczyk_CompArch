@@ -14,7 +14,7 @@
 //============================================
 // Constructors
 //============================================
-ArithmaticLogicUnit::ArithmaticLogicUnit(void){
+ALU::ALU(void){
     this->counter    = 0;
     this->A.uinteger = 0;
     this->B.uinteger = 0;
@@ -23,16 +23,16 @@ ArithmaticLogicUnit::ArithmaticLogicUnit(void){
 }
 
 //============================================
-// ArithmaticLogicUnit::process
+// ALU::process
 // - Updates Decoder DataPorts based on CtrlPorts
 //============================================
-void ArithmaticLogicUnit::process(void){
-    if(this->ctrl.alufp){
+void ALU::process(void){
+    if(this->aluctrl.alufp){
         this->counter++;       //increment counter
         if(this->counter < 5){ //if flop not done, stay busy.
             this->aluctrl.busy = 1;
         }else{                 //once flop counter is done (5cc) return operation
-            switch(this->ctrl.aluop){
+            switch(this->aluctrl.aluop){
                 case ALU_ADD :
                     this->X.single = this->A.single + this->B.single;
                 break;
@@ -44,7 +44,7 @@ void ArithmaticLogicUnit::process(void){
             this->aluctrl.busy = 0; //not busy
         }
     }else{
-        switch(this->ctrl.aluop){
+        switch(this->aluctrl.aluop){
             case ALU_ADD :
                 this->X.integer = this->A.integer + this->B.integer;
             break;
@@ -75,7 +75,7 @@ void ArithmaticLogicUnit::process(void){
                                   (this->A.integer>>this->B.integer);
             break;
             case ALU_CMP :
-                switch(this->ctrl.comp){ 
+                switch(this->aluctrl.alucomp){ 
                     case 0b00: this->X.integer = (this->A.integer <  this->B.integer)?(1):(0); break;
                     case 0b01: this->X.integer = (this->A.integer == this->B.integer)?(1):(0); break;
                     case 0b10: this->X.integer = (this->A.integer != this->B.integer)?(1):(0); break;
@@ -83,7 +83,7 @@ void ArithmaticLogicUnit::process(void){
                 }
             break;
             case ALU_CMPU:
-                switch(this->ctrl.comp){ 
+                switch(this->aluctrl.alucomp){ 
                     case 0b00: this->X.integer = ((this->A.uinteger) <  (this->B.uinteger))?(1):(0); break;
                     case 0b01: this->X.integer = ((this->A.uinteger) == (this->B.uinteger))?(1):(0); break;
                     case 0b10: this->X.integer = ((this->A.uinteger) != (this->B.uinteger))?(1):(0); break;

@@ -24,15 +24,17 @@ using std::map;
 class Memory{
     map<uint32_t, uint8_t> bank; //Memory Bank Hashtable
     
-    read(uint32_t,uint8_t); //helper for memread
-    write(uint32_t,uint32_t,uint8_t); //helper for memwrite
+    uint32_t memRead(uint32_t,uint8_t); //helper for memread
+    void memWrite(uint32_t,uint32_t,uint8_t); //helper for memwrite
+
+    uint8_t counterI;
+    uint8_t counterD;
 
  public:
     //I-port
     struct{
         uint32_t address;
         uint32_t data;
-        uint8_t counter;
         union{
             uint8_t all;
             struct{
@@ -41,7 +43,7 @@ class Memory{
                 uint8_t request : 1; //has a memory request been made?
                 uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portI;
 
@@ -49,7 +51,6 @@ class Memory{
     struct{
         uint32_t address;
         uint32_t data;
-        uint8_t counter;
         union{
             uint8_t all;
             struct{
@@ -58,7 +59,7 @@ class Memory{
                 uint8_t request : 1; //has a memory request been made?
                 uint8_t  memack : 1; //is memory operation complete?
                 uint8_t:0; //union alignment
-            }
+            };
         } memctrl;
     } portD;
 
