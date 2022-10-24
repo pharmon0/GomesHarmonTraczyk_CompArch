@@ -1,4 +1,9 @@
 # Lab 4
+### TODO
+ - Printout stats during CPUCore Runtime
+ - Calculate final CPI from stats
+ - Populate Array Data at launch
+ - Update this list to actually include all the files with descriptions
 ## Module Briefs
 These will be filled in as they are reworked from Lab03 to Lab04.
 ### RegisterFile
@@ -28,12 +33,3 @@ Provides a collection of datatypes with various uses.
      - This is a union datatype that contains a uint32_t and a large set of bitmapped values. These bitmaps correspond to the fields in various RISCV instruction types. This allows for easy reading of instruction data in the decode stage.
    - data32_t
      - This is a union datatype that contains a uint32_t, an int32_t, and a float. This allows for easy handling of type-ambiguous data busses.
-
-### TODO
- - Fetch
- - Core
- - Decode Signals
- - MemBus
- - ALU handles floats
- - pipeline registers
- - All stall Flags
