@@ -22,9 +22,11 @@
 // Memory Controller Class
 //============================================
 class Membus{
+  public:
+
     Core   cpu;
     Memory ram;
-  public:
+    
     //constructor
     Membus(void);
 

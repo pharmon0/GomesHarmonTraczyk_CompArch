@@ -9,7 +9,7 @@
 //============================================
 string hexString(uint32_t bin){
     string res = "0x";
-    for(uint8_t i = 28; i >= 0; i-=4){
+    for(int8_t i = 28; i >= 0; i-=4){
         //iterate through bin, 4b at a time
         switch((bin>>i)&0xF){
             case  0: res += '0'; break;

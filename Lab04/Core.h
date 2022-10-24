@@ -12,6 +12,7 @@
 #include <cstdint>      //Standard Int Types
 #include "RISCV.h"      //RISCV Definitions Header
 #include <iostream>
+#include <iomanip>
 #include <bitset>
 #include <string>
 #include "Datatypes.h"  //Custom Datatypes Header
@@ -25,6 +26,8 @@ using std::string;
 using std::cout;
 using std::bitset;
 using std::endl;
+using std::setw;
+using std::setfill;
 
 //============================================
 // CPU Core Object Class
@@ -52,6 +55,9 @@ class Core{
     } ctrl;
 
  public:
+    long int clock;   //clock cycle counter
+    long int instcnt; //instruction counter
+
     //I-port
     struct{
         uint32_t address;

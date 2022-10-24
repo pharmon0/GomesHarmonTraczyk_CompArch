@@ -12,7 +12,23 @@
 #include <cstdint>   //Standard Int Types
 #include <map>       //Standard Ordered Hash Map
 #include "RISCV.h"   //RISCV Definitions Header
+#include <vector>
+#include <string>
+#include <fstream>
+#include <bitset>
+#include <iostream>
+#include "Functions.h"
+#include "Datatypes.h"
+using std::stoi;
+using std::cout;
+using std::endl;
+using std::fstream;
+using std::string;
+using std::vector;
 using std::map;
+using std::bitset;
+using std::ifstream;
+using std::ofstream;
 
 //============================================
 // Constants and Macros
@@ -69,6 +85,10 @@ class Memory{
     //process functions
     void processPortI(void); //32bit read only
     void processPortD(void); //read/write 8,16,32-bit data
+
+    //init
+    void populate(string,uint32_t);
+    void printToFile(string);
 };
 
 // End Header Guard

@@ -106,3 +106,39 @@ void Memory::memWrite(uint32_t addr, uint32_t value, uint8_t size){
             if(this->bank[addr] == 0) this->bank.erase(addr);
     }
 }
+
+//============================================
+// Memory::populate
+//  prepopulates memory
+//============================================
+void Memory::populate(string filename, uint32_t start){
+    ifstream file;
+    file.open(filename);
+    vector<uint32_t> values;
+    data32_t val;
+    while(file >> val.single){
+        values.push_back(val.uinteger);
+        cout << "Read : val = " << val.single << endl;
+    }
+    file.close();
+    uint32_t length = values.size();
+    for(uint32_t i = 0; i < length * 4; i+= 4){
+        this->memWrite(start + i, values.at(0), 0b11);
+        cout << hexString(start + i) << ":" << hexString(values.at(0)) << endl;
+        values.erase(values.begin());
+    }
+}
+
+//============================================
+// Memory::populate
+//  prepopulates memory
+//============================================
+void Memory::printToFile(string filename){
+    ofstream file;
+    file.open(filename);
+    map<uint32_t,uint8_t>::iterator iter;
+    for(iter = this->bank.begin(); iter != this->bank.end(); iter++){
+        file << hexString(iter->first) << ":" << bitset<8>(iter->second) << endl;
+    }
+    file.close();
+}

@@ -29,6 +29,11 @@ void Decoder::process(void){
     this->immctrl.all = 0;
     this->aluctrl.all = 0;
     switch(i.base.opcode){
+        case 0: //NOOP!!!
+            //just let all the things be zero
+            cout << "Decoded :: NOOP Instruction" << endl;
+            this->printCtrl();
+        break;
         case OPCODE_R: //instruction is R-type
             this->rfctrl.selrs1 = i.R.rs1; //get RS1 from i
             this->rfctrl.selrs2 = i.R.rs2; //get RS2 from i

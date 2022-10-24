@@ -7,13 +7,13 @@
 // Constructor
 //============================================
 Membus::Membus(void){
-    int x = 0;
 }
 
 //============================================
 // Membus::process
 //============================================
 bool Membus::process(void){
+    this->cpu.clock++;
     if(!this->cpu.process()){
         return false;
     }

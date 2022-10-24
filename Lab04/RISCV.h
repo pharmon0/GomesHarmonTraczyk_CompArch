@@ -190,7 +190,7 @@
 #define OPCODE_AUIPC 0x17
 #define OPCODE_JAL 0x6F
 #define OPCODE_JALR 0x67
-#define OPCODE_HALT 0x00000000 //NON-RISCV CUSTOM HALT
+#define OPCODE_HALT 0x0000007F //NON-RISCV CUSTOM HALT
 //--------------------------------------------
 //Defined Decoding functcodes
 //--------------------------------------------
@@ -229,7 +229,7 @@
 //--------------------------------------------
 //Defined Instruction Operation Fields
 //--------------------------------------------
-#define OP_HALT 0x00000000 //NON-RISCV CUSTOM HALT
+#define OP_HALT  0x0000007F //NON-RISCV CUSTOM HALT
 //R-type                           fn7     rs2    rs1  fn3     rd       op
 #define OP_add   0x00000033 //0000|000 X|XXXX| XXXX|X 000| XXXX|X 011|0011
 #define OP_sub   0x40000033 //0100|000 X|XXXX| XXXX|X 000| XXXX|X 011|0011
