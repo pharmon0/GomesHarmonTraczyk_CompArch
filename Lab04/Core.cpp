@@ -350,13 +350,13 @@ bool Core::process(void){
          << endl;
 
     //DEBUG stop the clock after too long
-    //if(this->clock > 40)
-    //  return false;
-
-    if(this->pc > 0x30){
-      cout << "DEBUG PC OVERFLOW!!!" << endl;
+    if(this->clock > 30)
       return false;
-    }
+
+    //if(this->pc > 0x30){
+    //  cout << "DEBUG PC OVERFLOW!!!" << endl;
+    //  return false;
+    //}
 
     return true; //No Halt, Return True.
 }
