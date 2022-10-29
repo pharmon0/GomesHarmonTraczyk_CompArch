@@ -39,10 +39,11 @@ int main(void){
 
     //create a CPU core
     Core cpuA = Core("cpuA", ALU_INT_CYCLES, ALU_FLOP_CYCLES);
+    Core cpuB = Core("cpuB", ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
     //create and populate membus for instruction and data
-    Membus busD = Membus({&(cpuA.portD)},&(ram.portD));
-    Membus busI = Membus({&(cpuA.portI)},&(ram.portI));
+    Membus busD = Membus({&(cpuA.portD), &(cpuB.portD)},&(ram.portD));
+    Membus busI = Membus({&(cpuA.portI), &(cpuB.portI)},&(ram.portI));
     
     //run simulation loop until CPU halts
     uint64_t tick = 0;
@@ -50,7 +51,9 @@ int main(void){
     while(noHalt){
         cout << "\n*** Simulation Loop : Tick #" << tick << endl;
         //tick the CPU
-        noHalt = cpuA.process(tick);
+        bool noHaltA = cpuA.process(tick);
+        bool noHaltB = cpuB.process(tick);
+        noHalt = noHaltA && noHaltB;
 
         //update the membus
         busD.process(tick);
