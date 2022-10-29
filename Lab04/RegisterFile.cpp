@@ -17,6 +17,17 @@ RegisterFile::RegisterFile(void){
     this->rd.uinteger = 0U;
     this->iBank[XSP] = 0x2FF;//SP Range 0x200 - 0x2FF
 }
+RegisterFile::RegisterFile(uint32_t initialSP){
+    for(uint16_t i = 0; i < 32; i++){
+        this->iBank[i] = 0U;
+        this->fBank[i] = 0.0;
+    }
+    this->rfctrl.all = 0;
+    this->rs1.uinteger = 0U;
+    this->rs2.uinteger = 0U;
+    this->rd.uinteger = 0U;
+    this->iBank[XSP] = initialSP;
+}
 
 //============================================
 // RegisterFile::processRead
