@@ -6,10 +6,9 @@
 //============================================
 // Constructors
 //============================================
-Core::Core(void){
-  this->clock = 0;
+Core::Core(uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
+  this->alu = ALU(aluIntTickCount, aluFlopTickCount);
   this->pc = 0;
-  this->instcnt = 0;
   this->ctrl.all = 0;
   this->portI.memctrl.all = 0;
   this->portI.memctrl.memrsz = 0b11; //READ-ONLY (32b)
@@ -21,15 +20,25 @@ Core::Core(void){
 }
 
 //============================================
+// CPU Core Simulator Tick Process
+//============================================
+bool Core::process(uint64_t tick){
+  if(tick % TICKS_PER_CLOCK){
+    //Do not run full CPU Cycle.
+    //update ALU ticks for timing
+    this->alu.process();
+  } else{
+    //Run Full CPU Update
+    return this->clock(tick / TICKS_PER_CLOCK);
+  }
+}
+
+//============================================
 // CPU Core Clock Cycle Process
 //  This is the bulk of the system operation
 //  returns false if halt instruction is executed
 //============================================
-bool Core::process(void){
-  cout << "\n\n"
-       << setfill('*') << setw(100) << "\n"
-       << "Clock Cycle " << this->clock << "\n"
-       << setfill('*') << setw(100) << " " << endl;
+bool Core::clock(uint32_t clockCycle){
   this->fdr.ctrl.all = 0;
   this->der.ctrl.all = 0;
   this->ewr.ctrl.all = 0;
@@ -41,7 +50,7 @@ bool Core::process(void){
  //Fetch Stage (Interact with I Port and Update PC)
  //---------------------------------------------
     cout << setfill('=') << setw(80) << "\n"
-         << "  FETCH STAGE (CC=" << this->clock << ")\n"
+         << "  FETCH STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
     this->fdr.input.pc = this->pc;
 
@@ -94,7 +103,7 @@ bool Core::process(void){
  //Decode Stage (Decode Fetched instructions)
  //---------------------------------------------
     cout << setfill('=') << setw(80) << "\n"
-         << "  DECODE STAGE (CC=" << this->clock << ")\n"
+         << "  DECODE STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
     this->der.input.pc = this->fdr.output.pc;
 
@@ -142,7 +151,7 @@ bool Core::process(void){
  //Execute Stage (Process Register File and ALU)
  //---------------------------------------------
     cout << setfill('=') << setw(80) << "\n"
-         << "  EXECUTE STAGE (CC=" << this->clock << ")\n"
+         << "  EXECUTE STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
    //Access Register File
     this->rf.rfctrl.selrs1 = this->der.output.rfctrl.selrs1;
@@ -210,7 +219,7 @@ bool Core::process(void){
  //Writeback Stage (Memory Access and Register File Writeback)
  //---------------------------------------------
     cout << setfill('=') << setw(80) << "\n"
-         << "  WRITEBACK STAGE (CC=" << this->clock << ")\n"
+         << "  WRITEBACK STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
     this->ctrl.branched = this->ewr.output.bctrl.branch || this->ewr.output.bctrl.jtype;
    //Port-D Memory Access
@@ -323,15 +332,12 @@ bool Core::process(void){
         this->fdr.ctrl.no_op = 1;
         this->der.ctrl.no_op = 1;
         this->ewr.ctrl.no_op = 1;
-        //remove fetch, decode, and execute instructions from counter
-        this->instcnt -= 3;
       }else{
         cout << "PC IS Normal!" << endl;
         //Normal Operation, PC+=4
         cout << "\tPC = " << this->pc << endl;
         this->pc += 4;
         cout << "\tPC = " << this->pc << endl;
-        this->instcnt++;
       }
     } else{
       cout << "PC IS STALLED!" << endl;
@@ -349,14 +355,10 @@ bool Core::process(void){
          << " stallW : " << bitset<1>(this->ctrl.stallW)
          << endl;
 
-    //DEBUG stop the clock after too long
-    if(this->clock > 30)
+    if(this->pc > 0x30){
+      cout << "\nDEBUG PC OVERFLOW!!!\n" << endl;
       return false;
-
-    //if(this->pc > 0x30){
-    //  cout << "DEBUG PC OVERFLOW!!!" << endl;
-    //  return false;
-    //}
+    }
 
     return true; //No Halt, Return True.
 }

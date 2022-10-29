@@ -5,32 +5,28 @@
 
 //============================================
 // Constructor
+//  Links the membus to all cores and the ram
+//   through pointers to their memports
 //============================================
-Membus::Membus(void){
+Membus::Membus(vector<memport_t*> corePorts, memport_t* memPort){
+    this->mem = memPort;
+    this->ports = corePorts;
+    this->toMem = true;
 }
 
 //============================================
 // Membus::process
+//  TODO make this function work for arbitrary number of Cores
+//   AKA: Bus Arbitration
 //============================================
-bool Membus::process(void){
-    this->cpu.clock++;
-    if(!this->cpu.process()){
-        return false;
+void Membus::process(uint64_t tick){
+    if(this->toMem){
+        //TODO iterate through ports according to bus arbitration
+        *(this->mem) = *(this->ports.at(0));
+        this->toMem = false;
+    }else{
+        //TODO iterate through ports according to bus arbitration
+        *(this->ports.at(0)) = *(this->mem);
+        this->toMem = true;
     }
-    this->ram.portI.memctrl.all = this->cpu.portI.memctrl.all;
-    this->ram.portI.address     = this->cpu.portI.address;
-    this->ram.portI.data        = this->cpu.portI.data;
-    this->ram.portD.memctrl.all = this->cpu.portD.memctrl.all;
-    this->ram.portD.address     = this->cpu.portD.address;
-    this->ram.portD.data        = this->cpu.portD.data;
-    this->ram.processPortI();
-    this->ram.processPortD();
-    this->cpu.portI.memctrl.all = this->ram.portI.memctrl.all;
-    this->cpu.portI.address     = this->ram.portI.address;
-    this->cpu.portI.data        = this->ram.portI.data;
-    this->cpu.portD.memctrl.all = this->ram.portD.memctrl.all;
-    this->cpu.portD.address     = this->ram.portD.address;
-    this->cpu.portD.data        = this->ram.portD.data;
-
-    return true;
 }

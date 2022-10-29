@@ -38,6 +38,8 @@ using std::ofstream;
 // Memory Controller Class
 //============================================
 class Memory{
+    uint8_t accessTicks; //number of ticks required for memory access
+
     map<uint32_t, uint8_t> bank; //Memory Bank Hashtable
     
     uint32_t memRead(uint32_t,uint8_t); //helper for memread
@@ -47,48 +49,19 @@ class Memory{
     uint8_t counterD;
 
  public:
-    //I-port
-    struct{
-        uint32_t address;
-        uint32_t data;
-        union{
-            uint8_t all;
-            struct{
-                uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t request : 1; //has a memory request been made?
-                uint8_t  memack : 1; //is memory operation complete?
-                uint8_t:0; //union alignment
-            };
-        } memctrl;
-    } portI;
-
-    //D-port
-    struct{
-        uint32_t address;
-        uint32_t data;
-        union{
-            uint8_t all;
-            struct{
-                uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t request : 1; //has a memory request been made?
-                uint8_t  memack : 1; //is memory operation complete?
-                uint8_t:0; //union alignment
-            };
-        } memctrl;
-    } portD;
+    //Memory Ports
+    memport_t portI;
+    memport_t portD;
 
     //Constructors
-    Memory(void);
+    Memory(uint8_t);
 
     //process functions
-    void processPortI(void); //32bit read only
-    void processPortD(void); //read/write 8,16,32-bit data
+    void process(uint64_t); //Process Memory Ports
 
-    //init
+    //misc. Functions
     void populateFloat(string,uint32_t);
-    void populateInt(string,uint32_t);
+    void populate(string,uint32_t);
     void printToFile(string);
 };
 

@@ -30,6 +30,11 @@ using std::setw;
 using std::setfill;
 
 //============================================
+// Constants and Definitions
+//============================================
+#define TICKS_PER_CLOCK 10
+
+//============================================
 // CPU Core Object Class
 //============================================
 class Core{
@@ -55,46 +60,18 @@ class Core{
     } ctrl;
 
  public:
-    long int clock;   //clock cycle counter
-    long int instcnt; //instruction counter
-
     //I-port
-    struct{
-        uint32_t address;
-        uint32_t data;
-        union{
-            uint8_t all;
-            struct{
-                uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t request : 1; //has a memory request been made?
-                uint8_t  memack : 1; //is memory operation complete?
-                uint8_t:0; //union alignment
-            };
-        } memctrl;
-    } portI;
+    memport_t portI;
 
     //D-port
-    struct{
-        uint32_t address;
-        uint32_t data;
-        union{
-            uint8_t all;
-            struct{
-                uint8_t  memrsz : 2; //select memory read size   | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t  memwsz : 2; //select memory write size  | 00:disable, 01:Byte, 10:Half, 11:Word
-                uint8_t request : 1; //has a memory request been made?
-                uint8_t  memack : 1; //is memory operation complete?
-                uint8_t:0; //union alignment
-            };
-        } memctrl;
-    } portD;
+    memport_t portD;
 
     //constructor
-    Core(void);
+    Core(uint8_t, uint8_t);
 
     //Clock Cycle Process
-    bool process(void);
+    bool process(uint64_t);
+    bool clock(uint32_t);
 };
 
 // End Header Guard

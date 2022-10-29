@@ -17,6 +17,8 @@
 // ALU Object Class
 //============================================
 class ALU{
+    uint32_t intTicks;
+    uint32_t flopTicks;
     uint8_t counter;
  public:
     data32_t A, B, X; //ALU dataports
@@ -33,9 +35,11 @@ class ALU{
 
     //constructor
     ALU(void);
+    ALU(uint8_t, uint8_t);
 
     //run ALU operation
     void process(void);
+    void operate(void);
 };
 
 // End Header Guard
