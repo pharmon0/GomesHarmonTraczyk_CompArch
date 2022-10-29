@@ -32,7 +32,9 @@ using std::setfill;
 //============================================
 // Constants and Definitions
 //============================================
+#ifndef TICKS_PER_CLOCK
 #define TICKS_PER_CLOCK 10
+#endif
 
 //============================================
 // CPU Core Object Class
@@ -58,6 +60,8 @@ class Core{
             uint8_t:0; //union alignment
         };
     } ctrl;
+    //Core ID for differentiating CPU Cores
+    string coreID;
 
  public:
     //I-port
@@ -65,13 +69,15 @@ class Core{
 
     //D-port
     memport_t portD;
+    
+    //instruction counter for CPI calculation
+    uint32_t instructionCount;
 
     //constructor
-    Core(uint8_t, uint8_t);
+    Core(string, uint8_t, uint8_t);
 
     //Clock Cycle Process
     bool process(uint64_t);
-    bool clock(uint32_t);
 };
 
 // End Header Guard

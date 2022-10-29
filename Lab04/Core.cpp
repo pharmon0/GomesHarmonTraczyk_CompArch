@@ -6,7 +6,8 @@
 //============================================
 // Constructors
 //============================================
-Core::Core(uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
+Core::Core(string name, uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
+  this->coreID = name;
   this->alu = ALU(aluIntTickCount, aluFlopTickCount);
   this->pc = 0;
   this->ctrl.all = 0;
@@ -17,20 +18,7 @@ Core::Core(uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
   this->portD.memctrl.all = 0;
   this->portD.address = 0x2FF; //top of stack
   this->portD.data = 0;
-}
-
-//============================================
-// CPU Core Simulator Tick Process
-//============================================
-bool Core::process(uint64_t tick){
-  if(tick % TICKS_PER_CLOCK){
-    //Do not run full CPU Cycle.
-    //update ALU ticks for timing
-    this->alu.process();
-  } else{
-    //Run Full CPU Update
-    return this->clock(tick / TICKS_PER_CLOCK);
-  }
+  this->instructionCount = 0;
 }
 
 //============================================
@@ -38,7 +26,17 @@ bool Core::process(uint64_t tick){
 //  This is the bulk of the system operation
 //  returns false if halt instruction is executed
 //============================================
-bool Core::clock(uint32_t clockCycle){
+bool Core::process(uint64_t tick){
+  uint32_t clockCycle = tick / TICKS_PER_CLOCK;
+  if(tick % TICKS_PER_CLOCK){
+    //not a clock cycle tick
+    return true; //no halt
+  }
+  cout << "\n" 
+       << setfill('*') << setw(80) << "\n"
+       << "RUNNING " << this->coreID << "'s CLOCK CYCLE #" << clockCycle << "\n"
+       << setfill('*') << setw(80) << " " << endl;
+
   this->fdr.ctrl.all = 0;
   this->der.ctrl.all = 0;
   this->ewr.ctrl.all = 0;
@@ -58,7 +56,7 @@ bool Core::clock(uint32_t clockCycle){
     if(this->portI.memctrl.request && !this->portI.memctrl.memack){
       //waiting on memory, stall.
       this->ctrl.stallF = 1;
-      cout << " Waiting for Port-I" << endl;
+      cout << "Waiting for Port-I" << endl;
     }else if(this->ctrl.branched){
       if(!this->portI.memctrl.request){
         //CPU Branched, no active instruction fetch.
@@ -66,7 +64,7 @@ bool Core::clock(uint32_t clockCycle){
         this->portI.memctrl.request = 1;
         this->portI.address = this->pc;
         this->ctrl.stallF = 1;
-        cout << " CPU Branched, Port-I Starting new Fetch." << endl;
+        cout << "CPU Branched, Port-I Starting new Fetch." << endl;
       }else if(this->portI.memctrl.memack){
         //CPU Branched, trash fetched data and request new.
         this->portI.memctrl.request = 1;
@@ -74,30 +72,31 @@ bool Core::clock(uint32_t clockCycle){
         this->portI.address = this->pc;
         this->ctrl.branched = 0;
         this->ctrl.stallF = 1;
-        cout << " CPU Branched, Port-I Trashing old fetch and Starting new Fetch." << endl;
+        cout << "CPU Branched, Port-I Trashing old fetch and Starting new Fetch." << endl;
       }
     }else if(!this->portI.memctrl.request){
       //request data and wait
       this->portI.memctrl.request = 1;
       this->portI.address = this->pc;
       this->ctrl.stallF = 1;
-      cout << " Port-I Starting new Fetch." << endl;
+      cout << "Port-I Starting new Fetch." << endl;
     }else if(this->portI.memctrl.memack){
       //memory done. Load instruction to FDReg
       this->fdr.input.i = this->portI.data;
       this->portI.memctrl.request = 0;
       this->portI.memctrl.memack  = 0;
       this->ctrl.stallF = 0;
-      cout << " Port-I Done Waiting" << endl;
+      cout << "Port-I Done Waiting" << endl;
     }
 
     cout << " Current PC : " << hexString(this->pc)
          << " (0b" << bitset<32>(this->pc) << ")" << endl;
     if(this->ctrl.stallF){
       cout << " Fetch Stage is Stalled!" << endl;
+    }else{
+      cout << " Instruction Fetched : " << hexString(this->fdr.input.i)
+           << " (0b" << bitset<32>(this->fdr.input.i) << ")" << endl;
     }
-    cout << " Instruction Fetched : " << hexString(this->fdr.input.i)
-         << " (0b" << bitset<32>(this->fdr.input.i) << ")" << endl;
     
  //---------------------------------------------
  //Decode Stage (Decode Fetched instructions)
@@ -124,12 +123,12 @@ bool Core::clock(uint32_t clockCycle){
       if(this->dec.rfctrl.selrs1 == this->der.output.rfctrl.selrd){
         if(this->dec.rfctrl.r1flop == this->der.output.rfctrl.rdflop){
           this->ctrl.stallD = 1; //instruction is using DEReg rd, stall.
-          cout << " DATAHAZARD! Execute Stage Rd matches Decode Stage RS1. Stalling Decode!" << endl;
+          cout << "DATAHAZARD! Execute Stage Rd matches Decode Stage RS1. Stalling Decode!" << endl;
         }
       }else if(this->dec.rfctrl.selrs1 == this->ewr.output.rfctrl.selrd){
         if(this->dec.rfctrl.r1flop == this->ewr.output.rfctrl.rdflop){
           this->ctrl.stallD = 1; //instruction is using EWReg rd, stall.
-          cout << " DATAHAZARD! Writeback Stage Rd matches Decode Stage RS1. Stalling Decode!" << endl;
+          cout << "DATAHAZARD! Writeback Stage Rd matches Decode Stage RS1. Stalling Decode!" << endl;
         }
       }
     }
@@ -137,15 +136,18 @@ bool Core::clock(uint32_t clockCycle){
       if(this->dec.rfctrl.selrs2 == this->der.output.rfctrl.selrd){
         if(this->dec.rfctrl.r2flop == this->der.output.rfctrl.rdflop){
           this->ctrl.stallD = 1; //instruction is using DEReg rd, stall.
-          cout << " DATAHAZARD! Execute Stage Rd matches Decode Stage RS2. Stalling Decode!" << endl;
+          cout << "DATAHAZARD! Execute Stage Rd matches Decode Stage RS2. Stalling Decode!" << endl;
         }
       }else if(this->dec.rfctrl.selrs2 == this->ewr.output.rfctrl.selrd){
         if(this->dec.rfctrl.r2flop == this->ewr.output.rfctrl.rdflop){
           this->ctrl.stallD = 1; //instruction is using EWReg rd, stall.
-          cout << " DATAHAZARD! Writeback Stage Rd matches Decode Stage RS2. Stalling Decode!" << endl;
+          cout << "DATAHAZARD! Writeback Stage Rd matches Decode Stage RS2. Stalling Decode!" << endl;
         }
       }
     }
+
+    //detect statistical noop
+    this->der.input.noop = (this->fdr.output.i == 0);
 
  //---------------------------------------------
  //Execute Stage (Process Register File and ALU)
@@ -153,6 +155,13 @@ bool Core::clock(uint32_t clockCycle){
     cout << setfill('=') << setw(80) << "\n"
          << "  EXECUTE STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
+
+   //Note NOOPS
+    this->ewr.input.noop = this->der.output.noop;
+    if(this->der.output.noop){
+      cout << " NOOP DETECTED" << endl;
+    }
+
    //Access Register File
     this->rf.rfctrl.selrs1 = this->der.output.rfctrl.selrs1;
     this->rf.rfctrl.selrs2 = this->der.output.rfctrl.selrs2;
@@ -161,15 +170,32 @@ bool Core::clock(uint32_t clockCycle){
     this->rf.processRead();
     this->ewr.input.rfctrl.all = this->der.output.rfctrl.all;
     this->ewr.input.rs2  = this->rf.rs2;
+
     cout << " RS1 : ";
-    if(der.output.rfctrl.r1flop){cout << "F";}else{cout << "X";}
+    if(der.output.rfctrl.r1flop){
+      cout << "F";
+    }else{
+      cout << "X";
+    }
     cout << this->rf.rfctrl.selrs1 << " --> ";
-    if(der.output.rfctrl.r1flop){cout << this->rf.rs1.single;}else{cout << this->rf.rs1.integer;}
+    if(der.output.rfctrl.r1flop){
+      cout << this->rf.rs1.single;
+    }else{
+      cout << this->rf.rs1.integer;
+    }
     cout << " (" << hexString(this->rf.rs1.integer) << ")" << endl;
     cout << " RS2 : ";
-    if(der.output.rfctrl.r2flop){cout << "F";}else{cout << "X";}
+    if(der.output.rfctrl.r2flop){
+      cout << "F";
+    }else{
+      cout << "X";
+    }
     cout << this->rf.rfctrl.selrs2 << " --> ";
-    if(der.output.rfctrl.r2flop){cout << this->rf.rs2.single;}else{cout << this->rf.rs2.integer;}
+    if(der.output.rfctrl.r2flop){
+      cout << this->rf.rs2.single;
+    }else{
+      cout << this->rf.rs2.integer;
+    }
     cout << " (" << hexString(this->rf.rs2.integer) << ")" << endl;
 
    //Run ALU
@@ -182,6 +208,7 @@ bool Core::clock(uint32_t clockCycle){
       this->alu.A = this->rf.rs1;
       cout << " ALU A gets RS1" << endl;
     }
+    
     if(this->der.output.aluctrl.alubsel){
       //use Immediate
       this->alu.B.integer = this->der.output.imm;
@@ -191,29 +218,52 @@ bool Core::clock(uint32_t clockCycle){
       this->alu.B = this->rf.rs2;
       cout << " ALU B gets RS2" << endl;
     }
+    
     this->alu.aluctrl.aluop   = this->der.output.aluctrl.aluop;
     this->alu.aluctrl.alucomp = this->der.output.aluctrl.alucomp;
     this->alu.aluctrl.alufp   = this->der.output.aluctrl.alufp;
+
     this->alu.process();
+    
     this->ewr.input.aluX = this->alu.X;
     this->ctrl.stallE = alu.aluctrl.busy;
-    if(this->alu.aluctrl.busy) cout << " ALU PERFORMING FLOP! STALLING EXECUTE STAGE!" << endl;
+    
+    if(this->alu.aluctrl.busy) cout << " ALU BUSY! STALLING EXECUTE STAGE!" << endl;
+    
     cout << " ALU Result : ";
-    if(der.output.aluctrl.alufp){cout << this->alu.X.single;}else{cout << hexString(this->alu.X.integer);}
-    cout << endl;
+    cout << hexString(this->alu.X.integer) << " (";
+    if(der.output.aluctrl.alufp){
+      cout << this->alu.X.single;
+    }else{
+      cout << this->alu.X.integer;
+    }
+    cout << ")" << endl;
 
    //Run PCplus/Branch Logic
-    bool branched = (this->der.output.bctrl.btype && (0b1 & this->alu.X.integer));
-    this->ewr.input.pcplus = (branched)?
+    bool branching = (this->der.output.bctrl.btype && (0b1 & this->alu.X.integer));
+    this->ewr.input.pcplus = (branching)?
                              (this->der.output.pc + this->der.output.imm):
                              (this->der.output.pc + 4U);
-    this->ewr.input.bctrl.branch = branched;
+    this->ewr.input.bctrl.branch = branching;
     this->ewr.input.bctrl.jtype = this->der.output.bctrl.jtype;
     this->ewr.input.bctrl.halt = this->der.output.bctrl.halt;
-    if(branched){
-      cout << " Branch Confirmed. Preparing to Branch." << endl;
-      cout << " Branch Destination : " << hexString(this->ewr.input.pcplus) << endl;
+    
+    if(this->der.output.bctrl.btype){
+      cout << " B-type Branch Attempted..." << endl;
+      if(branching){
+        cout << "  Branch Success! destination = " << hexString(this->ewr.input.pcplus) << endl;
+        cout << "  Branch will be taken on writeback stage." << endl;
+      }else{
+        cout << "  Branch not taken!" << endl;
+      }
     }
+    if(this->der.output.bctrl.jtype){
+      cout << " Processing J-type branch..." << endl;
+      cout << "  destination = " << hexString(this->ewr.input.aluX.uinteger) << endl;
+    }
+
+    //forward memory controls
+    this->ewr.input.memctrl.all = this->der.output.memctrl.all;
 
  //---------------------------------------------
  //Writeback Stage (Memory Access and Register File Writeback)
@@ -221,8 +271,11 @@ bool Core::clock(uint32_t clockCycle){
     cout << setfill('=') << setw(80) << "\n"
          << "  WRITEBACK STAGE\n"
          << setfill('=') << setw(80) << " " << endl;
-    this->ctrl.branched = this->ewr.output.bctrl.branch || this->ewr.output.bctrl.jtype;
+
    //Port-D Memory Access
+    cout << " Memctrl :: memrsz : " << (int)this->ewr.output.memctrl.memrsz
+         << " memwsz : " << (int)this->ewr.output.memctrl.memwsz
+         << " memrsgn : " << (int)this->ewr.output.memctrl.memrsgn << endl;
     this->portD.memctrl.memrsz = this->ewr.output.memctrl.memrsz;
     this->portD.memctrl.memwsz = this->ewr.output.memctrl.memwsz;
     if(this->ewr.output.memctrl.memwsz){
@@ -266,7 +319,10 @@ bool Core::clock(uint32_t clockCycle){
    //check for halt
     if(this->ewr.output.bctrl.halt){
       //HALT ON EXECUTE OF HALT INSTRUCTION
-      cout << "HALT INSTRUCTION IN WRITEBACK!!!\n --> EXITING CPU LOOP\n" << endl;
+      cout << "\nHALT INSTRUCTION IN WRITEBACK!!!\n --> EXITING CPU LOOP\n" << endl;
+      cout << setfill('*') << setw(80) << "\n"
+        << "END OF " << this->coreID << "'s CLOCK CYCLE #" << clockCycle << "\n"
+        << setfill('*') << setw(80) << " \n" << endl;
       return false;
     }
 
@@ -297,6 +353,7 @@ bool Core::clock(uint32_t clockCycle){
       cout << "DEBUG - 2 - pcbranch : " << pcbranch << endl;
       pcbranch = this->ewr.output.aluX.uinteger;
     }
+    this->ctrl.branched = this->ewr.output.bctrl.branch || this->ewr.output.bctrl.jtype;
     if(this->ewr.output.bctrl.jtype || this->ewr.output.bctrl.branch){
       this->ctrl.stallF = 0;
       this->ctrl.stallD = 0;
@@ -355,10 +412,25 @@ bool Core::clock(uint32_t clockCycle){
          << " stallW : " << bitset<1>(this->ctrl.stallW)
          << endl;
 
-    if(this->pc > 0x30){
+    //DEBUG PC LIMIT
+    //if(this->pc > 0x1FF){
+    if(this->pc > 0x2C){
       cout << "\nDEBUG PC OVERFLOW!!!\n" << endl;
       return false;
     }
 
+    //Instruction Counter for statistics
+    if(((!this->ctrl.stallW) && (!this->ctrl.stallE)) 
+     && ((!this->ctrl.stallD) && (!this->ctrl.stallF))){
+      //not stalled
+      if(!this->ewr.output.noop){
+        //not a noop
+        this->instructionCount++;
+      }
+    }
+
+    cout << setfill('*') << setw(80) << "\n"
+       << "END OF " << this->coreID << "'s CLOCK CYCLE #" << clockCycle << "\n"
+       << setfill('*') << setw(80) << " \n" << endl;
     return true; //No Halt, Return True.
 }

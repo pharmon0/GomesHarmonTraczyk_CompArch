@@ -12,14 +12,21 @@
 #include <cstdint>      //Standard Int Types
 #include "RISCV.h"      //RISCV Definitions Header
 #include "Datatypes.h"  //Custom Datatypes
+#include <iostream>
+using std::cout;
+using std::endl;
+
+//============================================
+// Constants and Definitions
+//============================================
 
 //============================================
 // ALU Object Class
 //============================================
 class ALU{
-    uint32_t intTicks;
-    uint32_t flopTicks;
-    uint8_t counter;
+    uint32_t intCycles;
+    uint32_t flopCycles;
+    uint16_t counter;
  public:
     data32_t A, B, X; //ALU dataports
     union{

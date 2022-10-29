@@ -20,9 +20,12 @@ using std::bitset;
 //============================================
 // Constants and Definitions
 //============================================
+#ifndef TICKS_PER_CLOCK
+#define TICKS_PER_CLOCK 10
+#endif
 #define MEM_TICKS      20 //20 ticks per Memory Access
-#define ALU_INT_TICKS  10 //10 ticks per integer ALU OP
-#define ALU_FLOP_TICKS 50 //50 ticks per floating ALU OP
+#define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
+#define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
 
 //============================================
 // Main Program
@@ -35,7 +38,7 @@ int main(void){
     ram.populate("text/vadd.asm",0); //populate instruction space
 
     //create a CPU core
-    Core cpuA = Core(ALU_INT_TICKS, ALU_FLOP_TICKS);
+    Core cpuA = Core("cpuA", ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
     //create and populate membus for instruction and data
     Membus busD = Membus({&(cpuA.portD)},&(ram.portD));
@@ -43,10 +46,11 @@ int main(void){
     
     //run simulation loop until CPU halts
     uint64_t tick = 0;
-    bool halt = false;
-    while(!halt){
+    bool noHalt = true;
+    while(noHalt){
+        cout << "\n*** Simulation Loop : Tick #" << tick << endl;
         //tick the CPU
-        halt = cpuA.process(tick);
+        noHalt = cpuA.process(tick);
 
         //update the membus
         busD.process(tick);
@@ -61,17 +65,14 @@ int main(void){
 
         tick++;
     }
-    /*
-    long int clock = system.cpu.clock;
-    long int instructions = system.cpu.instcnt;
-    float cpi = clock / instructions;
-    int ticks = clock * 10;
-    cout << "With a total of " << clock
-         << " Clock Cycles and " << instructions
-         <<  " Instructions, the average system CPI was "
-         << cpi
-         << "\n\n Total System Ticks: " << ticks 
-         << endl;
-    */
+
+    uint32_t clockCycles = tick / TICKS_PER_CLOCK;
+    uint32_t instructions = cpuA.instructionCount;
+    float cpi = ((float)clockCycles)/((float)instructions);
+    cout << "\nProgram halted after " << tick << " ticks (" << clockCycles << " cycles), executing "
+         << instructions << " instructions, giving an average CPI of " << cpi
+         << "\nMemory Dump saved to ./text/memorydump.txt" << endl;
+    ram.printToFile("text/memorydump.txt");
+
     return 0;
 }

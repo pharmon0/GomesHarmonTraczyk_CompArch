@@ -19,6 +19,7 @@
 #include <iostream>
 #include "Functions.h"
 #include "Datatypes.h"
+#include <iostream>
 using std::stoi;
 using std::cout;
 using std::endl;
@@ -45,8 +46,8 @@ class Memory{
     uint32_t memRead(uint32_t,uint8_t); //helper for memread
     void memWrite(uint32_t,uint32_t,uint8_t); //helper for memwrite
 
-    uint8_t counterI;
-    uint8_t counterD;
+    int counterI;
+    int counterD;
 
  public:
     //Memory Ports

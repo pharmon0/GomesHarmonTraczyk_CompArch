@@ -61,8 +61,9 @@ class FDRegister{
 class DERegister{
  public:
     struct{  //Register Input Dataports
+        bool     noop;//noop flag for system statistics
         uint32_t pc;  //Program Counter Value;
-        int32_t imm; //immediate value;
+        int32_t imm;  //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;
@@ -113,8 +114,9 @@ class DERegister{
     } input; //Register Input Dataports
 
     struct{  //Register Output Dataports
+        bool     noop;//noop flag for system statistics
         uint32_t pc;  //Program Counter Value;
-        int32_t imm; //immediate value;
+        int32_t imm;  //immediate value;
 
         union{    //Register File Control Signals
             uint32_t all;
@@ -191,6 +193,7 @@ class DERegister{
 class EWRegister{
  public:
     struct{  //Register Input Dataports
+        bool     noop;//noop flag for system statistics
         data32_t aluX;//ALU Result
         data32_t rs2; //RS2 Data
         uint32_t pcplus;  //Modified Program Counter Value;
@@ -232,6 +235,7 @@ class EWRegister{
     } input; //Register Input Dataports
 
     struct{  //Register Output Dataports
+        bool     noop;//noop flag for system statistics
         data32_t aluX;//ALU Result
         data32_t rs2; //RS2 Data
         uint32_t pcplus;  //Modified Program Counter Value;

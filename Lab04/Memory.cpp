@@ -8,8 +8,8 @@
 //============================================
 Memory::Memory(uint8_t accessTickCount){
     this->accessTicks = accessTickCount;
-    this->counterD = 0;
-    this->counterI = 0;
+    this->counterD = accessTickCount-1;
+    this->counterI = accessTickCount-1;
     this->portI.memctrl.all = 0;
     this->portI.address = 0;
     this->portI.data = 0;
@@ -25,45 +25,55 @@ Memory::Memory(uint8_t accessTickCount){
 //============================================
 void Memory::process(uint64_t tick){
     //Port I
-    if(this->portI.memctrl.memrsz == this->portI.memctrl.memwsz);
-    else if(this->counterI != 0){
+    if(this->portI.memctrl.memrsz == this->portI.memctrl.memwsz){
+        cout << "Memory | PortI : No Memory Access this tick! |";
+        this->counterI = this->accessTicks-1;
+    }else if(this->counterI != 0){
         //count one tick
-        this->counterI--; 
+        cout << "Memory | PortI : Counter Decremented (" << this->counterI << " --> " << --this->counterI << ") |";
     }else{
+        cout << "Memory | PortI : Memory Ready";
         //memory done.
-        this->counterI = this->accessTicks;
+        this->counterI = this->accessTicks-1;
         this->portI.memctrl.memack = 1;
 
         //Load
         if(this->portI.memctrl.memrsz > this->portI.memctrl.memwsz){
             this->portI.data = this->memRead(this->portI.address,
                                             this->portI.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portI.data) << " Read from " << hexString(this->portI.address) << "\n >";
         //Store
         }else{
             this->memWrite(this->portI.address,
                         this->portI.data,
                         this->portI.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portI.data) << " Written to " << hexString(this->portI.address) << "\n >";
         }
     }
     //Port D
-    if(this->portD.memctrl.memrsz == this->portD.memctrl.memwsz);
-    else if(this->counterD != 0){
+    if(this->portD.memctrl.memrsz == this->portD.memctrl.memwsz){
+        cout << " PortD : No Memory Access this tick!" << endl;
+        this->counterD = this->accessTicks-1;
+    }else if(this->counterD != 0){
         //count one tick
-        this->counterD--; 
+        cout << " PortD : Counter Decremented (" << this->counterD << " --> " << --this->counterD << ")" << endl;
     }else{
+        cout << " PortD : Memory Ready";
         //memory done.
-        this->counterD = this->accessTicks;
+        this->counterD = this->accessTicks-1;
         this->portD.memctrl.memack = 1;
 
         //Load
         if(this->portD.memctrl.memrsz > this->portD.memctrl.memwsz){
             this->portD.data = this->memRead(this->portD.address,
                                             this->portD.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portD.data) << " Read from " << hexString(this->portD.address) << endl;
         //Store
         }else{
             this->memWrite(this->portD.address,
                         this->portD.data,
                         this->portD.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portD.data) << " Written to " << hexString(this->portD.address) << endl;
         }
     }
 }
@@ -157,7 +167,8 @@ void Memory::printToFile(string filename){
     file.open(filename);
     map<uint32_t,uint8_t>::iterator iter;
     for(iter = this->bank.begin(); iter != this->bank.end(); iter++){
-        file << hexString(iter->first) << ":" << bitset<8>(iter->second) << endl;
+        file << hexString(iter->first) << " : "
+            << hexString(iter->second,8) << " (" << bitset<8>(iter->second) << ")" << endl;
     }
     file.close();
 }
