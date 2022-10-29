@@ -58,13 +58,16 @@ int main(void){
         cout << "\n*** Simulation Loop : Tick #" << tick << endl;
         //tick the CPU
         bool noHaltA = cpuA.process(tick);
-        bool noHaltB = cpuB.process(tick);
-        noHalt = noHaltA && noHaltB;
+        //TODO enable cpuB
+        //bool noHaltB = cpuB.process(tick);
+        //noHalt = noHaltA && noHaltB;
+        noHalt = noHaltA;
 
         //update the membus
         dataBus.process(tick);
         ram.portIA = cpuA.portI;
-        ram.portIB = cpuB.portI;
+        //TODO uncomment
+        //ram.portIB = cpuB.portI;
 
         //tick the RAM
         ram.process(tick);
@@ -72,7 +75,8 @@ int main(void){
         //update the membus
         dataBus.process(tick);
         cpuA.portI = ram.portIA;
-        cpuB.portI = ram.portIB;
+        //TODO uncomment
+        //cpuB.portI = ram.portIB;
 
         tick++;
     }
