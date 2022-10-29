@@ -21,6 +21,7 @@ using std::string;
 // Function Prototypes
 //============================================
 string hexString(uint32_t);
+string hexString(uint32_t, uint8_t);
 int32_t memSignExtend(int32_t,bool,uint8_t);
 int32_t immSignExtendShift(int32_t,bool,bool);
 

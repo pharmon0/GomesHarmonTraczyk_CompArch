@@ -13,6 +13,8 @@
 #include "Core.h"
 #include <cstdint>
 #include "RISCV.h"
+#include <vector>
+using std::vector;
 
 //============================================
 // Constants and Macros
@@ -22,16 +24,16 @@
 // Memory Controller Class
 //============================================
 class Membus{
-  public:
+    vector<memport_t*> ports;
+    memport_t* mem;
+    bool toMem;
 
-    Core   cpu;
-    Memory ram;
-    
+  public:
     //constructor
-    Membus(void);
+    Membus(vector<memport_t*>,memport_t*);
 
     //Clock Cycle Process
-    bool process(void);
+    void process(uint64_t);
 };
 
 // End Header Guard

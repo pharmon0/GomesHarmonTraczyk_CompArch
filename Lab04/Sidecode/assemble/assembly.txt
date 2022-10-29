@@ -1,4 +1,0 @@
-#comment test
-addi x11, xzr, 7
-addi x12, x0, 9 #will it get this one?
-add  x13, x11, x12  
