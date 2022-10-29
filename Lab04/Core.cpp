@@ -6,10 +6,11 @@
 //============================================
 // Constructors
 //============================================
-Core::Core(string name, uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
+Core::Core(string name, uint32_t initialPC, uint32_t initialSP, uint8_t aluIntTickCount, uint8_t aluFlopTickCount){
   this->coreID = name;
+  this->rf = RegisterFile(initialSP);
   this->alu = ALU(aluIntTickCount, aluFlopTickCount);
-  this->pc = 0;
+  this->pc = initialPC;
   this->ctrl.all = 0;
   this->portI.memctrl.all = 0;
   this->portI.memctrl.memrsz = 0b11; //READ-ONLY (32b)
@@ -414,10 +415,10 @@ bool Core::process(uint64_t tick){
 
     //DEBUG PC LIMIT
     //if(this->pc > 0x1FF){
-    if(this->pc > 0x2C){
-      cout << "\nDEBUG PC OVERFLOW!!!\n" << endl;
-      return false;
-    }
+    //if(this->pc > 0x2C){
+    //  cout << "\nDEBUG PC OVERFLOW!!!\n" << endl;
+    //  return false;
+    //}
 
     //Instruction Counter for statistics
     if(((!this->ctrl.stallW) && (!this->ctrl.stallE)) 

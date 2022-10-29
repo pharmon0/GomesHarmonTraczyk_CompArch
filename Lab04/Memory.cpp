@@ -9,10 +9,14 @@
 Memory::Memory(uint8_t accessTickCount){
     this->accessTicks = accessTickCount;
     this->counterD = accessTickCount-1;
-    this->counterI = accessTickCount-1;
-    this->portI.memctrl.all = 0;
-    this->portI.address = 0;
-    this->portI.data = 0;
+    this->counterIA = accessTickCount-1;
+    this->counterIB = accessTickCount-1;
+    this->portIA.memctrl.all = 0;
+    this->portIA.address = 0;
+    this->portIA.data = 0;
+    this->portIB.memctrl.all = 0;
+    this->portIB.address = 0;
+    this->portIB.data = 0;
     this->portD.memctrl.all = 0;
     this->portD.address = 0;
     this->portD.data = 0;
@@ -24,30 +28,56 @@ Memory::Memory(uint8_t accessTickCount){
 //  Read/Write 8,16,32-bit data to/from ports
 //============================================
 void Memory::process(uint64_t tick){
-    //Port I
-    if(this->portI.memctrl.memrsz == this->portI.memctrl.memwsz){
-        cout << "Memory | PortI : No Memory Access this tick! |";
-        this->counterI = this->accessTicks-1;
-    }else if(this->counterI != 0){
+    //portIA
+    if(this->portIA.memctrl.memrsz == this->portIA.memctrl.memwsz){
+        cout << "Memory | PortIA : No Memory Access this tick! |";
+        this->counterIA = this->accessTicks-1;
+    }else if(this->counterIA != 0){
         //count one tick
-        cout << "Memory | PortI : Counter Decremented (" << this->counterI << " --> " << --this->counterI << ") |";
+        cout << "Memory | PortIA : Counter Decremented (" << this->counterIA << " --> " << --this->counterIA << ") |";
     }else{
-        cout << "Memory | PortI : Memory Ready";
+        cout << "Memory | PortIA : Memory Ready";
         //memory done.
-        this->counterI = this->accessTicks-1;
-        this->portI.memctrl.memack = 1;
+        this->counterIA = this->accessTicks-1;
+        this->portIA.memctrl.memack = 1;
 
         //Load
-        if(this->portI.memctrl.memrsz > this->portI.memctrl.memwsz){
-            this->portI.data = this->memRead(this->portI.address,
-                                            this->portI.memctrl.memrsz);
-            cout << "\n\t" << hexString(this->portI.data) << " Read from " << hexString(this->portI.address) << "\n >";
+        if(this->portIA.memctrl.memrsz > this->portIA.memctrl.memwsz){
+            this->portIA.data = this->memRead(this->portIA.address,
+                                            this->portIA.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portIA.data) << " Read from " << hexString(this->portIA.address) << "\n >";
         //Store
         }else{
-            this->memWrite(this->portI.address,
-                        this->portI.data,
-                        this->portI.memctrl.memrsz);
-            cout << "\n\t" << hexString(this->portI.data) << " Written to " << hexString(this->portI.address) << "\n >";
+            this->memWrite(this->portIA.address,
+                        this->portIA.data,
+                        this->portIA.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portIA.data) << " Written to " << hexString(this->portIA.address) << "\n >";
+        }
+    }
+    //portIB
+    if(this->portIB.memctrl.memrsz == this->portIB.memctrl.memwsz){
+        cout << " portIB : No Memory Access this tick! |";
+        this->counterIB = this->accessTicks-1;
+    }else if(this->counterIB != 0){
+        //count one tick
+        cout << " portIB : Counter Decremented (" << this->counterIB << " --> " << --this->counterIB << ") |";
+    }else{
+        cout << " portIB : Memory Ready";
+        //memory done.
+        this->counterIB = this->accessTicks-1;
+        this->portIB.memctrl.memack = 1;
+
+        //Load
+        if(this->portIB.memctrl.memrsz > this->portIB.memctrl.memwsz){
+            this->portIB.data = this->memRead(this->portIB.address,
+                                            this->portIB.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portIB.data) << " Read from " << hexString(this->portIB.address) << "\n >";
+        //Store
+        }else{
+            this->memWrite(this->portIB.address,
+                        this->portIB.data,
+                        this->portIB.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->portIB.data) << " Written to " << hexString(this->portIB.address) << "\n >";
         }
     }
     //Port D

@@ -26,6 +26,12 @@ using std::bitset;
 #define MEM_TICKS      20 //20 ticks per Memory Access
 #define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
 #define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
+#define ARRAY_A_START 0x400
+#define ARRAY_B_START 0x800
+#define CPUA_INIT_PC 0
+#define CPUA_INIT_SP 0x2FF
+#define CPUB_INIT_PC 0x100
+#define CPUB_INIT_SP 0x3FF
 
 //============================================
 // Main Program
@@ -33,17 +39,17 @@ using std::bitset;
 int main(void){
     //create and populate the system memory
     Memory ram = Memory(MEM_TICKS);
-    ram.populateFloat("text/A.txt",0x400); //populate A array
-    ram.populateFloat("text/B.txt",0x800); //populate B array
-    ram.populate("text/vadd.asm",0); //populate instruction space
+    ram.populateFloat("text/A.txt",ARRAY_A_START); //populate A array
+    ram.populateFloat("text/B.txt",ARRAY_B_START); //populate B array
+    ram.populate("text/vadd.asm",CPUA_INIT_PC); //populate instruction space
+    ram.populate("text/vadd.asm",CPUB_INIT_PC); //populate instruction space
 
     //create a CPU core
-    Core cpuA = Core("cpuA", ALU_INT_CYCLES, ALU_FLOP_CYCLES);
-    Core cpuB = Core("cpuB", ALU_INT_CYCLES, ALU_FLOP_CYCLES);
+    Core cpuA = Core("cpuA", CPUA_INIT_PC, CPUA_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
+    Core cpuB = Core("cpuB", CPUB_INIT_PC, CPUB_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
     //create and populate membus for instruction and data
-    Membus busD = Membus({&(cpuA.portD), &(cpuB.portD)},&(ram.portD));
-    Membus busI = Membus({&(cpuA.portI), &(cpuB.portI)},&(ram.portI));
+    Membus dataBus = Membus({&(cpuA.portD), &(cpuB.portD)},&(ram.portD));
     
     //run simulation loop until CPU halts
     uint64_t tick = 0;
@@ -56,15 +62,17 @@ int main(void){
         noHalt = noHaltA && noHaltB;
 
         //update the membus
-        busD.process(tick);
-        busI.process(tick);
+        dataBus.process(tick);
+        ram.portIA = cpuA.portI;
+        ram.portIB = cpuB.portI;
 
         //tick the RAM
         ram.process(tick);
 
         //update the membus
-        busD.process(tick);
-        busI.process(tick);
+        dataBus.process(tick);
+        cpuA.portI = ram.portIA;
+        cpuB.portI = ram.portIB;
 
         tick++;
     }

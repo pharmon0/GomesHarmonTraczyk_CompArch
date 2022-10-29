@@ -31,6 +31,7 @@ class RegisterFile{
  public:
     //Constructors
     RegisterFile(void);
+    RegisterFile(uint32_t);
 
     union{
         uint32_t all;

@@ -46,12 +46,14 @@ class Memory{
     uint32_t memRead(uint32_t,uint8_t); //helper for memread
     void memWrite(uint32_t,uint32_t,uint8_t); //helper for memwrite
 
-    int counterI;
+    int counterIA;
+    int counterIB;
     int counterD;
 
  public:
     //Memory Ports
-    memport_t portI;
+    memport_t portIA;
+    memport_t portIB;
     memport_t portD;
 
     //Constructors

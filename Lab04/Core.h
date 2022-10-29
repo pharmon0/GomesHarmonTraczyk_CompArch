@@ -74,7 +74,7 @@ class Core{
     uint32_t instructionCount;
 
     //constructor
-    Core(string, uint8_t, uint8_t);
+    Core(string, uint32_t, uint32_t, uint8_t, uint8_t);
 
     //Clock Cycle Process
     bool process(uint64_t);
