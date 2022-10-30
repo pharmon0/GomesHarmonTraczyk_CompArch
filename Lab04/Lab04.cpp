@@ -56,11 +56,19 @@ int main(void){
     bool noHalt = true;
     bool runA = true;
     bool runB = true;
+    uint64_t ticksA = 0;
+    uint64_t ticksB = 0;
     while(noHalt){
         cout << "\n*** Simulation Loop : Tick #" << tick << endl;
         //tick the CPU
-        if(runA) runA = cpuA.process(tick);
-        if(runB) runB = cpuB.process(tick);
+        if(runA){
+            runA = cpuA.process(tick);
+            ticksA++;
+        }
+        if(runB){
+            runB = cpuB.process(tick);
+            ticksB++;
+        }
         noHalt = runA || runB;
 
         //update the membus
@@ -79,12 +87,17 @@ int main(void){
         tick++;
     }
 
-    uint32_t clockCycles = tick / TICKS_PER_CLOCK;
-    uint32_t instructions = cpuA.instructionCount;
-    float cpi = ((float)clockCycles)/((float)instructions);
-    cout << "\nProgram halted after " << tick << " ticks (" << clockCycles << " cycles), executing "
-         << instructions << " instructions, giving an average CPI of " << cpi
-         << "\nMemory Dump saved to ./text/memorydump.txt" << endl;
+    uint32_t ccA = ticksA / TICKS_PER_CLOCK;
+    uint32_t instructionsA = cpuA.instructionCount;
+    float cpiA = ((float)ccA)/((float)instructionsA);
+    uint32_t ccB = ticksB / TICKS_PER_CLOCK;
+    uint32_t instructionsB = cpuB.instructionCount;
+    float cpiB = ((float)ccB)/((float)instructionsB);
+    cout << "\nCPU_A ran for " << ccA << " Clock Cycles (" << ticksA << " Ticks) and ran "
+         << instructionsA << " Instructions, giving an average CPI of " << cpiA << endl;
+    cout << "\nCPU_B ran for " << ccB << " Clock Cycles (" << ticksB << " Ticks) and ran "
+         << instructionsB << " Instructions, giving an average CPI of " << cpiB << endl;
+    cout << "\nMemory Dump saved to ./text/memorydump.txt" << endl;
     ram.printToFile("text/memorydump.txt");
 
     return 0;

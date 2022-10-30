@@ -428,11 +428,10 @@ bool Core::process(uint64_t tick){
     //}
 
     //Instruction Counter for statistics
-    if(((!this->ctrl.stallW) && (!this->ctrl.stallE)) 
-     && ((!this->ctrl.stallD) && (!this->ctrl.stallF))){
+    if(!this->ctrl.stallW){
       //not stalled
       if(!this->ewr.output.noop){
-        //not a noop
+        //not a noop from execute
         this->instructionCount++;
       }
     }
