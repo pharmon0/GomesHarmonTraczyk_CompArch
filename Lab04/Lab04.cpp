@@ -42,7 +42,7 @@ int main(void){
     ram.populateFloat("text/A.txt",ARRAY_A_START); //populate A array
     ram.populateFloat("text/B.txt",ARRAY_B_START); //populate B array
     ram.populate("text/vadd.asm",CPUA_INIT_PC); //populate instruction space
-    ram.populate("text/vadd.asm",CPUB_INIT_PC); //populate instruction space
+    ram.populate("text/vsub.asm",CPUB_INIT_PC); //populate instruction space
 
     //create a CPU core
     Core cpuA = Core("cpuA", CPUA_INIT_PC, CPUA_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
@@ -54,20 +54,19 @@ int main(void){
     //run simulation loop until CPU halts
     uint64_t tick = 0;
     bool noHalt = true;
+    bool runA = true;
+    bool runB = true;
     while(noHalt){
         cout << "\n*** Simulation Loop : Tick #" << tick << endl;
         //tick the CPU
-        bool noHaltA = cpuA.process(tick);
-        //TODO enable cpuB
-        //bool noHaltB = cpuB.process(tick);
-        //noHalt = noHaltA && noHaltB;
-        noHalt = noHaltA;
+        if(runA) runA = cpuA.process(tick);
+        if(runB) runB = cpuB.process(tick);
+        noHalt = runA || runB;
 
         //update the membus
         dataBus.process(tick);
         ram.portIA = cpuA.portI;
-        //TODO uncomment
-        //ram.portIB = cpuB.portI;
+        ram.portIB = cpuB.portI;
 
         //tick the RAM
         ram.process(tick);
@@ -75,8 +74,7 @@ int main(void){
         //update the membus
         dataBus.process(tick);
         cpuA.portI = ram.portIA;
-        //TODO uncomment
-        //cpuB.portI = ram.portIB;
+        cpuB.portI = ram.portIB;
 
         tick++;
     }

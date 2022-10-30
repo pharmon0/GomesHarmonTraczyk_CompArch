@@ -12,6 +12,7 @@ Membus::Membus(vector<memport_t*> corePorts, memport_t* memPort){
     this->mem = memPort;
     this->ports = corePorts;
     this->toMem = true;
+    this->token = 0;
 }
 
 //============================================
@@ -20,13 +21,22 @@ Membus::Membus(vector<memport_t*> corePorts, memport_t* memPort){
 //   AKA: Bus Arbitration
 //============================================
 void Membus::process(uint64_t tick){
+    cout << " Current Token Holder : CPU" << (int)this->token;
+    if(!(tick % TICKS_PER_CLOCK)){
+        if(!(*this->ports.at(token)).memctrl.request){
+            cout << " | Token Handoff to CPU";
+            this->token = (this->token < this->ports.size()-1)?(this->token+1):(0);
+            cout << (int)this->token;
+        }
+    }
+    cout << endl;
     if(this->toMem){
         //TODO iterate through ports according to bus arbitration
-        *(this->mem) = *(this->ports.at(0));
+        *(this->mem) = *(this->ports.at(token));
         this->toMem = false;
     }else{
         //TODO iterate through ports according to bus arbitration
-        *(this->ports.at(0)) = *(this->mem);
+        *(this->ports.at(token)) = *(this->mem);
         this->toMem = true;
     }
 }

@@ -19,6 +19,9 @@ using std::vector;
 //============================================
 // Constants and Macros
 //============================================
+#ifndef TICKS_PER_CLOCK
+#define TICKS_PER_CLOCK 10
+#endif
 
 //============================================
 // Memory Controller Class
@@ -27,7 +30,7 @@ class Membus{
     vector<memport_t*> ports;
     memport_t* mem;
     bool toMem;
-
+    uint8_t token;
   public:
     //constructor
     Membus(vector<memport_t*>,memport_t*);
