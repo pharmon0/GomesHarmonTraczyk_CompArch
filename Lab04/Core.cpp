@@ -282,6 +282,13 @@ bool Core::process(uint64_t tick){
     if(this->ewr.output.memctrl.memwsz){
       //Store Instruction Detection
       this->portD.data = this->ewr.output.rs2.uinteger;
+      cout << " Attempting a STORE | address : " << hexString(this->ewr.output.aluX.uinteger)
+           << " | data : " << hexString(this->ewr.output.rs2.uinteger) << endl;
+    }
+    if(this->ewr.output.memctrl.memrsz){
+      //Load Instruction Detection
+      cout << " Attempting a LOAD | address : " << hexString(this->ewr.output.aluX.uinteger)
+           << " | Rd : " << this->ewr.output.rfctrl.selrd << endl; 
     }
     bool loading = false;
     if(this->ewr.output.memctrl.memrsz || this->ewr.output.memctrl.memwsz){

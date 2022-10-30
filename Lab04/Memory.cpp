@@ -47,10 +47,10 @@ void Memory::process(uint64_t tick){
                                             this->portIA.memctrl.memrsz);
             cout << "\n\t" << hexString(this->portIA.data) << " Read from " << hexString(this->portIA.address) << "\n >";
         //Store
-        }else{
+        }else if(this->portIA.memctrl.memwsz > this->portIA.memctrl.memrsz){
             this->memWrite(this->portIA.address,
                         this->portIA.data,
-                        this->portIA.memctrl.memrsz);
+                        this->portIA.memctrl.memwsz);
             cout << "\n\t" << hexString(this->portIA.data) << " Written to " << hexString(this->portIA.address) << "\n >";
         }
     }
@@ -73,10 +73,10 @@ void Memory::process(uint64_t tick){
                                             this->portIB.memctrl.memrsz);
             cout << "\n\t" << hexString(this->portIB.data) << " Read from " << hexString(this->portIB.address) << "\n >";
         //Store
-        }else{
+        }else if(this->portIB.memctrl.memwsz > this->portIB.memctrl.memrsz){
             this->memWrite(this->portIB.address,
                         this->portIB.data,
-                        this->portIB.memctrl.memrsz);
+                        this->portIB.memctrl.memwsz);
             cout << "\n\t" << hexString(this->portIB.data) << " Written to " << hexString(this->portIB.address) << "\n >";
         }
     }
@@ -99,10 +99,10 @@ void Memory::process(uint64_t tick){
                                             this->portD.memctrl.memrsz);
             cout << "\n\t" << hexString(this->portD.data) << " Read from " << hexString(this->portD.address) << endl;
         //Store
-        }else{
+        }else if(this->portD.memctrl.memwsz > this->portD.memctrl.memrsz){
             this->memWrite(this->portD.address,
                         this->portD.data,
-                        this->portD.memctrl.memrsz);
+                        this->portD.memctrl.memwsz);
             cout << "\n\t" << hexString(this->portD.data) << " Written to " << hexString(this->portD.address) << endl;
         }
     }
