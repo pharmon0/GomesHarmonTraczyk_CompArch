@@ -189,16 +189,53 @@ void Memory::populate(string filename, uint32_t start){
 }
 
 //============================================
-// Memory::populate
-//  prepopulates memory
+// Memory::printToFile
+//  prints byte-by-byte memory
 //============================================
-void Memory::printToFile(string filename){
+void Memory::printBytes(string filename){
     ofstream file;
     file.open(filename);
     map<uint32_t,uint8_t>::iterator iter;
     for(iter = this->bank.begin(); iter != this->bank.end(); iter++){
         file << hexString(iter->first) << " : "
             << hexString(iter->second,8) << " (" << bitset<8>(iter->second) << ")" << endl;
+    }
+    file.close();
+}
+
+//============================================
+// Memory::printToFile
+//  prints Lab 4 Arrays
+//============================================
+void Memory::printFloats(string filename){
+    ofstream file;
+    file.open(filename);
+    file << "A:\n";
+    for(uint32_t i = 0x400; i < 0x800; i+=4){
+        data32_t val;
+        val.uinteger = memRead(i,0b11);
+        file << hexString(i) << " : " << hexString(val.uinteger) << " (" << val.single << ")\n";
+    }
+    file << "\n=====================================\n";
+    file << "\nB:\n";
+    for(uint32_t i = 0x800; i < 0xC00; i+=4){
+        data32_t val;
+        val.uinteger = memRead(i,0b11);
+        file << hexString(i) << " : " << hexString(val.uinteger) << " (" << val.single << ")\n";
+    }
+    file << "\n=====================================\n";
+    file << "\nC:\n";
+    for(uint32_t i = 0xC00; i < 0x1000; i+=4){
+        data32_t val;
+        val.uinteger = memRead(i,0b11);
+        file << hexString(i) << " : " << hexString(val.uinteger) << " (" << val.single << ")\n";
+    }
+    file << "\n=====================================\n";
+    file << "\nD:\n";
+    for(uint32_t i = 0x1000; i < 0x1400; i+=4){
+        data32_t val;
+        val.uinteger = memRead(i,0b11);
+        file << hexString(i) << " : " << hexString(val.uinteger) << " (" << val.single << ")\n";
     }
     file.close();
 }

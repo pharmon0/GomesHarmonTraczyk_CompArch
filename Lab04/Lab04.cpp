@@ -97,8 +97,9 @@ int main(void){
          << instructionsA << " Instructions, giving an average CPI of " << cpiA << endl;
     cout << "\nCPU_B ran for " << ccB << " Clock Cycles (" << ticksB << " Ticks) and ran "
          << instructionsB << " Instructions, giving an average CPI of " << cpiB << endl;
-    cout << "\nMemory Dump saved to ./text/memorydump.txt" << endl;
-    ram.printToFile("text/memorydump.txt");
+    cout << "\nMemory Byte Dump saved to ./text/memorydump.txt\nMemory Array Values saved to ./text/arraysout.txt" << endl;
+    ram.printBytes("text/memorydump.txt");
+    ram.printFloats("text/arraysout.txt");
 
     return 0;
 }

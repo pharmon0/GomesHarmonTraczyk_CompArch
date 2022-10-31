@@ -65,7 +65,9 @@ class Memory{
     //misc. Functions
     void populateFloat(string,uint32_t);
     void populate(string,uint32_t);
-    void printToFile(string);
+    //void printToFile(string);
+    void printBytes(string);
+    void printFloats(string);
 };
 
 // End Header Guard
