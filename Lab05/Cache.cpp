@@ -77,3 +77,10 @@ void Cache::splitAddress(cacheaddr_t* addr){
     addr->offset = (address << (SYSTEM_BITWIDTH - this->offsetWidth)) >> (SYSTEM_BITWIDTH - this->offsetWidth);
     addr->index = ((address >> (this->offsetWidth)) << (this->offsetWidth + this->tagWidth)) >> this->tagWidth;
 }
+
+//==================================================================
+// Function to add data to cache using pseudo-LRU replacement policy
+//==================================================================
+void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+
+}
