@@ -82,5 +82,12 @@ void Cache::splitAddress(cacheaddr_t* addr){
 // Function to add data to cache using pseudo-LRU replacement policy
 //==================================================================
 void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+    //start at 0 iterate through loop until tag = 0
+    //if tag = 0 
+    //  check if space till next 1 < bytewidth
+    //if both true data, else continue loop
+    while(){
+        
+    }
 
 }
