@@ -47,3 +47,9 @@ uint8_t CacheBlock::writeOffset(uint32_t offset, uint8_t byte){
     if(this->bytes[offset] == 0)
         this->bytes.erase(offset);
 }
+
+//============================================
+// Accessors and Mutators
+//============================================
+uint32_t CacheBlock::getTag(void){return this->tag;}
+uint8_t  CacheBlock::getMESI(void){return this->mesi;}

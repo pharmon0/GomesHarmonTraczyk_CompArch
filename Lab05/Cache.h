@@ -79,7 +79,8 @@ class Cache{
     Cache(uint32_t cacheSize, uint32_t blockSize, uint8_t assMode);
     
     //member functions
-    bool find(uint32_t address);
+    int32_t find(uint32_t address); //is the address in the cache?
+    uint32_t load(uint32_t address, uint8_t byteWidth); //get the data at the address of width byteWidth
 
 };
 

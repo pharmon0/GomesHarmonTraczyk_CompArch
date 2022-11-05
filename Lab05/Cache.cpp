@@ -50,14 +50,30 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
 // Function to Find Element in Cache
 //  returns true for a hit, false for a miss
 //============================================
-bool Cache::find(uint32_t address){
+int32_t Cache::find(uint32_t address){
     cacheaddr_t addr; addr.address = address;
     splitAddress(&addr);
+    uint32_t index = addr.index;
+    uint32_t tag = addr.tag;
+    uint32_t offset = addr.offset;
+    for(int i = 0; i < setBlocks; i++){
+        if(bank[index][i].getTag() == tag){
+            if(bank[index][i].getMESI() != MESI_I){
+                return i;
+            }else{
+                return -1;
+            }
+        }
+    }
+    return -1;
 }
 
 //============================================
 // Function to mask address to index, tag, offset
 //============================================
 void Cache::splitAddress(cacheaddr_t* addr){
-
+    uint32_t address = addr->address;
+    addr->tag = (address >> (SYSTEM_BITWIDTH - this->tagWidth)) << (SYSTEM_BITWIDTH - this->tagWidth);
+    addr->offset = (address << (SYSTEM_BITWIDTH - this->offsetWidth)) >> (SYSTEM_BITWIDTH - this->offsetWidth);
+    addr->index = ((address >> (this->offsetWidth)) << (this->offsetWidth + this->tagWidth)) >> this->tagWidth;
 }

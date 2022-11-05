@@ -44,6 +44,9 @@ class CacheBlock{
 
     uint8_t readOffset(uint32_t offset);
     uint8_t writeOffset(uint32_t offset, uint8_t byte);
+
+    uint32_t getTag(void);
+    uint8_t getMESI(void);
 };
 
 // End Header Guard
