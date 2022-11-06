@@ -73,9 +73,9 @@ int32_t Cache::find(uint32_t address){
 //============================================
 void Cache::splitAddress(cacheaddr_t* addr){
     uint32_t address = addr->address;
-    addr->tag = (address >> (SYSTEM_BITWIDTH - this->tagWidth)) << (SYSTEM_BITWIDTH - this->tagWidth);
+    addr->tag = address >> (SYSTEM_BITWIDTH - this->tagWidth);
     addr->offset = (address << (SYSTEM_BITWIDTH - this->offsetWidth)) >> (SYSTEM_BITWIDTH - this->offsetWidth);
-    addr->index = ((address >> (this->offsetWidth)) << (this->offsetWidth + this->tagWidth)) >> this->tagWidth;
+    addr->index = (address << this->tagWidth) >> (this->tagWidth + this->offsetWidth);
 }
 
 //==================================================================
