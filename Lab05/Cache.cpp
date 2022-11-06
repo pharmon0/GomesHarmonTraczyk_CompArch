@@ -82,12 +82,33 @@ void Cache::splitAddress(cacheaddr_t* addr){
 // Function to add data to cache using pseudo-LRU replacement policy
 //==================================================================
 void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
-    //start at 0 iterate through loop until tag = 0
-    //if tag = 0 
-    //  check if space till next 1 < bytewidth
-    //if both true data, else continue loop
-    while(){
-        
-    }
+    //start at 0 iterate through loop until LRUtag = 0
+    cacheaddr_t addr; addr.address = address;
+    splitAddress(&addr);
+    uint32_t lindex = 0;
+    uint8_t foundAddress = this->find(address);
+    //checks if the tag exists in cache already
+    if(foundAddress == -1){
+        //if no tag exists checks all blocks within set
+        while(lindex < setBlocks){
+            if(bank[addr.index][lindex].LRU == 1){
+                lindex++;
+            }else{
+                bank[addr.index][lindex].writeOffset(addr.offset, data);
+                bank[addr.index][lindex].LRU = 1;
+                return;
+            }
+        }
+        //if all bocks written to, sets LRU to 0 and writes to first block
+        lindex = 0;
+        while(lindex < setBlocks){
+            bank[addr.index][lindex].LRU = 0;
+            lindex++;
+        }
+        bank[addr.index][0].writeOffset(addr.offset, data);
+    }else{//if found writes data
+        bank[addr.index][foundAddress].writeOffset(addr.offset, data);
+    } 
+
 
 }
