@@ -42,7 +42,7 @@ uint8_t CacheBlock::readOffset(uint32_t offset){
 // Write byte to block
 // This simply writes to block[offset]
 //============================================
-uint8_t CacheBlock::writeOffset(uint32_t offset, uint8_t byte){
+void CacheBlock::writeOffset(uint32_t offset, uint8_t byte){
     this->bytes[offset] = byte;
     if(this->bytes[offset] == 0)
         this->bytes.erase(offset);

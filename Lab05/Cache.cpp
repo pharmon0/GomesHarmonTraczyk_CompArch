@@ -108,7 +108,5 @@ void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
         bank[addr.index][0].writeOffset(addr.offset, data);
     }else{//if found writes data
         bank[addr.index][foundAddress].writeOffset(addr.offset, data);
-    } 
-
-
+    }
 }
