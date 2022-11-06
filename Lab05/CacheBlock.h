@@ -31,7 +31,7 @@ class CacheBlock{
     uint8_t mesi;
     
     uint32_t tag;
-
+    bool LRU;
     //bytes[tag] = byte
     map<uint32_t, uint8_t> bytes;
 
