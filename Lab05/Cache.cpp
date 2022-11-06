@@ -86,7 +86,7 @@ void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
     //if tag = 0 
     //  check if space till next 1 < bytewidth
     //if both true data, else continue loop
-    while(){
+    while(false){
         
     }
 
