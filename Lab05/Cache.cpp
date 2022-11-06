@@ -85,6 +85,18 @@ void Cache::cpuWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
     //start at 0 iterate through loop until LRUtag = 0
     cacheaddr_t addr; addr.address = address;
     splitAddress(&addr);
+    uint8_t foundAddress = this->find(address);
+    bank[addr.index][foundAddress].writeOffset(addr.offset, data);
+    bank[addr.index][foundAddress].setLRU(1);
+}
+
+//==================================================================
+// Function to add data to cache using pseudo-LRU replacement policy
+//==================================================================
+void Cache::memoryWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+    //start at 0 iterate through loop until LRUtag = 0
+    cacheaddr_t addr; addr.address = address;
+    splitAddress(&addr);
     uint32_t lindex = 0;
     uint8_t foundAddress = this->find(address);
     //checks if the tag exists in cache already
@@ -94,7 +106,7 @@ void Cache::cpuWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
             if(bank[addr.index][lindex].getLRU() == 1){
                 lindex++;
             }else{
-                bank[addr.index][lindex].writeOffset(addr.offset, data);
+                bank[addr.index][lindex] = new CacheBlock()
                 bank[addr.index][lindex].setLRU(1);
                 return;
             }
