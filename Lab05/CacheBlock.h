@@ -47,6 +47,9 @@ class CacheBlock{
 
     uint32_t getTag(void);
     uint8_t getMESI(void);
+
+    bool getLRU(void);
+    void setLRU(bool newLRU);
 };
 
 // End Header Guard

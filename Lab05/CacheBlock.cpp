@@ -53,3 +53,6 @@ void CacheBlock::writeOffset(uint32_t offset, uint8_t byte){
 //============================================
 uint32_t CacheBlock::getTag(void){return this->tag;}
 uint8_t  CacheBlock::getMESI(void){return this->mesi;}
+
+bool CacheBlock::getLRU(void){return this->LRU;}
+void CacheBlock::setLRU(bool newLRU){this->LRU = newLRU;}
