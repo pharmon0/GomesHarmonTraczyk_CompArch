@@ -67,7 +67,7 @@ class Cache{
 
     //Bank Access Functions
     uint32_t cacheRead(uint32_t address, uint8_t byteWidth);
-    void cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth);
+    void cpuWrite(uint32_t address, uint32_t data, uint8_t byteWidth);
 
     //addressing helpers
     void splitAddress(cacheaddr_t* addr);

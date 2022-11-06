@@ -81,7 +81,7 @@ void Cache::splitAddress(cacheaddr_t* addr){
 //==================================================================
 // Function to add data to cache using pseudo-LRU replacement policy
 //==================================================================
-void Cache::cacheWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+void Cache::cpuWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
     //start at 0 iterate through loop until LRUtag = 0
     cacheaddr_t addr; addr.address = address;
     splitAddress(&addr);
