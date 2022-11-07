@@ -32,10 +32,47 @@ vector<uint32_t> readFile(string filename);
 int main(void){
     vector<uint32_t> addresses = readFile("text/addresses.txt");
 
-    //Cache cache1 = Cache(256, 32, CACHE_ASS_DIRECT);
-    //Cache cache2 = Cache(512, 32, CACHE_ASS_DIRECT);
-    //Cache cache3 = Cache(256, 64, CACHE_ASS_DIRECT);
-    //Cache cache4 = Cache(256, 32, CACHE_ASS_4WAY);
+    cout << "Lab05::main() | File Read Successfully" << endl;
+
+    vector<Cache> caches = { Cache(256, 32, CACHE_ASS_DIRECT),
+                             Cache(512, 32, CACHE_ASS_DIRECT),
+                             Cache(256, 64, CACHE_ASS_DIRECT),
+                             Cache(256, 32, CACHE_ASS_4WAY),
+                             //Cache(256, 16, CACHE_ASS_DIRECT),
+                             //Cache(256, 32, CACHE_ASS_2WAY),
+                             //Cache(256, 32, CACHE_ASS_FULLY),
+                             //Cache(256, 16, CACHE_ASS_FULLY),
+                             //Cache(256, 64, CACHE_ASS_FULLY),
+                             //Cache(256, 64, CACHE_ASS_2WAY),
+                             //Cache(256, 64, CACHE_ASS_4WAY)
+                             };
+    
+    //iterate through all caches
+    for(int i = 0; i < caches.size(); i++){
+       cout << "Lab05::main() | Running Simulation of Cache " << i+1 << endl;
+       //read every address
+       for(int j = 0; j < addresses.size(); j++){
+           cout << "Lab05::main() | attempting to read byte from " << hexString(addresses[j]) << endl;
+           caches[i].byteRead(addresses[j],0b01);
+       }
+       //print stats
+       caches[i].printStats();
+    }
+
+    for(int i = 0; i < caches.size(); i++){
+        cout << "--------------------------" << endl;
+        caches[i].printStats();
+    }
+
+    // Cache cacheA = Cache(256, 32, CACHE_ASS_DIRECT);
+    // cout << "Lab05::main() | Running Simulation of CacheA" << endl;
+    // //read every address
+    // for(int j = 0; j < addresses.size(); j++){
+    //     cout << "Lab05::main() | attempting to read byte from " << hexString(addresses[j]) << endl;
+    //     cacheA.byteRead(addresses[j],0b01);
+    // }
+    // cacheA.printStats();
+    
 
     return 0;
 }
@@ -47,12 +84,12 @@ vector<uint32_t> readFile(string filename){
     ifstream file;
     file.open(filename);
     if(!file.is_open()){
-        cout << "FILE '" << filename << "' DID NOT OPEN" << endl;
+        cout << "Lab05::readFile | FILE '" << filename << "' DID NOT OPEN" << endl;
         return {};
     }
     string value;
     vector<uint32_t> result;
-    cout << " Reading File!" << endl;
+    //cout << " Reading File!" << endl;
     while( file >> value ){
         uint32_t item = uint32_t(stoul(value, nullptr, 16));
         result.push_back(item);

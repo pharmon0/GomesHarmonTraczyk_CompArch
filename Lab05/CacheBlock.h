@@ -12,6 +12,11 @@
 #include <cstdint>
 #include <map>
 #include <vector>
+#include <iostream>
+#include <bitset>
+using std::bitset;
+using std::cout;
+using std::endl;
 using std::vector;
 using std::map;
 
@@ -28,17 +33,23 @@ using std::map;
 //============================================
 class CacheBlock{    
     //CacheBlock metadata
+      //blocksize
+      uint32_t blockSize;
+
+    //MESI flags
     uint8_t mesi;
-    
+    //address tag
     uint32_t tag;
+    //LRU flag
     bool LRU;
-    //bytes[tag] = byte
-    map<uint32_t, uint8_t> bytes;
 
   public:
+    //bytes[offset] = byte
+    vector<uint8_t> bytes;
 
     //Constructor
     CacheBlock(void);
+    CacheBlock(uint32_t size, uint32_t addrtag);
     CacheBlock(vector<uint8_t> data, uint32_t addrtag);
     CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status);
 
