@@ -9,23 +9,37 @@
 CacheBlock::CacheBlock(void){
     this->mesi = MESI_I;
     this->tag = 0;
-    this->bytes.clear();
+    this->LRU = false;
+    this->blockSize = 0;
+    this->bytes = {};
+}
+CacheBlock::CacheBlock(uint32_t size, uint32_t addrtag){
+    
+    cout << "CacheBlock(size,tag) | entered constructor" << endl;
+    
+    this->mesi = MESI_I;
+    this->tag = addrtag;
+    this->LRU = false;
+    this->blockSize = size;
+    for(int i = 0; i < this->blockSize; i++){
+        this->bytes.push_back(0);
+    }
+    
+    cout << "CacheBlock(size,tag) | Finished For Loop, this->bytes.size()=" << this->bytes.size() << endl;
 }
 CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag){
     this->mesi = MESI_E;
     this->tag  = addrtag;
-    this->bytes.clear();
-    for(int i = 0; i < data.size(); i++){
-        this->bytes[i] = data[i];
-    }
+    this->LRU = false;
+    this->bytes = data;
+    this->blockSize = data.size();
 }
 CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status){
     this->mesi = status;
     this->tag = addrtag;
-    this->bytes.clear();
-    for(int i = 0; i < data.size(); i++){
-        this->bytes[i] = data[i];
-    }
+    this->LRU = false;
+    this->bytes = data;
+    this->blockSize = data.size();
 }
 
 //============================================
@@ -33,9 +47,14 @@ CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status){
 // This simply returns the data present at block[offset]
 //============================================
 uint8_t CacheBlock::readOffset(uint32_t offset){
-    if(this->bytes.find(offset) != this->bytes.end())
-        return this->bytes[offset];
-    return 0;
+
+    cout << "CacheBlock::readOffset() | offset=" << offset << " bytesSize=" << this->bytes.size() << endl; 
+
+    if(this->bytes.size() > this->blockSize){
+        cout << "CacheBlock::readOffset() | WARNING! ARRAY SIZE EXCEEDS BLOCK SIZE. GET READY TO WUMBO" << endl;
+    }
+
+    return this->bytes.at(offset);
 }
 
 //============================================
@@ -43,9 +62,7 @@ uint8_t CacheBlock::readOffset(uint32_t offset){
 // This simply writes to block[offset]
 //============================================
 void CacheBlock::writeOffset(uint32_t offset, uint8_t byte){
-    this->bytes[offset] = byte;
-    if(this->bytes[offset] == 0)
-        this->bytes.erase(offset);
+    this->bytes.at(offset) = byte;
 }
 
 //============================================

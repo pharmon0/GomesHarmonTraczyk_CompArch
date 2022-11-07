@@ -8,6 +8,7 @@
 //============================================
 Cache::Cache(void){};
 Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
+
     //set the size of the cache and each block's size
     this->cacheSize = cacheByteSize;
     this->blockSize = blockByteSize;
@@ -18,14 +19,16 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
     //get the size of the offset and block address
     this->offsetWidth = ceil(log2(this->blockSize));
     this->tagWidth = SYSTEM_BITWIDTH - this->offsetWidth;
-    
+
     //determine set associativity, index and tag widths
     //Full Associativity has only a single set
     if(assMode == CACHE_ASS_FULLY){
+
         this->setCount = 1;
         this->indexWidth = 0;
         this->setBlocks = blockCount;
     }else{
+
         this->setCount = blockCount / assMode;
         this->indexWidth = ceil(log2(setCount));
         this->tagWidth -= this->indexWidth;
@@ -38,87 +41,230 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
     //populate initial dirty cache data
     //iterate through sets
     for(int index = 0; index < this->setCount; index++){
+        this->bank.push_back({});
         //iterate through blocks
-        for(int tag = 0; tag < this->setBlocks; tag++){
+        for(int entry = 0; entry < this->setBlocks; entry++){
             //populate block
-            this->bank[index][tag] = CacheBlock();
+            this->bank[index].push_back(CacheBlock(this->blockSize,0));
         }
     }
 }
 
 //============================================
 // Function to Find Element in Cache
-//  returns true for a hit, false for a miss
+//  returns -1 for tag not found
+//  otherwise returns entry of tag
 //============================================
-int32_t Cache::find(uint32_t address){
-    cacheaddr_t addr; addr.address = address;
-    splitAddress(&addr);
-    uint32_t index = addr.index;
-    uint32_t tag = addr.tag;
-    uint32_t offset = addr.offset;
-    for(int i = 0; i < setBlocks; i++){
-        if(bank[index][i].getTag() == tag){
-            if(bank[index][i].getMESI() != MESI_I){
-                return i;
-            }else{
-                return -1;
-            }
-        }
+int32_t Cache::findEntry(uint32_t index, uint32_t tag){
+    for(uint32_t entry = 0; entry < this->setBlocks; entry++){
+        if(this->bank[index][entry].getTag() == tag)
+            return entry;
     }
     return -1;
 }
 
 //============================================
-// Function to mask address to index, tag, offset
+// Returns the tag of an address
 //============================================
-void Cache::splitAddress(cacheaddr_t* addr){
-    uint32_t address = addr->address;
-    addr->tag = address >> (SYSTEM_BITWIDTH - this->tagWidth);
-    addr->offset = (address << (SYSTEM_BITWIDTH - this->offsetWidth)) >> (SYSTEM_BITWIDTH - this->offsetWidth);
-    addr->index = (address << this->tagWidth) >> (this->tagWidth + this->offsetWidth);
+uint32_t Cache::makeTag(uint32_t address){
+    return address >> (SYSTEM_BITWIDTH - this->tagWidth);
+}
+
+//============================================
+// Returns the index of an address
+//============================================
+uint32_t Cache::makeIndex(uint32_t address){
+    return (address << this->tagWidth) >> (this->tagWidth + this->offsetWidth);
+}
+
+//============================================
+// Returns the offset of an address
+//============================================
+uint32_t Cache::makeOffset(uint32_t address){
+    return (address << (SYSTEM_BITWIDTH - this->offsetWidth)) >> (SYSTEM_BITWIDTH - this->offsetWidth);
 }
 
 //==================================================================
-// Function to add data to cache using pseudo-LRU replacement policy
+// Function reads from bytes within a cache block
+//  IMPORTANT! Assumes words are word-aligned!
 //==================================================================
-void Cache::cpuWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
-    //start at 0 iterate through loop until LRUtag = 0
-    cacheaddr_t addr; addr.address = address;
-    splitAddress(&addr);
-    uint8_t foundAddress = this->find(address);
-    bank[addr.index][foundAddress].writeOffset(addr.offset, data);
-    bank[addr.index][foundAddress].setLRU(1);
-}
+uint32_t Cache::byteRead(uint32_t address, uint8_t byteWidth){
 
-//==================================================================
-// Function to add data to cache using pseudo-LRU replacement policy
-//==================================================================
-void Cache::memoryWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
-    //start at 0 iterate through loop until LRUtag = 0
-    cacheaddr_t addr; addr.address = address;
-    splitAddress(&addr);
-    uint32_t lindex = 0;
-    uint8_t foundAddress = this->find(address);
-    //checks if the tag exists in cache already
-    if(foundAddress == -1){
-        //if no tag exists checks all blocks within set
-        while(lindex < setBlocks){
-            if(bank[addr.index][lindex].getLRU() == 1){
-                lindex++;
-            }else{
-                bank[addr.index][lindex] = new CacheBlock()
-                bank[addr.index][lindex].setLRU(1);
-                return;
-            }
-        }
-        //if all bocks written to, sets LRU to 0 and writes to first block
-        lindex = 0;
-        while(lindex < setBlocks){
-            bank[addr.index][lindex].setLRU(0);
-            lindex++;
-        }
-        bank[addr.index][0].writeOffset(addr.offset, data);
-    }else{//if found writes data
-        bank[addr.index][foundAddress].writeOffset(addr.offset, data);
+    cout << "Cache::byteRead() | entered Cache::byteRead()" << endl;
+
+    this->accesses++;
+
+    uint32_t tag = this->makeTag(address);
+    uint32_t index = this->makeIndex(address);
+    uint32_t offset = this->makeOffset(address);
+    int32_t entry = this->findEntry(index, tag);
+    
+    cout << "Cache::byteRead() | resolved address :: address=" << hexString(address)
+         << " tag=" << bitset<32>(tag)
+         << " index=" << bitset<32>(index)
+         << " offset=" << bitset<32>(offset)
+         << " entry=" << entry <<  endl;
+
+    if(entry < 0){
+        //MISS! Block not in Cache
+        this->misses++;
+
+        cout << "Cache::byteRead() | miss! block not in cache" << endl;
+
+        //FIXME Placeholder memory fetch!
+        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
+
+    }else if(this->bank[index][entry].getMESI() == MESI_I){
+        //MISS! Block not valid
+        this->misses++;
+
+        cout << "Cache::byteRead() | miss! block invalid" << endl;
+
+        //FIXME Placeholder memory fetch!
+        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
+
     }
+
+    cout << "Cache::byteRead() | any misses have been resolved" << endl;
+
+    uint32_t value = 0;
+    
+    switch(byteWidth){ //access memory byte-wise
+        case 0b11://WORD
+            value |= (this->bank[index][entry].readOffset(offset+3)) << 24;
+            value |= (this->bank[index][entry].readOffset(offset+2)) << 16;
+        case 0b10://HALF
+            value |= (this->bank[index][entry].readOffset(offset+1)) << 8;
+        case 0b01://BYTE
+
+            cout << "Cache::byteRead() | bytewidth is 1, offset=" << offset
+                 << " bank[index][entry].bytes.size()=" << this->bank[index][entry].bytes.size() << endl;
+            
+            value |= this->bank[index][entry].readOffset(offset);
+    }
+
+    cout << "Cache::byteRead() | data has been read" << endl;
+
+    this->bank[index][entry].setLRU(true);
+
+    cout << "Cache::byteRead() | lru updated" << endl;
+
+    cout << "Cache::byteRead() | Exiting Cache::byteRead()" << endl;
+
+    return value;
+}
+
+//==================================================================
+// Function reads a cache block from a set
+//==================================================================
+CacheBlock Cache::blockRead(uint32_t index, uint32_t tag){
+    //TODO implement this
+    //Not needed for Lab5a
+    return CacheBlock(); //FIXME PLACEHOLDER
+}
+
+//==================================================================
+// Function writes to a byte within a cache block
+//==================================================================
+void Cache::byteWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+    // //start at 0 iterate through loop until LRUtag = 0
+    // uint32_t index = getIndex(address);
+    // uint32_t tag = getTag(address);
+    // uint32_t offset = getOffset(address);
+    // uint8_t foundAddress = this->find(address);
+    // bank[addr.index][foundAddress].writeOffset(addr.offset, data);
+    // bank[addr.index][foundAddress].setLRU(1);
+
+    //TODO properly implement/check implementation of this function.
+    //Not needed for Lab5a
+}
+
+//==================================================================
+// Function to add data to cache using pseudo-LRU replacement policy
+//==================================================================
+void Cache::blockWrite(uint32_t index, uint32_t tag, CacheBlock block){
+
+    cout << "Cache::blockWrite() | entered function" << endl;
+
+    //find Least Recently Used block to replace
+    bool seekingLRU = true;
+    int32_t entry = 0;
+
+    cout << "\tCache::blockWrite() | Entering LRU Loop" << endl;
+    
+    while(seekingLRU){
+    
+        cout << "\tCache::blockWrite() | LRU LOOPING :: entry=" << entry << endl;
+
+        //if all entries have LRU==1, set all to 0.
+        if(entry == this->setBlocks){
+
+            cout << "\tCache::blockWrite() | Exhausted the loop. Setting all to LRU=0" << endl;
+    
+            for(entry = 0; entry < this->setBlocks; entry++){
+                this->bank[index][entry].setLRU(false);
+            }
+            entry = 0;
+        }
+
+        //check if entry is LRU
+        if(!this->bank[index][entry].getLRU()){
+
+            cout << "\tCache::blockWrite() | FOUND LRU! entry=" << entry << endl;
+
+            seekingLRU = false;
+        }
+
+        //if not done seeking, increment entry
+        if(seekingLRU){
+
+            cout << "\tCache::blockWrite() | incrementing entry from " << entry;
+
+            entry++;
+
+            cout << " to " << entry << endl;
+
+        }
+    }
+
+
+
+    cout << "Cache::blockWrite() | Entry to replace is " << entry << endl;
+
+    //check entry for modifications (if modified, store back to memory)
+    //TODO Store back to memory
+
+    //store new block
+    this->bank[index][entry] = block;
+}
+
+//==================================================================
+// Prints Cache Statistics
+//==================================================================
+void Cache::printStats(void){
+    uint32_t hits = this->accesses - this->misses;
+    float hitrate = 100.0 * float(hits) / float(this->accesses);
+    float missrate = 100.0 * float(this->misses) / float(this->accesses);
+    uint32_t ticks = (this->accesses * this->lookupTicks) + (this->misses * MEM_TICKS);
+
+    cout << "Cache Statistics" << endl;
+    cout << " Total Cache Size : " << this->cacheSize << "B" << endl;
+    cout << " Block Size : " << this->blockSize << "B" << endl;
+    cout << " Block Count : " << this->blockCount << endl;
+    cout << " Associativity : ";
+    if(this->setCount == 1){
+        cout << "Fully Associative";
+    }else if(this->setCount == this->blockCount){
+        cout << "Directly Mapped";
+    }else{
+        cout << this->setBlocks << "-way";
+    }
+    cout << endl;
+    cout << " Total Cache Accesses : " << this->accesses << endl;
+    cout << " Total Cache Hits : " << hits << endl;
+    cout << " Total Cache Misses : " << this->misses << endl;
+    cout << " Cache Hit Rate : " << hitrate << "%" << endl;
+    cout << " Cache Miss Rate : " << missrate << "%" << endl;
+    cout << " Total Cache Access Time : " << ticks << " simulation ticks ("
+         << (float(ticks)/10.0) << " clock cycles)" << endl;
 }
