@@ -8,6 +8,8 @@
 //============================================
 Cache::Cache(void){};
 Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
+    this->accesses = 0;
+    this->misses = 0;
 
     //set the size of the cache and each block's size
     this->cacheSize = cacheByteSize;
@@ -56,10 +58,16 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
 //  otherwise returns entry of tag
 //============================================
 int32_t Cache::findEntry(uint32_t index, uint32_t tag){
+    cout << "Cache::findEntry() | entered" << endl;
+    cout << " index=" << bitset<32>(index) << " this->setBlocks=" << this->setBlocks 
+         << " tag=" << bitset<32>(tag) << endl;
     for(uint32_t entry = 0; entry < this->setBlocks; entry++){
-        if(this->bank[index][entry].getTag() == tag)
+        if(this->bank[index][entry].getTag() == tag){
+            cout << "Cache::findEntry() | Found tag! entry=" << entry << endl;
             return entry;
+        }
     }
+    cout << "Cache::findEntry() | Never Found. Exiting with code -1" << endl;
     return -1;
 }
 
@@ -74,6 +82,7 @@ uint32_t Cache::makeTag(uint32_t address){
 // Returns the index of an address
 //============================================
 uint32_t Cache::makeIndex(uint32_t address){
+    if(this->setCount == 1) return 0;
     return (address << this->tagWidth) >> (this->tagWidth + this->offsetWidth);
 }
 
@@ -114,6 +123,11 @@ uint32_t Cache::byteRead(uint32_t address, uint8_t byteWidth){
         //FIXME Placeholder memory fetch!
         this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
 
+        entry = this->findEntry(index, tag);
+
+        cout << "Cache::byteRead() | index=" << index << " entry=" << entry
+             << " bank[index][entry].bytes.size()=" << this->bank[index][entry].bytes.size() << endl;
+
     }else if(this->bank[index][entry].getMESI() == MESI_I){
         //MISS! Block not valid
         this->misses++;
@@ -123,6 +137,7 @@ uint32_t Cache::byteRead(uint32_t address, uint8_t byteWidth){
         //FIXME Placeholder memory fetch!
         this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
 
+        entry = this->findEntry(index, tag);
     }
 
     cout << "Cache::byteRead() | any misses have been resolved" << endl;
@@ -229,7 +244,8 @@ void Cache::blockWrite(uint32_t index, uint32_t tag, CacheBlock block){
 
 
 
-    cout << "Cache::blockWrite() | Entry to replace is " << entry << endl;
+    cout << "Cache::blockWrite() | Entry to replace is " << entry
+         << " block.bytes.size()=" << block.bytes.size() <<  endl;
 
     //check entry for modifications (if modified, store back to memory)
     //TODO Store back to memory
@@ -259,6 +275,8 @@ void Cache::printStats(void){
     }else{
         cout << this->setBlocks << "-way";
     }
+    cout << endl;
+    cout << " Cache Lookup Time : " << this->lookupTicks << " simulation ticks" << endl;
     cout << endl;
     cout << " Total Cache Accesses : " << this->accesses << endl;
     cout << " Total Cache Hits : " << hits << endl;

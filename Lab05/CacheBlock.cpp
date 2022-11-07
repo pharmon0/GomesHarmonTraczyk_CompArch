@@ -17,7 +17,7 @@ CacheBlock::CacheBlock(uint32_t size, uint32_t addrtag){
     
     cout << "CacheBlock(size,tag) | entered constructor" << endl;
     
-    this->mesi = MESI_I;
+    this->mesi = MESI_E;
     this->tag = addrtag;
     this->LRU = false;
     this->blockSize = size;
