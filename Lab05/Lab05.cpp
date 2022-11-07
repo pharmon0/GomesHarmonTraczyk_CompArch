@@ -56,7 +56,8 @@ int main(void){
            caches[i].byteRead(addresses[j],0b01);
        }
        //print stats
-       caches[i].printStats();
+       //caches[i].printStats();
+       //waiting to the end to print stats now
     }
 
     for(int i = 0; i < caches.size(); i++){

@@ -16704,19 +16704,6 @@ CacheBlock::readOffset() | offset=16 bytesSize=32
 Cache::byteRead() | data has been read
 Cache::byteRead() | lru updated
 Cache::byteRead() | Exiting Cache::byteRead()
-Cache Statistics
- Total Cache Size : 256B
- Block Size : 32B
- Block Count : 8
- Associativity : Directly Mapped
- Cache Lookup Time : 3 simulation ticks
-
- Total Cache Accesses : 1000
- Total Cache Hits : 690
- Total Cache Misses : 310
- Cache Hit Rate : 69%
- Cache Miss Rate : 31%
- Total Cache Access Time : 34000 simulation ticks (3400 clock cycles)
 Lab05::main() | Running Simulation of Cache 2
 Lab05::main() | attempting to read byte from 0x00000004
 Cache::byteRead() | entered Cache::byteRead()
@@ -32534,19 +32521,6 @@ CacheBlock::readOffset() | offset=16 bytesSize=32
 Cache::byteRead() | data has been read
 Cache::byteRead() | lru updated
 Cache::byteRead() | Exiting Cache::byteRead()
-Cache Statistics
- Total Cache Size : 512B
- Block Size : 32B
- Block Count : 16
- Associativity : Directly Mapped
- Cache Lookup Time : 4 simulation ticks
-
- Total Cache Accesses : 1000
- Total Cache Hits : 743
- Total Cache Misses : 257
- Cache Hit Rate : 74.3%
- Cache Miss Rate : 25.7%
- Total Cache Access Time : 29700 simulation ticks (2970 clock cycles)
 Lab05::main() | Running Simulation of Cache 3
 Lab05::main() | attempting to read byte from 0x00000004
 Cache::byteRead() | entered Cache::byteRead()
@@ -49234,19 +49208,6 @@ CacheBlock::readOffset() | offset=48 bytesSize=64
 Cache::byteRead() | data has been read
 Cache::byteRead() | lru updated
 Cache::byteRead() | Exiting Cache::byteRead()
-Cache Statistics
- Total Cache Size : 256B
- Block Size : 64B
- Block Count : 4
- Associativity : Directly Mapped
- Cache Lookup Time : 2 simulation ticks
-
- Total Cache Accesses : 1000
- Total Cache Hits : 687
- Total Cache Misses : 313
- Cache Hit Rate : 68.7%
- Cache Miss Rate : 31.3%
- Total Cache Access Time : 33300 simulation ticks (3330 clock cycles)
 Lab05::main() | Running Simulation of Cache 4
 Lab05::main() | attempting to read byte from 0x00000004
 Cache::byteRead() | entered Cache::byteRead()
@@ -66506,19 +66467,6 @@ CacheBlock::readOffset() | offset=16 bytesSize=32
 Cache::byteRead() | data has been read
 Cache::byteRead() | lru updated
 Cache::byteRead() | Exiting Cache::byteRead()
-Cache Statistics
- Total Cache Size : 256B
- Block Size : 32B
- Block Count : 8
- Associativity : 4-way
- Cache Lookup Time : 12 simulation ticks
-
- Total Cache Accesses : 1000
- Total Cache Hits : 696
- Total Cache Misses : 304
- Cache Hit Rate : 69.6%
- Cache Miss Rate : 30.4%
- Total Cache Access Time : 42400 simulation ticks (4240 clock cycles)
 --------------------------
 Cache Statistics
  Total Cache Size : 256B
