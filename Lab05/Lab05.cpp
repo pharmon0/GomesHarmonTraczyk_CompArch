@@ -37,14 +37,27 @@ int main(void){
     vector<Cache> caches = { Cache(256, 32, CACHE_ASS_DIRECT),
                              Cache(512, 32, CACHE_ASS_DIRECT),
                              Cache(256, 64, CACHE_ASS_DIRECT),
+                             Cache(256, 32, CACHE_ASS_4WAY)
+                             /*Cache(256, 8, CACHE_ASS_DIRECT),
+                             Cache(256, 8, CACHE_ASS_2WAY),
+                             Cache(256, 8, CACHE_ASS_4WAY),
+                             Cache(256, 8, CACHE_ASS_FULLY),
+
+                             Cache(256, 16, CACHE_ASS_DIRECT),
+                             Cache(256, 16, CACHE_ASS_2WAY),
+                             Cache(256, 16, CACHE_ASS_4WAY),
+                             Cache(256, 16, CACHE_ASS_FULLY),
+
+                             Cache(256, 32, CACHE_ASS_DIRECT),
+                             Cache(256, 32, CACHE_ASS_2WAY),
                              Cache(256, 32, CACHE_ASS_4WAY),
-                             //Cache(256, 16, CACHE_ASS_DIRECT),
-                             //Cache(256, 32, CACHE_ASS_2WAY),
-                             //Cache(256, 32, CACHE_ASS_FULLY),
-                             //Cache(256, 16, CACHE_ASS_FULLY),
-                             //Cache(256, 64, CACHE_ASS_FULLY),
-                             //Cache(256, 64, CACHE_ASS_2WAY),
-                             //Cache(256, 64, CACHE_ASS_4WAY)
+                             Cache(256, 32, CACHE_ASS_FULLY),
+                             
+                             Cache(256, 64, CACHE_ASS_DIRECT),
+                             Cache(256, 64, CACHE_ASS_2WAY),
+                             Cache(256, 64, CACHE_ASS_FULLY), //4-way
+
+                             Cache(256, 128, CACHE_ASS_FULLY) //2-way*/
                              };
     
     //iterate through all caches
