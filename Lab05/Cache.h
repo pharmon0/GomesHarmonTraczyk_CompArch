@@ -42,6 +42,10 @@ using std::endl;
 // Class Definition
 //============================================
 class Cache{
+
+        memport_t membusPort;
+        memport_t* cpuPort;
+
     //cache statistic data
         uint32_t accesses; //total accesses
         uint32_t misses; //total misses
@@ -49,6 +53,7 @@ class Cache{
     //cache metadata
         //time for one cache access
         uint16_t lookupTicks;
+        uint16_t lookupCounter;
 
         //Cache Sizes
         uint32_t cacheSize;

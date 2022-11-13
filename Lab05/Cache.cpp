@@ -7,7 +7,9 @@
 // Constructors for Cache Object
 //============================================
 Cache::Cache(void){};
-Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
+Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, memport_t* cpuPort){
+    this->cpuPort = cpuPort;
+    
     this->accesses = 0;
     this->misses = 0;
 
@@ -48,6 +50,35 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode){
         for(int entry = 0; entry < this->setBlocks; entry++){
             //populate block
             this->bank[index].push_back(CacheBlock(this->blockSize,0));
+        }
+    }
+}
+
+void Cache::Process(){
+//cpuPort
+    if(this->cpuPort.memctrl.memrsz == this->cpuPort.memctrl.memwsz){
+        cout << "Memory | cpuPort : No Memory Access this tick! |";
+        this->lookupCounter = this->lookupTicks-1;
+    }else if(this->lookupCounter != 0){
+        //count one tick
+        cout << "Memory | cpuPort : Counter Decremented (" << this->lookupCounter << " --> " << --this->lookupCounter << ") |";
+    }else{
+        cout << "Memory | cpuPort : Memory Ready";
+        //memory done.
+        this->lookupCounter = this->lookupTicks-1;
+        this->cpuPort.memctrl.memack = 1;
+
+        //Load
+        if(this->cpuPort.memctrl.memrsz > this->cpuPort.memctrl.memwsz){
+            this->cpuPort.data = this->memRead(this->cpuPort.address,
+                                            this->cpuPort.memctrl.memrsz);
+            cout << "\n\t" << hexString(this->cpuPort.data) << " Read from " << hexString(this->cpuPort.address) << "\n >";
+        //Store
+        }else if(this->cpuPort.memctrl.memwsz > this->cpuPort.memctrl.memrsz){
+            this->memWrite(this->cpuPort.address,
+                        this->cpuPort.data,
+                        this->cpuPort.memctrl.memwsz);
+            cout << "\n\t" << hexString(this->cpuPort.data) << " Written to " << hexString(this->cpuPort.address) << "\n >";
         }
     }
 }
