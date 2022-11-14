@@ -60,12 +60,12 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
 
 void Cache::process(){
     /* ALGORITHM
-     STATE: Lookup
+    STATE: Lookup
         Check if memory requested
             run counter for lookup time
             if counter done
                 state -> Checkin
-     STATE: Checkin
+    STATE: Checkin
         check if block is present (read hit/miss detect)
             if read hit
                 state -> read hit
@@ -75,6 +75,32 @@ void Cache::process(){
                 state -> read miss
             if write miss
                 state -> write miss
+    STATE: read hit
+        return the data.
+        done.
+    STATE: read miss
+        broadcast request
+        wait for the data.
+        if replaced data is valid
+            if replaced data is modified
+                broadcast save to memory
+                wait for broadcast complete
+            else
+                broadcast dump
+                wait for broadcast complete
+        return the data.
+        done.
+    STATE: write hit
+        broadcast modify
+        wait for broadcast complete
+        if modified block is
+        modify the data
+        done.
+    STATE: write miss
+        broadcast request with mod
+        wait for the data
+        modify the data
+        done
     */ 
     /*
     if(entry < 0){

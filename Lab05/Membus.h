@@ -15,6 +15,7 @@
 #include "RISCV.h"
 #include <vector>
 #include "CacheBlock.h"
+#include "Cache.h"
 using std::vector;
 
 //============================================
@@ -28,7 +29,7 @@ using std::vector;
 // Memory Controller Class
 //============================================
 class Membus{
-    vector<blockport_t*> ports;
+    vector<Cache*> caches;
     bool messageSent;
     bool busDirection;
     bool dataReady;
@@ -36,7 +37,7 @@ class Membus{
     uint8_t token;
   public:
     //constructor
-    Membus(vector<blockport_t*>,blockport_t*);
+    Membus(vector<Cache*>,blockport_t*);
 
     //Clock Cycle Process
     void process(uint64_t);

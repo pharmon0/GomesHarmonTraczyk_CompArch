@@ -8,12 +8,12 @@
 //  Links the membus to all cores and the ram
 //   through pointers to their memports
 //============================================
-Membus::Membus(vector<blockport_t*> cachePorts, blockport_t* memPort){
+Membus::Membus(vector<Cache*> cachearr, blockport_t* memPort){
     this->mem = memPort;
     this->messageSent = false;
     bool busDirection = false;
     bool dataReady = false;
-    this->ports = cachePorts;
+    this->caches = cachearr;
     this->token = 0;
 }
 
@@ -25,11 +25,11 @@ void Membus::process(uint64_t tick){
     cout << " Current Token Holder : CPU" << (int)this->token;
     if(!(tick % TICKS_PER_CLOCK)){
         //if the current holder of the token is making no request
-        if(!(*this->ports.at(token)).memctrl.request){
+        if(!this->caches.at(token)->membusPort.memctrl.request){
             cout << " | Token Handoff to CPU";
             //rotate token
             this->messageSent = false;
-            this->token = (this->token < this->ports.size()-1)?(this->token+1):(0);
+            this->token = (this->token < this->caches.size()-1)?(this->token+1):(0);
             cout << (int)this->token;
         }
     }
@@ -50,7 +50,7 @@ void Membus::process(uint64_t tick){
     //check MESI flag of token holder
     if(!this->messageSent){
         this->messageSent = true;
-        switch(this->ports.at(token)->mesi){
+        switch(this->caches.at(token)->membusPort.mesi){
             case REQUEST_M:
             //in this case, the token holder is requesting a block of memory to read
             //first other holder should send their copy. a 'holder' has 'E', 'S', or 'M'
