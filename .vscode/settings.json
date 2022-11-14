@@ -1,6 +1,16 @@
 {
     "files.associations": {
         "cstdint": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "xmemory": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp",
+        "xlocbuf": "cpp"
     }
 }

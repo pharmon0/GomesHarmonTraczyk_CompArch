@@ -41,8 +41,8 @@ typedef struct{
     union{
         uint8_t all;
         struct{
-            uint8_t    read : 1; //select memory read size
-            uint8_t   write : 1; //select memory write size
+            uint8_t    memrsz : 1; //select memory read size
+            uint8_t   memwsz : 1; //select memory write size
             uint8_t request : 1; //has a memory request been made?
             uint8_t  memack : 1; //is memory operation complete?
             uint8_t:0; //union alignment
