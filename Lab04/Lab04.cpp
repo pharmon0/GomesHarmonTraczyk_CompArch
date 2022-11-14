@@ -23,7 +23,7 @@ using std::bitset;
 #ifndef TICKS_PER_CLOCK
 #define TICKS_PER_CLOCK 10
 #endif
-#define MEM_TICKS      20 //20 ticks per Memory Access
+#define MEM_TICKS      41 //100 ticks per Memory Access
 #define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
 #define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
 #define ARRAY_A_START 0x400
