@@ -41,6 +41,16 @@ using std::endl;
 //tickrates
 #define MEM_TICKS 100
 
+//internal state of cache::process()
+typedef enum{
+    LOOKUP_STATE, //initial lookup
+    CHECK_STATE,  //miss/hit detect
+    RHIT_STATE,   //case for read hit
+    WHIT_STATE,   //case for write hit
+    RMIS_STATE,   //case for read miss
+    WMIS_STATE    //case for write miss
+} cache_state_t;
+
 //============================================
 // Class Definition
 //============================================

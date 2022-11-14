@@ -59,6 +59,23 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
 }
 
 void Cache::process(){
+    /* ALGORITHM
+     STATE: Lookup
+        Check if memory requested
+            run counter for lookup time
+            if counter done
+                state -> Checkin
+     STATE: Checkin
+        check if block is present (read hit/miss detect)
+            if read hit
+                state -> read hit
+            if write hit
+                state -> write hit
+            if read miss
+                state -> read miss
+            if write miss
+                state -> write miss
+    */ 
     /*
     if(entry < 0){
         //MISS! Block not in Cache
@@ -88,6 +105,8 @@ void Cache::process(){
 
     cout << "Cache::byteRead() | any misses have been resolved" << endl;
     */
+
+   /* starting over
     if(this->state == LOOKUP_STATE){
     //perform lookup operations
         if(this->cpuPort->memctrl.memrsz == this->cpuPort->memctrl.memwsz){
@@ -126,7 +145,7 @@ void Cache::process(){
                 //WRITE HIT!
                     //WRITING TO MEMORY! INFORM THE BUS!
                     //"I AM WRITING DATA TO [ADDRESS]!"
-                    //TODO inform the bus
+                    //TO DO inform the bus
                     this->state = BUS_STATE;
                 }else{
                 //READ HIT!
@@ -142,7 +161,7 @@ void Cache::process(){
         }
     }
     if(this->state == BUS_STATE){
-        //TODO initialize MESI messaging
+        //TO DO initialize MESI messaging
 
     }
     if(this->state == ACCESS_STATE){
@@ -176,6 +195,7 @@ void Cache::process(){
         this->state = LOOKUP_STATE;
         this->cpuPort->memctrl.memack = 1;
     }
+    */
 }
 
 //============================================

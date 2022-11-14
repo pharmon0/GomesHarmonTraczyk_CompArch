@@ -6,7 +6,8 @@
 //============================================
 // Constructor
 //============================================
-Memory::Memory(uint8_t accessTickCount){
+Memory::Memory(uint8_t accessTickCount, uint32_t blockWidth){
+    this->blockSize = blockWidth;
     this->accessTicks = accessTickCount;
     this->counterD = accessTickCount-1;
     this->counterIA = accessTickCount-1;
@@ -43,7 +44,7 @@ void Memory::process(uint64_t tick){
 
         //Load
         if(this->portIA.memctrl.read > this->portIA.memctrl.write){
-            this->portIA.data = this->blockRead(this->portIA.address);
+            this->portIA.data = this->blockRead(this->portIA.address, this->blockSize);
             //cout << "\n\t" << hexString(this->portIA.data) << " Read from " << hexString(this->portIA.address) << "\n >";
         //Store
         }else if(this->portIA.memctrl.write > this->portIA.memctrl.read){
@@ -66,7 +67,7 @@ void Memory::process(uint64_t tick){
 
         //Load
         if(this->portIB.memctrl.read > this->portIB.memctrl.write){
-            this->portIB.data = this->blockRead(this->portIB.address);
+            this->portIB.data = this->blockRead(this->portIB.address, this->blockSize);
             //cout << "\n\t" << hexString(this->portIB.data) << " Read from " << hexString(this->portIB.address) << "\n >";
         //Store
         }else if(this->portIB.memctrl.write > this->portIB.memctrl.read){
@@ -89,7 +90,7 @@ void Memory::process(uint64_t tick){
 
         //Load
         if(this->portD.memctrl.read > this->portD.memctrl.write){
-            this->portD.data = this->blockRead(this->portD.address);
+            this->portD.data = this->blockRead(this->portD.address, this->blockSize);
             //cout << "\n\t" << hexString(this->portD.data) << " Read from " << hexString(this->portD.address) << endl;
         //Store
         }else if(this->portD.memctrl.write > this->portD.memctrl.read){
@@ -234,13 +235,12 @@ void Memory::printFloats(string filename){
 //============================================
 // Memory::blockRead
 //  Read a block of data
-//  WARNING! ASSUMES 32-BYTE BLOCKS
 //  WARNING! ASSUMES DATA IS WORD-ALIGNED
 //============================================
-CacheBlock Memory::blockRead(uint32_t address){
+CacheBlock Memory::blockRead(uint32_t address, uint32_t blockSize){
     uint32_t baseAddress = address & 0xFFFFFFE0;
     vector<uint8_t> data = {};
-    for(int i = 0; i < 32; i++){
+    for(int i = 0; i < blockSize; i++){
         data.push_back(uint8_t(this->memRead(baseAddress + i, 0b1)));
     }
     return CacheBlock(data);
