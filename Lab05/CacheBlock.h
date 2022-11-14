@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <bitset>
+#include "Datatypes.h"
 using std::bitset;
 using std::cout;
 using std::endl;
@@ -27,6 +28,27 @@ using std::map;
 #define MESI_E 0b10
 #define MESI_S 0b01
 #define MESI_I 0b00
+
+
+//============================================
+// blockport_t Datatype
+// - serves as a memory access point between cache and memory
+//============================================
+typedef struct{
+    uint32_t address;
+    vector<uint8_t> data;
+    mesi_message_t mesi;
+    union{
+        uint8_t all;
+        struct{
+            uint8_t    read : 1; //select memory read size
+            uint8_t   write : 1; //select memory write size
+            uint8_t request : 1; //has a memory request been made?
+            uint8_t  memack : 1; //is memory operation complete?
+            uint8_t:0; //union alignment
+        };
+    } memctrl;
+} blockport_t;
 
 //============================================
 // Class Definition

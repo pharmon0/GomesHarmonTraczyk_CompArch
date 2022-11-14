@@ -52,9 +52,9 @@ class Memory{
 
  public:
     //Memory Ports
-    memport_t portIA;
-    memport_t portIB;
-    memport_t portD;
+    blockport_t portIA;
+    blockport_t portIB;
+    blockport_t portD;
 
     //Constructors
     Memory(uint8_t);

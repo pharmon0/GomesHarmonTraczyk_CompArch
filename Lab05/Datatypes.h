@@ -11,6 +11,25 @@
 //============================================
 #include <cstdint>   //Standard Int Types
 
+
+//internal state of cache::process()
+typedef enum{
+    LOOKUP_STATE,
+    CHECK_STATE,
+    BUS_STATE,
+    ACCESS_STATE
+} cache_state_t;
+
+//possible cache coherence messages
+typedef enum{
+    NONE_M,       //No Memory Access Occuring
+    REQUEST_M,    //Requesting Data from [address]
+    MOD_M,        //Modified Data at [address]
+    REQUEST_MOD_M,//Requesting to Modify Data from [address]
+    DUMP_M,       //No longer holding [address]
+    SAVE_M        //Saving [address] to main memory
+} mesi_message_t;
+
 //============================================
 // data32_t Datatype
 // - Unifies 32-bit datatypes
@@ -23,7 +42,7 @@ typedef union{
 
 //============================================
 // memport_t Datatype
-// - serves as a memory access point for Cores and Memory
+// - serves as a memory access point between cores and cache
 //============================================
 typedef struct{
     uint32_t address;
