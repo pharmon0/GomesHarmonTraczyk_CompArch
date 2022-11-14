@@ -26,7 +26,9 @@ using std::bitset;
 #ifndef TICKS_PER_CLOCK
 #define TICKS_PER_CLOCK 10
 #endif
+#ifndef MEM_TICKS
 #define MEM_TICKS      20 //20 ticks per Memory Access
+#endif
 #define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
 #define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
 #define ARRAY_A_START 0x400
@@ -41,7 +43,7 @@ using std::bitset;
 //============================================
 int main(void){
     //create and populate the system memory
-    Memory ram = Memory(MEM_TICKS);
+    Memory ram = Memory(MEM_TICKS, 32);
     ram.populateFloat("text/A.txt",ARRAY_A_START); //populate A array
     ram.populateFloat("text/B.txt",ARRAY_B_START); //populate B array
     ram.populate("text/vadd.asm",CPUA_INIT_PC); //populate instruction space
@@ -100,11 +102,12 @@ int main(void){
         cacheBI.membusPort = ram.portIB;
 
         tick++;
+        
+        if(tick > 100000) int a = 1/0;
     }
 
     //MASTER TODO LIST
-    //TODO fix Memory.cpp/h to use blocks instead of bytes
-    //TODO add coherence operation to Membus.cpp/h
+    //TODO finish coherence operation in Membus.cpp/h
     //TODO finish implementing Cache.cpp
 
     uint32_t ccA = ticksA / TICKS_PER_CLOCK;

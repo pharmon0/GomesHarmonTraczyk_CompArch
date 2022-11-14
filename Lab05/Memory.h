@@ -40,12 +40,16 @@ using std::ofstream;
 // Memory Controller Class
 //============================================
 class Memory{
+    uint32_t blockSize;
+
     uint8_t accessTicks; //number of ticks required for memory access
 
     map<uint32_t, uint8_t> bank; //Memory Bank Hashtable
     
-    uint32_t memRead(uint32_t,uint8_t); //helper for memread
-    void memWrite(uint32_t,uint32_t,uint8_t); //helper for memwrite
+    uint32_t memRead(uint32_t addr, uint8_t size); //helper for memread
+    void memWrite(uint32_t addr, uint32_t value, uint8_t size); //helper for memwrite
+    CacheBlock blockRead(uint32_t address, uint32_t blockSize); //reads a block
+    void blockWrite(uint32_t address, CacheBlock block); //writes a block
 
     int counterIA;
     int counterIB;
@@ -58,7 +62,7 @@ class Memory{
     blockport_t portD;
 
     //Constructors
-    Memory(uint8_t);
+    Memory(uint8_t accessTickCount, uint32_t blockWidth);
 
     //process functions
     void process(uint64_t); //Process Memory Ports

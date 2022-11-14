@@ -15,6 +15,7 @@
 #include "RISCV.h"
 #include <vector>
 #include "CacheBlock.h"
+#include "Cache.h"
 using std::vector;
 
 //============================================
@@ -29,8 +30,10 @@ using std::vector;
 //============================================
 class Membus{
     vector<blockport_t*> ports;
+    bool messageSent;
+    bool transferDirection;
+    bool dataReady;
     blockport_t* mem;
-    bool toMem;
     uint8_t token;
   public:
     //constructor
