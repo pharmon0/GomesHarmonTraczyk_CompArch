@@ -103,7 +103,6 @@ int main(void){
     }
 
     //MASTER TODO LIST
-    //TODO fix Memory.cpp/h to use blocks instead of bytes
     //TODO add coherence operation to Membus.cpp/h
     //TODO finish implementing Cache.cpp
 

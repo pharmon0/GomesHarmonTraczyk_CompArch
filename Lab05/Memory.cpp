@@ -119,10 +119,6 @@ uint32_t Memory::memRead(uint32_t addr, uint8_t size){
             if(this->bank.find(addr) != this->bank.end())
                 value |= (uint32_t)(this->bank[addr]);
     }
-
-    //TODO: Read cache line from bank
-    value = 0;
-    value |= this->bank[portD.address]; 
     return value;
 }
 
@@ -145,10 +141,6 @@ void Memory::memWrite(uint32_t addr, uint32_t value, uint8_t size){
             this->bank[addr] = 0xFF & value;
             if(this->bank[addr] == 0) this->bank.erase(addr);
     }
-
-    //TODO: Write cache line to bank
-    value = 0;
-    this->bank[portD.address] = 0xFF & value;
 }
 
 //============================================

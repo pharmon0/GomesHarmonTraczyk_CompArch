@@ -1,8 +1,5 @@
-# Lab 4
+# Lab 5
 ### TODO
- - Printout stats during CPUCore Runtime
- - Calculate final CPI from stats
- - Populate Array Data at launch
  - Update this list to actually include all the files with descriptions
 ## Module Briefs
 These will be filled in as they are reworked from Lab03 to Lab04.

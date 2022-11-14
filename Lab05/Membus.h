@@ -29,8 +29,10 @@ using std::vector;
 //============================================
 class Membus{
     vector<blockport_t*> ports;
+    bool messageSent;
+    bool busDirection;
+    bool dataReady;
     blockport_t* mem;
-    bool toMem;
     uint8_t token;
   public:
     //constructor
