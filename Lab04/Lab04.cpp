@@ -49,13 +49,13 @@ int main(void){
     Core cpuB = Core("cpuB", CPUB_INIT_PC, CPUB_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
     //create Cache
-    cacheAI = Cache(256, 512, CACHE_ASS_DIRECT, cpuA.portI);
-    cacheAD = Cache(256, 512, CACHE_ASS_DIRECT, cpuA.portD);
-    cacheBI = Cache(256, 512, CACHE_ASS_DIRECT, cpuB.PortI);
-    cacheBD = Cache(256, 512, CACHE_ASS_DIRECT, cpuB.portD);
+    //cacheAI = Cache(256, 512, CACHE_ASS_DIRECT, cpuA.portI);
+    //cacheAD = Cache(256, 512, CACHE_ASS_DIRECT, cpuA.portD);
+    //cacheBI = Cache(256, 512, CACHE_ASS_DIRECT, cpuB.PortI);
+    //cacheBD = Cache(256, 512, CACHE_ASS_DIRECT, cpuB.portD);
 
     //create and populate membus for instruction and data
-    Membus dataBus = Membus({&(cacheAD.membusPort), &(cacheBD.membusPort)},&(ram.portD));
+    Membus dataBus = Membus({&(cpuA.portD), &(cpuB.portD)},&(ram.portD));
     
     //run simulation loop until CPU halts
     uint64_t tick = 0;
