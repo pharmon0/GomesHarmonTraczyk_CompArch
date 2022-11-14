@@ -6,6 +6,9 @@
 // Libraries
 //============================================
 #include "Membus.h"
+#include "Core.h"
+#include "Cache.h"
+#include "Memory.h"
 #include <iostream>
 #include <cstdint>
 #include <bitset>
@@ -49,10 +52,10 @@ int main(void){
     Core cpuB = Core("cpuB", CPUB_INIT_PC, CPUB_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
     //create Cache
-    cacheAI = Cache(256, 32, CACHE_ASS_DIRECT, cpuA.portI);
-    cacheAD = Cache(512, 32, CACHE_ASS_DIRECT, cpuA.portD);
-    cacheBI = Cache(256, 32, CACHE_ASS_DIRECT, cpuB.PortI);
-    cacheBD = Cache(512, 32, CACHE_ASS_DIRECT, cpuB.portD);
+    Cache cacheAI = Cache(256, 32, CACHE_ASS_DIRECT, &(cpuA.portI), "AI");
+    Cache cacheAD = Cache(512, 32, CACHE_ASS_DIRECT, &(cpuA.portD), "AD");
+    Cache cacheBI = Cache(256, 32, CACHE_ASS_DIRECT, &(cpuB.portI), "BI");
+    Cache cacheBD = Cache(512, 32, CACHE_ASS_DIRECT, &(cpuB.portD), "BD");
 
     //create and populate membus for instruction and data
     Membus dataBus = Membus({&(cacheAD.membusPort), &(cacheBD.membusPort)},&(ram.portD));
@@ -77,21 +80,32 @@ int main(void){
         }
         noHalt = runA || runB;
 
+        //perform cache operations
+        cacheAD.process();
+        cacheAI.process();
+        cacheBD.process();
+        cacheBI.process();
+
         //update the membus
         dataBus.process(tick);
-        ram.portIA = cpuA.portI;
-        ram.portIB = cpuB.portI;
+        ram.portIA = cacheAI.membusPort;
+        ram.portIB = cacheBI.membusPort;
 
         //tick the RAM
         ram.process(tick);
 
         //update the membus
         dataBus.process(tick);
-        cpuA.portI = ram.portIA;
-        cpuB.portI = ram.portIB;
+        cacheAI.membusPort = ram.portIA;
+        cacheBI.membusPort = ram.portIB;
 
         tick++;
     }
+
+    //MASTER TODO LIST
+    //TODO fix Memory.cpp/h to use blocks instead of bytes
+    //TODO add coherence operation to Membus.cpp/h
+    //TODO finish implementing Cache.cpp
 
     uint32_t ccA = ticksA / TICKS_PER_CLOCK;
     uint32_t instructionsA = cpuA.instructionCount;

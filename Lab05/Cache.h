@@ -16,7 +16,10 @@
 #include <iostream>
 #include "CacheBlock.h"
 #include "Functions.h"
+#include "Datatypes.h"
+#include <string>
 #include <bitset>
+using std::string;
 using std::bitset;
 using std::vector;
 using std::ceil;
@@ -43,14 +46,19 @@ using std::endl;
 //============================================
 class Cache{
 
-        memport_t membusPort;
-        memport_t* cpuPort;
+    //cache operating state (see process())
+        cache_state_t state;
+        uint32_t index;
+        uint32_t tag;
+        uint32_t offset;
+        uint32_t entry;
 
     //cache statistic data
         uint32_t accesses; //total accesses
         uint32_t misses; //total misses
 
     //cache metadata
+        string name;
         //time for one cache access
         uint16_t lookupTicks;
         uint16_t lookupCounter;
@@ -86,18 +94,24 @@ class Cache{
 
   public:
 
+    //cache data ports
+        blockport_t membusPort;
+        memport_t* cpuPort;
+
     //Constructor
     Cache(void);
-    Cache(uint32_t cacheSize, uint32_t blockSize, uint8_t assMode, memport_t* cpuPort);
+    Cache(uint32_t cacheSize, uint32_t blockSize, uint8_t assMode, memport_t* cpuPort, string ID);
 
     //Bank Access Functions
-    uint32_t byteRead(uint32_t address, uint8_t byteWidth);
+    uint32_t byteRead(uint32_t index, uint32_t entry, uint32_t offset, uint8_t byteWidth);
     CacheBlock blockRead(uint32_t index, uint32_t tag);
-    void byteWrite(uint32_t address, uint32_t data, uint8_t byteWidth);
+    void byteWrite(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t byteWidth);
     void blockWrite(uint32_t index, uint32_t tag, CacheBlock block);
 
     //statistics
     void printStats(void);
+
+    void process();
 };
 
 // End Header Guard

@@ -8,7 +8,7 @@
 //  Links the membus to all cores and the ram
 //   through pointers to their memports
 //============================================
-Membus::Membus(vector<memport_t*> cachePorts, memport_t* memPort){
+Membus::Membus(vector<blockport_t*> cachePorts, blockport_t* memPort){
     this->mem = memPort;
     this->ports = cachePorts;
     this->toMem = true;
@@ -17,8 +17,7 @@ Membus::Membus(vector<memport_t*> cachePorts, memport_t* memPort){
 
 //============================================
 // Membus::process
-//  TODO make this function work for arbitrary number of Cores
-//   AKA: Bus Arbitration
+//  TODO make this function work with cache coherence
 //============================================
 void Membus::process(uint64_t tick){
     cout << " Current Token Holder : CPU" << (int)this->token;
@@ -31,11 +30,9 @@ void Membus::process(uint64_t tick){
     }
     cout << endl;
     if(this->toMem){
-        //TODO iterate through ports according to bus arbitration
         *(this->mem) = *(this->ports.at(token));
         this->toMem = false;
     }else{
-        //TODO iterate through ports according to bus arbitration
         *(this->ports.at(token)) = *(this->mem);
         this->toMem = true;
     }

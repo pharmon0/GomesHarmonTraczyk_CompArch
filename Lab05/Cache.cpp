@@ -7,7 +7,9 @@
 // Constructors for Cache Object
 //============================================
 Cache::Cache(void){};
-Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, memport_t* cpuPort){
+Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, memport_t* cpuPort, string ID){
+    this->name = ID;
+ 
     this->cpuPort = cpuPort;
     
     this->accesses = 0;
@@ -52,34 +54,99 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
             this->bank[index].push_back(CacheBlock(this->blockSize,0));
         }
     }
+
+    this->state = LOOKUP_STATE;
 }
 
-void Cache::Process(){
-//cpuPort
-    if(this->cpuPort.memctrl.memrsz == this->cpuPort.memctrl.memwsz){
-        cout << "Memory | cpuPort : No Memory Access this tick! |";
-        this->lookupCounter = this->lookupTicks-1;
-    }else if(this->lookupCounter != 0){
-        //count one tick
-        cout << "Memory | cpuPort : Counter Decremented (" << this->lookupCounter << " --> " << --this->lookupCounter << ") |";
-    }else{
-        cout << "Memory | cpuPort : Memory Ready";
-        //memory done.
-        this->lookupCounter = this->lookupTicks-1;
-        this->cpuPort.memctrl.memack = 1;
+void Cache::process(){
+    if(this->state == LOOKUP_STATE){
+    //perform lookup operations
+        if(this->cpuPort->memctrl.memrsz == this->cpuPort->memctrl.memwsz){
+            cout << "Cache::process() | No Memory Access this tick!" << endl;
+            this->lookupCounter = this->lookupTicks-1;
+        }else if(this->lookupCounter != 0){
+            //count one tick
+            cout << "Cache::process() | Counter Decremented (" << this->lookupCounter << " --> " << --this->lookupCounter << ")" << endl;
+        }else{
+            cout << "Cache::process() | Lookup Complete!" << endl;
+            //memory done.
+            this->lookupCounter = this->lookupTicks-1;
+            this->state = CHECK_STATE;
+
+        }
+    }
+    if(this->state == CHECK_STATE){
+    //This part initiates the cache access
+
+        this->tag = this->makeTag(this->cpuPort->address);
+        this->index = this->makeIndex(this->cpuPort->address);
+        this->offset = this->makeOffset(this->cpuPort->address);
+        this->entry = this->findEntry(this->index, this->tag);
+    
+        cout << "Cache::process() | resolved address :: address=" << hexString(this->cpuPort->address)
+            << " tag=" << bitset<32>(this->tag)
+            << " index=" << bitset<32>(this->index)
+            << " offset=" << bitset<32>(this->offset)
+            << " entry=" << this->entry <<  endl;
+        
+        if(this->entry >= 0){
+        //BLOCK IS IN CACHE!
+            if(this->bank[this->index][this->entry].getMESI() != MESI_I){
+            //BLOCK IS VALID!
+                if(this->cpuPort->memctrl.memwsz > this->cpuPort->memctrl.memrsz){
+                //WRITE HIT!
+                    //WRITING TO MEMORY! INFORM THE BUS!
+                    //"I AM WRITING DATA TO [ADDRESS]!"
+                    //TODO inform the bus
+                    this->state = BUS_STATE;
+                }else{
+                //READ HIT!
+                    this->state = ACCESS_STATE;
+                }
+            }else{
+            //BLOCK IS INVALID, MISS!
+                this->misses++;
+            }
+        }else{
+        //BLOCK IS NOT IN CACHE, MISS!
+            this->misses++;
+        }
+    }
+    if(this->state == BUS_STATE){
+        //TODO initialize MESI messaging
+
+    }
+    if(this->state == ACCESS_STATE){
+    //this part actually gives/takes memory from the CPU
+
+        this->tag = this->makeTag(this->cpuPort->address);
+        this->index = this->makeIndex(this->cpuPort->address);
+        this->offset = this->makeOffset(this->cpuPort->address);
+        this->entry = this->findEntry(this->index, this->tag);
+    
+        cout << "Cache::process() | resolved address :: address=" << hexString(this->cpuPort->address)
+            << " tag=" << bitset<32>(this->tag)
+            << " index=" << bitset<32>(this->index)
+            << " offset=" << bitset<32>(this->offset)
+            << " entry=" << this->entry <<  endl;
 
         //Load
-        if(this->cpuPort.memctrl.memrsz > this->cpuPort.memctrl.memwsz){
-            this->cpuPort.data = this->memRead(this->cpuPort.address,
-                                            this->cpuPort.memctrl.memrsz);
-            cout << "\n\t" << hexString(this->cpuPort.data) << " Read from " << hexString(this->cpuPort.address) << "\n >";
+        if(this->cpuPort->memctrl.memrsz > this->cpuPort->memctrl.memwsz){
+            this->cpuPort->data = this->byteRead(this->index,this->entry,this->offset,
+                                                 this->cpuPort->memctrl.memrsz);
+            cout << "Cache::process() | " << hexString(this->cpuPort->data) << " Read from "
+                 << hexString(this->cpuPort->address) << "\n >" << endl;
         //Store
-        }else if(this->cpuPort.memctrl.memwsz > this->cpuPort.memctrl.memrsz){
-            this->memWrite(this->cpuPort.address,
-                        this->cpuPort.data,
-                        this->cpuPort.memctrl.memwsz);
-            cout << "\n\t" << hexString(this->cpuPort.data) << " Written to " << hexString(this->cpuPort.address) << "\n >";
+        }else if(this->cpuPort->memctrl.memwsz > this->cpuPort->memctrl.memrsz){
+            this->byteWrite(this->index,this->entry,this->offset,
+                            this->cpuPort->data,this->cpuPort->memctrl.memwsz);
+            cout << "Cache::process() | " << hexString(this->cpuPort->data) << " Written to "
+                 << hexString(this->cpuPort->address) << "\n >" << endl;
         }
+        //reset flags
+        this->state = LOOKUP_STATE;
+        this->cpuPort->memctrl.memack = 1;
+        //TODO update LRU
     }
 }
 
@@ -126,25 +193,16 @@ uint32_t Cache::makeOffset(uint32_t address){
 
 //==================================================================
 // Function reads from bytes within a cache block
-//  IMPORTANT! Assumes words are word-aligned!
+//  WARNING! Non-word-aligned words may break the whole thing
 //==================================================================
-uint32_t Cache::byteRead(uint32_t address, uint8_t byteWidth){
+uint32_t Cache::byteRead(uint32_t index, uint32_t entry, uint32_t offset, uint8_t byteWidth){
 
     cout << "Cache::byteRead() | entered Cache::byteRead()" << endl;
 
     this->accesses++;
 
-    uint32_t tag = this->makeTag(address);
-    uint32_t index = this->makeIndex(address);
-    uint32_t offset = this->makeOffset(address);
-    int32_t entry = this->findEntry(index, tag);
-    
-    cout << "Cache::byteRead() | resolved address :: address=" << hexString(address)
-         << " tag=" << bitset<32>(tag)
-         << " index=" << bitset<32>(index)
-         << " offset=" << bitset<32>(offset)
-         << " entry=" << entry <<  endl;
-
+    //moving all of this to Cache::process()
+    /*
     if(entry < 0){
         //MISS! Block not in Cache
         this->misses++;
@@ -172,6 +230,7 @@ uint32_t Cache::byteRead(uint32_t address, uint8_t byteWidth){
     }
 
     cout << "Cache::byteRead() | any misses have been resolved" << endl;
+    */
 
     uint32_t value = 0;
     
@@ -212,7 +271,7 @@ CacheBlock Cache::blockRead(uint32_t index, uint32_t tag){
 //==================================================================
 // Function writes to a byte within a cache block
 //==================================================================
-void Cache::byteWrite(uint32_t address, uint32_t data, uint8_t byteWidth){
+void Cache::byteWrite(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t byteWidth){
     // //start at 0 iterate through loop until LRUtag = 0
     // uint32_t index = getIndex(address);
     // uint32_t tag = getTag(address);
