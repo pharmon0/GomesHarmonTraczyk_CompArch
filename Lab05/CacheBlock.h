@@ -55,9 +55,6 @@ typedef struct{
 //============================================
 class CacheBlock{    
     //CacheBlock metadata
-
-    //MESI flags
-    uint8_t mesi;
     //address tag
     uint32_t tag;
     //LRU flag
@@ -66,6 +63,9 @@ class CacheBlock{
     bool tagSet;
 
   public:
+
+    //MESI flags
+    uint8_t mesi;
       //blocksize
       uint32_t blockSize;
 

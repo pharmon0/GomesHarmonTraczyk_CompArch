@@ -103,7 +103,7 @@ int main(void){
     }
 
     //MASTER TODO LIST
-    //TODO add coherence operation to Membus.cpp/h
+    //TODO finish coherence operation in Membus.cpp/h
     //TODO finish implementing Cache.cpp
 
     uint32_t ccA = ticksA / TICKS_PER_CLOCK;

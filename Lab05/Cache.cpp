@@ -59,6 +59,35 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
 }
 
 void Cache::process(){
+    /*
+    if(entry < 0){
+        //MISS! Block not in Cache
+        this->misses++;
+
+        cout << "Cache::byteRead() | miss! block not in cache" << endl;
+
+        // FIX ME Placeholder memory fetch!
+        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
+
+        entry = this->findEntry(index, tag);
+
+        cout << "Cache::byteRead() | index=" << index << " entry=" << entry
+             << " bank[index][entry].bytes.size()=" << this->bank[index][entry].bytes.size() << endl;
+
+    }else if(this->bank[index][entry].getMESI() == MESI_I){
+        //MISS! Block not valid
+        this->misses++;
+
+        cout << "Cache::byteRead() | miss! block invalid" << endl;
+
+        // FIX ME Placeholder memory fetch!
+        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
+
+        entry = this->findEntry(index, tag);
+    }
+
+    cout << "Cache::byteRead() | any misses have been resolved" << endl;
+    */
     if(this->state == LOOKUP_STATE){
     //perform lookup operations
         if(this->cpuPort->memctrl.memrsz == this->cpuPort->memctrl.memwsz){
@@ -146,7 +175,6 @@ void Cache::process(){
         //reset flags
         this->state = LOOKUP_STATE;
         this->cpuPort->memctrl.memack = 1;
-        //TODO update LRU
     }
 }
 
@@ -193,47 +221,20 @@ uint32_t Cache::makeOffset(uint32_t address){
 
 //==================================================================
 // Function reads from bytes within a cache block
+//  increments access count
+//  updates LRU
 //  WARNING! Non-word-aligned words may break the whole thing
 //==================================================================
 uint32_t Cache::byteRead(uint32_t index, uint32_t entry, uint32_t offset, uint8_t byteWidth){
 
+
+
     cout << "Cache::byteRead() | entered Cache::byteRead()" << endl;
 
     this->accesses++;
-
-    //moving all of this to Cache::process()
-    /*
-    if(entry < 0){
-        //MISS! Block not in Cache
-        this->misses++;
-
-        cout << "Cache::byteRead() | miss! block not in cache" << endl;
-
-        //FIXME Placeholder memory fetch!
-        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
-
-        entry = this->findEntry(index, tag);
-
-        cout << "Cache::byteRead() | index=" << index << " entry=" << entry
-             << " bank[index][entry].bytes.size()=" << this->bank[index][entry].bytes.size() << endl;
-
-    }else if(this->bank[index][entry].getMESI() == MESI_I){
-        //MISS! Block not valid
-        this->misses++;
-
-        cout << "Cache::byteRead() | miss! block invalid" << endl;
-
-        //FIXME Placeholder memory fetch!
-        this->blockWrite(index, tag, CacheBlock(this->blockSize,tag));
-
-        entry = this->findEntry(index, tag);
-    }
-
-    cout << "Cache::byteRead() | any misses have been resolved" << endl;
-    */
-
-    uint32_t value = 0;
     
+    //read the bytes
+    uint32_t value = 0;
     switch(byteWidth){ //access memory byte-wise
         case 0b11://WORD
             value |= (this->bank[index][entry].readOffset(offset+3)) << 24;
@@ -241,53 +242,76 @@ uint32_t Cache::byteRead(uint32_t index, uint32_t entry, uint32_t offset, uint8_
         case 0b10://HALF
             value |= (this->bank[index][entry].readOffset(offset+1)) << 8;
         case 0b01://BYTE
-
-            cout << "Cache::byteRead() | bytewidth is 1, offset=" << offset
-                 << " bank[index][entry].bytes.size()=" << this->bank[index][entry].bytes.size() << endl;
-            
             value |= this->bank[index][entry].readOffset(offset);
     }
-
     cout << "Cache::byteRead() | data has been read" << endl;
-
+    
+    //LRU update
     this->bank[index][entry].setLRU(true);
+    bool LRUSearch = true;
+    for(int block = 0; block < this->bank[index].size(); block++){
+        LRUSearch = LRUSearch && this->bank[index][block].getLRU();
+    }
+    if(LRUSearch){
+        for(int block = 0; block < this->bank[index].size(); block++){
+            this->bank[index][block].setLRU(false);
+        }
+        this->bank[index][entry].setLRU(true);
+    }
 
     cout << "Cache::byteRead() | lru updated" << endl;
-
     cout << "Cache::byteRead() | Exiting Cache::byteRead()" << endl;
-
     return value;
+    //hit/miss detection, MESI are handled by the calling function, not here.
 }
 
 //==================================================================
-// Function reads a cache block from a set
+// Function reads a cache block from a set and a known entry
 //==================================================================
-CacheBlock Cache::blockRead(uint32_t index, uint32_t tag){
-    //TODO implement this
-    //Not needed for Lab5a
-    return CacheBlock(); //FIXME PLACEHOLDER
+CacheBlock Cache::blockRead(uint32_t index, uint32_t entry){
+    return this->bank[index][entry];
 }
 
 //==================================================================
 // Function writes to a byte within a cache block
+//  increments accesses
+//  updates LRU
+//  WARNING! Non-word-aligned words may break the whole thing
 //==================================================================
 void Cache::byteWrite(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t byteWidth){
-    // //start at 0 iterate through loop until LRUtag = 0
-    // uint32_t index = getIndex(address);
-    // uint32_t tag = getTag(address);
-    // uint32_t offset = getOffset(address);
-    // uint8_t foundAddress = this->find(address);
-    // bank[addr.index][foundAddress].writeOffset(addr.offset, data);
-    // bank[addr.index][foundAddress].setLRU(1);
+    this->accesses++;
+    //write the bytes
+    switch(byteWidth){
+        //access memory bytewise and delete zeroed data
+        case 0b11://WORD
+            this->bank[index][entry].writeOffset(offset+3,0xFF & (data >> 24));
+            this->bank[index][entry].writeOffset(offset+2,0xFF & (data >> 16));
+        case 0b10://HALF
+            this->bank[index][entry].writeOffset(offset+1,0xFF & (data >> 8));
+        case 0b01://BYTE
+            this->bank[index][entry].writeOffset(offset,0xFF & data);
+    }
 
-    //TODO properly implement/check implementation of this function.
-    //Not needed for Lab5a
+    //LRU update
+    this->bank[index][entry].setLRU(true);
+    bool LRUSearch = true;
+    for(int block = 0; block < this->bank[index].size(); block++){
+        LRUSearch = LRUSearch && this->bank[index][block].getLRU();
+    }
+    if(LRUSearch){
+        for(int block = 0; block < this->bank[index].size(); block++){
+            this->bank[index][block].setLRU(false);
+        }
+        this->bank[index][entry].setLRU(true);
+    }
+
+    //hit/miss detection, MESI are handled by the calling function, not here.
 }
 
 //==================================================================
 // Function to add data to cache using pseudo-LRU replacement policy
 //==================================================================
-void Cache::blockWrite(uint32_t index, uint32_t tag, CacheBlock block){
+uint32_t Cache::blockWrite(uint32_t index, CacheBlock block){
 
     cout << "Cache::blockWrite() | entered function" << endl;
 

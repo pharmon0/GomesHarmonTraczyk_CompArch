@@ -104,9 +104,9 @@ class Cache{
 
     //Bank Access Functions
     uint32_t byteRead(uint32_t index, uint32_t entry, uint32_t offset, uint8_t byteWidth);
-    CacheBlock blockRead(uint32_t index, uint32_t tag);
+    CacheBlock blockRead(uint32_t index, uint32_t entry);
     void byteWrite(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t byteWidth);
-    void blockWrite(uint32_t index, uint32_t tag, CacheBlock block);
+    uint32_t blockWrite(uint32_t index, CacheBlock block); //returns entry of block written
 
     //statistics
     void printStats(void);
