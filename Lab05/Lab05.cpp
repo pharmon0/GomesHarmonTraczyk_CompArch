@@ -5,109 +5,107 @@
 //============================================
 // Libraries
 //============================================
-#include "Cache.h"
-#include <cstdint>
-#include <vector>
-#include <string>
+#include "Membus.h"
 #include <iostream>
-#include <fstream>
-//#include <cstring>
-#include "Functions.h"
-using std::ifstream;
+#include <cstdint>
+#include <bitset>
+#include <string>
+#include <vector>
+using std::vector;
+using std::string;
 using std::cout;
 using std::endl;
-using std::string;
-using std::vector;
-using std::stoul;
-using std::tolower;
+using std::bitset;
 
 //============================================
 // Constants and Definitions
 //============================================
-vector<uint32_t> readFile(string filename);
+#ifndef TICKS_PER_CLOCK
+#define TICKS_PER_CLOCK 10
+#endif
+#define MEM_TICKS      20 //20 ticks per Memory Access
+#define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
+#define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
+#define ARRAY_A_START 0x400
+#define ARRAY_B_START 0x800
+#define CPUA_INIT_PC 0
+#define CPUA_INIT_SP 0x2FF
+#define CPUB_INIT_PC 0x100
+#define CPUB_INIT_SP 0x3FF
 
 //============================================
 // Main Program
 //============================================
 int main(void){
-    vector<uint32_t> addresses = readFile("text/addresses.txt");
+    //create and populate the system memory
+    Memory ram = Memory(MEM_TICKS);
+    ram.populateFloat("text/A.txt",ARRAY_A_START); //populate A array
+    ram.populateFloat("text/B.txt",ARRAY_B_START); //populate B array
+    ram.populate("text/vadd.asm",CPUA_INIT_PC); //populate instruction space
+    ram.populate("text/vsub.asm",CPUB_INIT_PC); //populate instruction space
 
-    cout << "Lab05::main() | File Read Successfully" << endl;
+    //create a CPU core
+    Core cpuA = Core("cpuA", CPUA_INIT_PC, CPUA_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
+    Core cpuB = Core("cpuB", CPUB_INIT_PC, CPUB_INIT_SP, ALU_INT_CYCLES, ALU_FLOP_CYCLES);
 
-    vector<Cache> caches = { Cache(256, 32, CACHE_ASS_DIRECT),
-                             Cache(512, 32, CACHE_ASS_DIRECT),
-                             Cache(256, 64, CACHE_ASS_DIRECT),
-                             Cache(256, 32, CACHE_ASS_4WAY)
-                             /*Cache(256, 8, CACHE_ASS_DIRECT),
-                             Cache(256, 8, CACHE_ASS_2WAY),
-                             Cache(256, 8, CACHE_ASS_4WAY),
-                             Cache(256, 8, CACHE_ASS_FULLY),
+    //create Cache
+    cacheAI = Cache(256, 32, CACHE_ASS_DIRECT, cpuA.portI);
+    cacheAD = Cache(512, 32, CACHE_ASS_DIRECT, cpuA.portD);
+    cacheBI = Cache(256, 32, CACHE_ASS_DIRECT, cpuB.PortI);
+    cacheBD = Cache(512, 32, CACHE_ASS_DIRECT, cpuB.portD);
 
-                             Cache(256, 16, CACHE_ASS_DIRECT),
-                             Cache(256, 16, CACHE_ASS_2WAY),
-                             Cache(256, 16, CACHE_ASS_4WAY),
-                             Cache(256, 16, CACHE_ASS_FULLY),
-
-                             Cache(256, 32, CACHE_ASS_DIRECT),
-                             Cache(256, 32, CACHE_ASS_2WAY),
-                             Cache(256, 32, CACHE_ASS_4WAY),
-                             Cache(256, 32, CACHE_ASS_FULLY),
-                             
-                             Cache(256, 64, CACHE_ASS_DIRECT),
-                             Cache(256, 64, CACHE_ASS_2WAY),
-                             Cache(256, 64, CACHE_ASS_FULLY), //4-way
-
-                             Cache(256, 128, CACHE_ASS_FULLY) //2-way*/
-                             };
+    //create and populate membus for instruction and data
+    Membus dataBus = Membus({&(cacheAD.membusPort), &(cacheBD.membusPort)},&(ram.portD));
     
-    //iterate through all caches
-    for(int i = 0; i < caches.size(); i++){
-       cout << "Lab05::main() | Running Simulation of Cache " << i+1 << endl;
-       //read every address
-       for(int j = 0; j < addresses.size(); j++){
-           cout << "Lab05::main() | attempting to read byte from " << hexString(addresses[j]) << endl;
-           caches[i].byteRead(addresses[j],0b01);
-       }
-       //print stats
-       //caches[i].printStats();
-       //waiting to the end to print stats now
+    //run simulation loop until CPU halts
+    uint64_t tick = 0;
+    bool noHalt = true;
+    bool runA = true;
+    bool runB = true;
+    uint64_t ticksA = 0;
+    uint64_t ticksB = 0;
+    while(noHalt){
+        cout << "\n*** Simulation Loop : Tick #" << tick << endl;
+        //tick the CPU
+        if(runA){
+            runA = cpuA.process(tick);
+            ticksA++;
+        }
+        if(runB){
+            runB = cpuB.process(tick);
+            ticksB++;
+        }
+        noHalt = runA || runB;
+
+        //update the membus
+        dataBus.process(tick);
+        ram.portIA = cpuA.portI;
+        ram.portIB = cpuB.portI;
+
+        //tick the RAM
+        ram.process(tick);
+
+        //update the membus
+        dataBus.process(tick);
+        cpuA.portI = ram.portIA;
+        cpuB.portI = ram.portIB;
+
+        tick++;
     }
 
-    for(int i = 0; i < caches.size(); i++){
-        cout << "--------------------------" << endl;
-        caches[i].printStats();
-    }
-
-    // Cache cacheA = Cache(256, 32, CACHE_ASS_DIRECT);
-    // cout << "Lab05::main() | Running Simulation of CacheA" << endl;
-    // //read every address
-    // for(int j = 0; j < addresses.size(); j++){
-    //     cout << "Lab05::main() | attempting to read byte from " << hexString(addresses[j]) << endl;
-    //     cacheA.byteRead(addresses[j],0b01);
-    // }
-    // cacheA.printStats();
-    
+    uint32_t ccA = ticksA / TICKS_PER_CLOCK;
+    uint32_t instructionsA = cpuA.instructionCount;
+    float cpiA = ((float)ccA)/((float)instructionsA);
+    uint32_t ccB = ticksB / TICKS_PER_CLOCK;
+    uint32_t instructionsB = cpuB.instructionCount;
+    float cpiB = ((float)ccB)/((float)instructionsB);
+    cout << "\nCPU_A ran for " << ccA << " Clock Cycles (" << ticksA << " Ticks) and ran "
+         << instructionsA << " Instructions, giving an average CPI of " << cpiA << endl;
+    cout << "\nCPU_B ran for " << ccB << " Clock Cycles (" << ticksB << " Ticks) and ran "
+         << instructionsB << " Instructions, giving an average CPI of " << cpiB << endl;
+    cout << "\nMemory Byte Dump saved to ./text/memorydump.txt\nMemory Array Values saved to ./text/arraysout.txt" << endl;
+    ram.printBytes("text/memorydump.txt");
+    ram.printFloats("text/arraysout.txt");
 
     return 0;
-}
-
-//============================================
-// Main Program
-//============================================
-vector<uint32_t> readFile(string filename){
-    ifstream file;
-    file.open(filename);
-    if(!file.is_open()){
-        cout << "Lab05::readFile | FILE '" << filename << "' DID NOT OPEN" << endl;
-        return {};
-    }
-    string value;
-    vector<uint32_t> result;
-    //cout << " Reading File!" << endl;
-    while( file >> value ){
-        uint32_t item = uint32_t(stoul(value, nullptr, 16));
-        result.push_back(item);
-    }
-    file.close();
-    return result;
 }
