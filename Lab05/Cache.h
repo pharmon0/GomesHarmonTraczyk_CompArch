@@ -88,7 +88,7 @@ class Cache{
 
     //Constructor
     Cache(void);
-    Cache(uint32_t cacheSize, uint32_t blockSize, uint8_t assMode);
+    Cache(uint32_t cacheSize, uint32_t blockSize, uint8_t assMode, memport_t* cpuPort);
 
     //Bank Access Functions
     uint32_t byteRead(uint32_t address, uint8_t byteWidth);

@@ -8,9 +8,9 @@
 //  Links the membus to all cores and the ram
 //   through pointers to their memports
 //============================================
-Membus::Membus(vector<memport_t*> corePorts, memport_t* memPort){
+Membus::Membus(vector<memport_t*> cachePorts, memport_t* memPort){
     this->mem = memPort;
-    this->ports = corePorts;
+    this->ports = cachePorts;
     this->toMem = true;
     this->token = 0;
 }
