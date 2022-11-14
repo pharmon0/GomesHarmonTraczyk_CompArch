@@ -7,13 +7,12 @@
 // Constructors for Cache Object
 //============================================
 Cache::Cache(void){
-
     this->state = LOOKUP_STATE;};
 Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, memport_t* cpuPort, string ID){
     this->name = ID;
  
     this->cpuPort = cpuPort;
-    
+    cout << "Cache::Cache(" << blockByteSize << "," << int(assMode) << ",cpuPort," << ID << ") | entered constructor" << endl;
     this->accesses = 0;
     this->misses = 0;
 
@@ -21,12 +20,17 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
     this->cacheSize = cacheByteSize;
     this->blockSize = blockByteSize;
 
+
+    this->membusPort.data = CacheBlock(this->blockSize, 0);
+    
     //get the number of blocks
     this->blockCount = this->cacheSize / this->blockSize;
+    cout << "Cache::Cache ID"<<this->name<<"| blockCount=" << (int)this->blockCount << endl;
 
     //get the size of the offset and block address
     this->offsetWidth = ceil(log2(this->blockSize));
     this->tagWidth = SYSTEM_BITWIDTH - this->offsetWidth;
+    cout << "Cache::Cache ID"<<this->name<<"| offsetWidth=" << (int)this->offsetWidth << endl;
 
     //determine set associativity, index and tag widths
     //Full Associativity has only a single set
@@ -42,9 +46,17 @@ Cache::Cache(uint32_t cacheByteSize, uint32_t blockByteSize, uint8_t assMode, me
         this->tagWidth -= this->indexWidth;
         this->setBlocks = blockCount / setCount;
     }
+    cout << "Cache::Cache ID"<<this->name<<"| tagWidth=" << this->tagWidth
+            << " setCount=" << (int)this->setCount
+            << " indexWidth=" << (int)this->indexWidth
+            << " setBlocks=" << (int)this->setBlocks 
+            << " tagWidth=" << (int)this->tagWidth
+            << endl;
 
     //get the looktup time of the cache
     this->lookupTicks = ceil(log2(float(cacheSize)/float(blockSize))) * assMode;
+    this->lookupCounter = this->lookupTicks-1;
+    cout << "Cache::Cache ID"<<this->name<<"| lookupTicks=" << this->lookupTicks << endl;
 
     //populate initial dirty cache data
     //iterate through sets
@@ -122,6 +134,7 @@ void Cache::process(){
         this->index = this->makeIndex(this->cpuPort->address);
         this->offset = this->makeOffset(this->cpuPort->address);
         this->entry = this->findEntry(this->index, this->tag);
+        this->membusPort.memctrl.all = 0;
 
         if(this->entry >= 0){
         //block address is present
@@ -174,23 +187,30 @@ void Cache::process(){
 
     case WRITE_STATE:
     //writeback to memory
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         this->membusPort.address = this->makeAddress(this->bank[index][entry].getTag(),this->index,0);
         this->membusPort.memctrl.request = 1;
         this->membusPort.memctrl.write = 1;
         this->membusPort.data = this->bank[this->index][this->entry];
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         if(this->membusPort.memctrl.memack){
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         //MEMORY DONE
             this->state = READ_STATE;
             this->membusPort.memctrl.all = 0;
         }
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
     break;
 
     case READ_STATE:
     //read from memory
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         this->membusPort.address = this->cpuPort->address;
         this->membusPort.memctrl.request = 1;
         this->membusPort.memctrl.read = 1;
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         if(this->membusPort.memctrl.memack){
+            cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         //MEMORY DONE
             this->state = ACCESS_STATE;
             this->membusPort.memctrl.all = 0;
@@ -198,7 +218,9 @@ void Cache::process(){
             block.setTag(this->makeTag(this->cpuPort->address));
             block.mesi = MESI_E;
             this->blockWrite(this->index,this->entry,block);
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
         }
+        cout << "Cache"<<this->name<<"::process() | memack=" << (int)this->membusPort.memctrl.memack << endl;
     break;
 
     case ACCESS_STATE:
