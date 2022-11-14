@@ -56,7 +56,7 @@ class CacheBlock{
     CacheBlock(uint32_t size, uint32_t addrtag);
     CacheBlock(vector<uint8_t> data, uint32_t addrtag);
     CacheBlock(vector<uint8_t> data);
-    CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status);
+    //CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status);
 
     uint8_t readOffset(uint32_t offset);
     void writeOffset(uint32_t offset, uint8_t byte);

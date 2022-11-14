@@ -27,7 +27,7 @@ using std::bitset;
 #define TICKS_PER_CLOCK 10
 #endif
 #ifndef MEM_TICKS
-#define MEM_TICKS      20 //20 ticks per Memory Access
+#define MEM_TICKS      100 //100 ticks per Memory Access
 #endif
 #define ALU_INT_CYCLES  1 //10 ticks per integer ALU OP
 #define ALU_FLOP_CYCLES 5 //50 ticks per floating ALU OP
@@ -103,7 +103,7 @@ int main(void){
 
         tick++;
         
-        if(tick > 100000) int a = 1/0;
+        //if(tick > 100) break;
     }
 
     //MASTER TODO LIST
