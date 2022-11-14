@@ -31,6 +31,7 @@ using std::bitset;
 using std::ifstream;
 using std::ofstream;
 
+#include "CacheBlock.h"
 //============================================
 // Constants and Macros
 //============================================
