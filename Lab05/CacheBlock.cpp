@@ -12,6 +12,7 @@ CacheBlock::CacheBlock(void){
     this->LRU = false;
     this->blockSize = 0;
     this->bytes = {};
+    this->tagSet = false;
 }
 CacheBlock::CacheBlock(uint32_t size, uint32_t addrtag){
     
@@ -24,12 +25,22 @@ CacheBlock::CacheBlock(uint32_t size, uint32_t addrtag){
     for(int i = 0; i < this->blockSize; i++){
         this->bytes.push_back(0);
     }
+    this->tagSet = true;
     
     cout << "CacheBlock(size,tag) | Finished For Loop, this->bytes.size()=" << this->bytes.size() << endl;
 }
 CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag){
     this->mesi = MESI_E;
     this->tag  = addrtag;
+    this->LRU = false;
+    this->bytes = data;
+    this->blockSize = data.size();
+    this->tagSet = true;
+}
+CacheBlock::CacheBlock(vector<uint8_t> data){
+    this->mesi = MESI_E;
+    this->tag  = 0;
+    this->tagSet = false;
     this->LRU = false;
     this->bytes = data;
     this->blockSize = data.size();
@@ -40,6 +51,7 @@ CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status){
     this->LRU = false;
     this->bytes = data;
     this->blockSize = data.size();
+    this->tagSet = true;
 }
 
 //============================================

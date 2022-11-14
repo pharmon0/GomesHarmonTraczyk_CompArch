@@ -36,13 +36,13 @@ using std::map;
 //============================================
 typedef struct{
     uint32_t address;
-    vector<uint8_t> data;
+    CacheBlock data;
     mesi_message_t mesi;
     union{
         uint8_t all;
         struct{
-            uint8_t    memrsz : 1; //select memory read size
-            uint8_t   memwsz : 1; //select memory write size
+            uint8_t    read : 1; //read a block
+            uint8_t   write : 1; //write a block
             uint8_t request : 1; //has a memory request been made?
             uint8_t  memack : 1; //is memory operation complete?
             uint8_t:0; //union alignment
@@ -55,8 +55,6 @@ typedef struct{
 //============================================
 class CacheBlock{    
     //CacheBlock metadata
-      //blocksize
-      uint32_t blockSize;
 
     //MESI flags
     uint8_t mesi;
@@ -64,8 +62,13 @@ class CacheBlock{
     uint32_t tag;
     //LRU flag
     bool LRU;
+    //tag set flag
+    bool tagSet;
 
   public:
+      //blocksize
+      uint32_t blockSize;
+
     //bytes[offset] = byte
     vector<uint8_t> bytes;
 
@@ -73,6 +76,7 @@ class CacheBlock{
     CacheBlock(void);
     CacheBlock(uint32_t size, uint32_t addrtag);
     CacheBlock(vector<uint8_t> data, uint32_t addrtag);
+    CacheBlock(vector<uint8_t> data);
     CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status);
 
     uint8_t readOffset(uint32_t offset);

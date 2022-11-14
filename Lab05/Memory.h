@@ -44,8 +44,10 @@ class Memory{
 
     map<uint32_t, uint8_t> bank; //Memory Bank Hashtable
     
-    uint32_t memRead(uint32_t,uint8_t); //helper for memread
-    void memWrite(uint32_t,uint32_t,uint8_t); //helper for memwrite
+    uint32_t memRead(uint32_t addr, uint8_t size); //helper for memread
+    void memWrite(uint32_t addr, uint32_t value, uint8_t size); //helper for memwrite
+    CacheBlock blockRead(uint32_t address); //reads a block
+    void blockWrite(uint32_t address, CacheBlock block); //writes a block
 
     int counterIA;
     int counterIB;

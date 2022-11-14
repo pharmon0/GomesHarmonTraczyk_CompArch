@@ -87,12 +87,12 @@ class Cache{
     //otherwise returns entry of tag
     int32_t findEntry(uint32_t index, uint32_t tag);
 
+  public:
+
     //addressing helpers
     uint32_t makeTag(uint32_t address);
     uint32_t makeIndex(uint32_t address);
     uint32_t makeOffset(uint32_t address);
-
-  public:
 
     //cache data ports
         blockport_t membusPort;
