@@ -29,27 +29,6 @@ using std::map;
 #define MESI_S 0b01
 #define MESI_I 0b00
 
-
-//============================================
-// blockport_t Datatype
-// - serves as a memory access point between cache and memory
-//============================================
-typedef struct{
-    uint32_t address;
-    CacheBlock data;
-    mesi_message_t mesi;
-    union{
-        uint8_t all;
-        struct{
-            uint8_t    read : 1; //read a block
-            uint8_t   write : 1; //write a block
-            uint8_t request : 1; //has a memory request been made?
-            uint8_t  memack : 1; //is memory operation complete?
-            uint8_t:0; //union alignment
-        };
-    } memctrl;
-} blockport_t;
-
 //============================================
 // Class Definition
 //============================================
@@ -83,11 +62,33 @@ class CacheBlock{
     void writeOffset(uint32_t offset, uint8_t byte);
 
     uint32_t getTag(void);
+    void setTag(uint32_t t){this->tag=t;}
     uint8_t getMESI(void);
 
     bool getLRU(void);
     void setLRU(bool newLRU);
 };
+
+
+//============================================
+// blockport_t Datatype
+// - serves as a memory access point between cache and memory
+//============================================
+typedef struct{
+    uint32_t address;
+    CacheBlock data;
+    mesi_message_t mesi;
+    union{
+        uint8_t all;
+        struct{
+            uint8_t    read : 1; //read a block
+            uint8_t   write : 1; //write a block
+            uint8_t request : 1; //has a memory request been made?
+            uint8_t  memack : 1; //is memory operation complete?
+            uint8_t:0; //union alignment
+        };
+    } memctrl;
+} blockport_t;
 
 // End Header Guard
 #endif

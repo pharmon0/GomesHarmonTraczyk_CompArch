@@ -14,13 +14,10 @@ Memory::Memory(uint8_t accessTickCount, uint32_t blockWidth){
     this->counterIB = accessTickCount-1;
     this->portIA.memctrl.all = 0;
     this->portIA.address = 0;
-    this->portIA.data.clear();
     this->portIB.memctrl.all = 0;
     this->portIB.address = 0;
-    this->portIB.data.clear();
     this->portD.memctrl.all = 0;
     this->portD.address = 0;
-    this->portD.data.clear();
     this->bank.clear();
 }
 
@@ -238,11 +235,15 @@ void Memory::printFloats(string filename){
 //  WARNING! ASSUMES DATA IS WORD-ALIGNED
 //============================================
 CacheBlock Memory::blockRead(uint32_t address, uint32_t blockSize){
+    cout << "Memory::blockRead | entered" << endl;
     uint32_t baseAddress = address & 0xFFFFFFE0;
     vector<uint8_t> data = {};
     for(int i = 0; i < blockSize; i++){
-        data.push_back(uint8_t(this->memRead(baseAddress + i, 0b1)));
+        uint8_t val = uint8_t(this->memRead(baseAddress + i, 0b1));
+        data.push_back(val);
+        cout << "Memory::blockRead | read " << bitset<8>(val) << "from " << hexString(baseAddress + i) << endl;
     }
+    cout << "Memory::blockRead | exiting (calling CacheBlock constructor)" << endl;
     return CacheBlock(data);
 }
 

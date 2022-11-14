@@ -44,6 +44,8 @@ CacheBlock::CacheBlock(vector<uint8_t> data){
     this->LRU = false;
     this->bytes = data;
     this->blockSize = data.size();
+    cout << "CacheBlock::CacheBlock(data) | mesi=" << this->mesi << " tag=" << this->tag << " tagSet="
+         << this->tagSet << " LRU=" << this->LRU << " blockSize=" << this->blockSize << endl;
 }
 CacheBlock::CacheBlock(vector<uint8_t> data, uint32_t addrtag, uint8_t status){
     this->mesi = status;

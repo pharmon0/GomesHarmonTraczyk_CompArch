@@ -29,15 +29,15 @@ using std::vector;
 // Memory Controller Class
 //============================================
 class Membus{
-    vector<Cache*> caches;
+    vector<blockport_t*> ports;
     bool messageSent;
-    bool busDirection;
+    bool transferDirection;
     bool dataReady;
     blockport_t* mem;
     uint8_t token;
   public:
     //constructor
-    Membus(vector<Cache*>,blockport_t*);
+    Membus(vector<blockport_t*>,blockport_t*);
 
     //Clock Cycle Process
     void process(uint64_t);

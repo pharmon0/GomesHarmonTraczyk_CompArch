@@ -11,15 +11,6 @@
 //============================================
 #include <cstdint>   //Standard Int Types
 
-
-//internal state of cache::process()
-typedef enum{
-    LOOKUP_STATE,
-    CHECK_STATE,
-    BUS_STATE,
-    ACCESS_STATE
-} cache_state_t;
-
 //possible cache coherence messages
 typedef enum{
     NONE_M,       //No Memory Access Occuring
