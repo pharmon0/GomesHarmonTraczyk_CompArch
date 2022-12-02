@@ -6,7 +6,11 @@
 //================================
 // Block Constructor
 //================================
-Block::Block(){
+Block::Block(uint32_t tag){
+    this->block_tag = tag;
+    this->least_recent = false;
+    this->cold_start = false;
+    this->bank.clear();
 }
 
 //================================

@@ -29,10 +29,18 @@ using std::vector;
 #define ASSOCIATIVITY_2_WAY 2
 #define ASSOCIATIVITY_4_WAY 4
 
-
 class Cache{
 
     //Physical Components
+    //Bank is arranged as follows:
+    //----------------------------------------------
+    // index ||                entry
+    //----------------------------------------------
+    // set 0 || block(0,0) | block(0,1) | block(0,2)
+    // set 1 || block(1,0) | block(1,1) | block(1,2)
+    // set 2 || block(2,0) | block(2,1) | block(2,2)
+    // set 3 || block(3,0) | block(3,1) | block(3,2)
+    //----------------------------------------------
     vector<vector<Block> > bank;
 
     //Physical Properties

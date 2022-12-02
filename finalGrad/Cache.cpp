@@ -31,6 +31,8 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
 
     this->access_ticks = ceil(log2(this->bytes_in_cache/this->bytes_in_block));
     this->access_counter = this->access_ticks;
+
+    //TODO populate the bank
 }
 
 //================================

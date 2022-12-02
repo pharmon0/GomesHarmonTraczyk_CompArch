@@ -33,13 +33,13 @@ class Node{
   public:
 
     //Constructor
-    Node(); //TODO Node::Node()
+    Node(string name, uint8_t id, Cache* cache_pointer, Memory* memory_pointer);
 
     //Node Setup Functions
-    //void attach_core(TODO);
-    void attach_cache(Cache* cache_pointer);
-    void attach_memory(Memory* memory_pointer);
     void add_connection(Node* node_pointer);
+
+    //Tick Process Function
+    void process();
 
 };
 

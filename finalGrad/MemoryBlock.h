@@ -21,10 +21,15 @@ class Block{
     //Physical Components
     map<uint32_t, uint8_t> bank;
 
+    //Control Flags
+    uint32_t block_tag;
+    bool least_recent;
+    bool cold_start;
+
   public:
 
     //Constructor
-    Block();
+    Block(uint32_t tag);
 
     //Bank Access
     uint8_t read_byte(uint32_t offset);

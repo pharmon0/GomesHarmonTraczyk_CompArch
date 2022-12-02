@@ -21,6 +21,8 @@ using std::vector;
 #define CACHE_SIZE 65536
 #define CACHE_BLOCK_SIZE 64
 #define CACHE_ACCESS_TICKS 10
+#define MEMORY_BANK_SIZE 262144
+#define MEMORY_ACCESS_TICKS 30
 
 //============================================
 // Main Program
@@ -42,44 +44,44 @@ int main(void){
         for(int i = 0; i < cache.size(); i++){
             cache.at(i).set_access_time(CACHE_ACCESS_TICKS);
         }
-
-    //attach cores to caches
-    //No cores needed. Use fake request feeders
-    //TODO
+        //TODO attach cores to caches
+        //No cores needed. Use fake request feeders
 
     //build memory
-    //TODO
-    vector<Memory> memory = {Memory(),
-                             Memory(),
-                             Memory(),
-                             Memory()};
+    vector<Memory> memory = {Memory("memory_0", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
+                             Memory("memory_1", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
+                             Memory("memory_2", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
+                             Memory("memory_3", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS)};
 
     //build nodes
-    //TODO
-    vector<Node> node = {Node(),
-                         Node(),
-                         Node(),
-                         Node()};
-
-    //attach caches to nodes
-    for(int i = 0; i < node.size(); i++){
-        node.at(i).attach_cache(&cache.at(i));
-    }
-
-    //attach memory to nodes
-    for(int i = 0; i < node.size(); i++){
-        node.at(i).attach_memory(&memory.at(i));
-    }
-
-    //attach nodes to nodes
-    for(int i = 0; i < node.size(); i++){
-        for(int j = 0; i < node.size(); i++){
-            node.at(i).add_connection(&node.at(j));
+    vector<Node> node = {Node("node_0", 0, &cache.at(0), &memory.at(0)),
+                         Node("node_1", 1, &cache.at(1), &memory.at(1)),
+                         Node("node_2", 2, &cache.at(2), &memory.at(2)),
+                         Node("node_3", 3, &cache.at(3), &memory.at(3))};
+        //interconnect nodes
+        for(int i = 0; i < node.size(); i++){
+            for(int j = 0; i < node.size(); i++){
+                node.at(i).add_connection(&node.at(j));
+            }
         }
-    }
 
     //run main program loop
-    //TODO
+    uint32_t tick = 0;
+    bool halt = false;
+    while(!halt){
+
+        //process clock tick
+        for(int i = 0; i < node.size(); i++){
+            node.at(i).process();
+        }
+
+        //Move to next tick
+        tick++;
+        if(tick > 10000){
+            //DEBUG PROGRAM HALT
+            halt = true;
+        }
+    }
 
     return 0;
 }

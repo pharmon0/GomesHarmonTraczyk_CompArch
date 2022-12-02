@@ -3,20 +3,21 @@
  * Directory Node Module */
 #include "Node.h"
 
-Node::Node(){}
-
 //================================
-// Attach the cache to the node
+// Node Constructor
 //================================
-void Node::attach_cache(Cache* cache_pointer){
+Node::Node(string name, uint8_t id, Cache* cache_pointer, Memory* memory_pointer){
+    this->node_name = name;
+    this->node_id = id;
     this->cache = cache_pointer;
+    this->memory = memory_pointer;
 }
 
 //================================
-// Attach the memory to the node
+// Process a tick in the node
 //================================
-void Node::attach_memory(Memory* memory_pointer){
-    this->memory = memory_pointer;
+void Node::process(){
+    //TODO Node::process()
 }
 
 //================================
