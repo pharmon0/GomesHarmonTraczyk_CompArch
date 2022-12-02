@@ -11,11 +11,13 @@
 //============================================
 #include <cstdint>
 #include <string>
+#include <vector>
 #include "Settings.h"
 #include "Cache.h"
 #include "Memory.h"
 #include "Node.h"
 using std::string;
+using std::vector;
 
 //============================================
 // Main Program
@@ -28,10 +30,10 @@ int main(void){
     //Empty. No cores needed
 
     //build caches
-    Cache cache_0 = Cache("cache_0", 65536, 64, ASSOCIATIVITY_2_WAY);
-    Cache cache_1 = Cache("cache_1", 65536, 64, ASSOCIATIVITY_2_WAY);
-    Cache cache_2 = Cache("cache_2", 65536, 64, ASSOCIATIVITY_2_WAY);
-    Cache cache_3 = Cache("cache_3", 65536, 64, ASSOCIATIVITY_2_WAY);
+    vector<Cache> cache = {Cache("cache_0", 65536, 64, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_1", 65536, 64, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_2", 65536, 64, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_3", 65536, 64, ASSOCIATIVITY_2_WAY)};
 
     //attach cores to caches
     //No cores needed. Use fake request feeders
@@ -39,47 +41,34 @@ int main(void){
 
     //build memory
     //TODO
-    Memory memory_0 = Memory();
-    Memory memory_1 = Memory();
-    Memory memory_2 = Memory();
-    Memory memory_3 = Memory();
+    vector<Memory> memory = {Memory(),
+                             Memory(),
+                             Memory(),
+                             Memory()};
 
     //build nodes
     //TODO
-    Node node_0 = Node();
-    Node node_1 = Node();
-    Node node_2 = Node();
-    Node node_3 = Node();
+    vector<Node> node = {Node(),
+                         Node(),
+                         Node(),
+                         Node()};
 
     //attach caches to nodes
-    node_0.attach_cache(&cache_0);
-    node_1.attach_cache(&cache_1);
-    node_2.attach_cache(&cache_2);
-    node_3.attach_cache(&cache_3);
+    for(int i = 0; i < node.size(); i++){
+        node.at(i).attach_cache(&cache.at(i));
+    }
 
     //attach memory to nodes
-    node_0.attach_memory(&memory_0);
-    node_1.attach_memory(&memory_1);
-    node_2.attach_memory(&memory_2);
-    node_3.attach_memory(&memory_3);
+    for(int i = 0; i < node.size(); i++){
+        node.at(i).attach_memory(&memory.at(i));
+    }
 
     //attach nodes to nodes
-    node_0.add_connection(&node_0);
-    node_0.add_connection(&node_1);
-    node_0.add_connection(&node_2);
-    node_0.add_connection(&node_3);
-    node_1.add_connection(&node_0);
-    node_1.add_connection(&node_1);
-    node_1.add_connection(&node_2);
-    node_1.add_connection(&node_3);
-    node_2.add_connection(&node_0);
-    node_2.add_connection(&node_1);
-    node_2.add_connection(&node_2);
-    node_2.add_connection(&node_3);
-    node_3.add_connection(&node_0);
-    node_3.add_connection(&node_1);
-    node_3.add_connection(&node_2);
-    node_3.add_connection(&node_3);
+    for(int i = 0; i < node.size(); i++){
+        for(int j = 0; i < node.size(); i++){
+            node.at(i).add_connection(&node.at(j));
+        }
+    }
 
     //run main program loop
     //TODO
