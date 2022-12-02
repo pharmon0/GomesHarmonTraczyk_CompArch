@@ -1,12 +1,12 @@
 /* ECGR 4181/5181 - Computer Architecture
  * Stanly Gomes, Phillip Harmon, Gibert Traczyk
- * Cache Module */
+ * Memory Module */
 
 // Start Header Guard
-#ifndef GHT_CACHE
-#define GHT_CACHE
+#ifndef GHT_MEMORY
+#define GHT_MEMORY
 
-class Cache{
+class Memory{
 
 };
 

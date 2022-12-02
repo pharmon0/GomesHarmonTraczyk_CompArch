@@ -1,12 +1,12 @@
 /* ECGR 4181/5181 - Computer Architecture
  * Stanly Gomes, Phillip Harmon, Gibert Traczyk
- * Cache Module */
+ * CPU Node Module */
 
 // Start Header Guard
-#ifndef GHT_CACHE
-#define GHT_CACHE
+#ifndef GHT_NODE
+#define GHT_NODE
 
-class Cache{
+class Node{
 
 };
 
