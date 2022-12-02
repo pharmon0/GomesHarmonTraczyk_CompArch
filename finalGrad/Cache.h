@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <string>
 #include <math.h>
-#include "Settings.h"
+#include "Definitions.h"
 #include "MemoryBlock.h"
 using std::log2;
 using std::ceil;
@@ -73,6 +73,14 @@ class Cache{
     //Mutators for Cache Properties
     void set_access_time(uint32_t ticks);
 
+    //Bank Access
+    response_t cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width);
+
+    //helper functions
+    uint32_t make_tag(uint32_t address);
+    uint32_t make_index(uint32_t address);
+    uint32_t make_offset(uint32_t address);
+    int32_t find_entry(uint32_t index, uint32_t tag); 
 };
 
 // End Header Guard
