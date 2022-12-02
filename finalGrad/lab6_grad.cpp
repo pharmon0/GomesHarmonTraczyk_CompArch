@@ -12,6 +12,7 @@
 #include "Cache.h"
 #include "Memory.h"
 #include "Node.h"
+#include "Core.h"
 using std::string;
 using std::vector;
 
@@ -33,7 +34,11 @@ int main(void){
 
     //build cores
     //No cores needed. Build fake request feeders
-    //TODO
+    //FIXME make this actually do stuff
+    vector<Core> core = {Core(),
+                         Core(),
+                         Core(),
+                         Core()};
 
     //build caches
     vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
@@ -67,12 +72,16 @@ int main(void){
 
     //run main program loop
     uint32_t tick = 0;
+    vector<bool> core_halt = {false, false, false, false};
     bool halt = false;
     while(!halt){
 
         //process clock tick
-        for(int i = 0; i < node.size(); i++){
-            node.at(i).process();
+        //TODO ticks
+        //The plan here is that the core-level components will recieve the clock ticks
+        // and processes will propogate upwards through the stackup with pointers
+        for(int i = 0; i < core.size(); i++){
+            core_halt.at(i) = core.at(i).process(tick);
         }
 
         //Move to next tick

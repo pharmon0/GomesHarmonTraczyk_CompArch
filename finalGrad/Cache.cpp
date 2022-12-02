@@ -23,7 +23,7 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
         //other associativities behave thusly
         this->sets_in_cache = this->blocks_in_cache / associativity;
         this->index_width = ceil(log2(this->sets_in_cache));
-        this->blocks_in_set = this->blocks_in_cache / this->sets_in_cache;
+        this->blocks_in_set = associativity;
     }
 
     this->offset_width = ceil(log2(block_bytes));

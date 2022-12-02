@@ -38,9 +38,6 @@ class Node{
     //Node Setup Functions
     void add_connection(Node* node_pointer);
 
-    //Tick Process Function
-    void process();
-
 };
 
 // End Header Guard

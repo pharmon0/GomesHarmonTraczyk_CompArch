@@ -14,13 +14,6 @@ Node::Node(string name, uint8_t id, Cache* cache_pointer, Memory* memory_pointer
 }
 
 //================================
-// Process a tick in the node
-//================================
-void Node::process(){
-    //TODO Node::process()
-}
-
-//================================
 // Add an interconnect to the node
 //================================
 void Node::add_connection(Node* node_pointer){
