@@ -3,11 +3,7 @@
  * Main Program Code */
 
 //============================================
-// Libraries
-//============================================
-
-//============================================
-// Constants and Definitions
+// Headers and Namespaces
 //============================================
 #include <cstdint>
 #include <string>
@@ -20,6 +16,13 @@ using std::string;
 using std::vector;
 
 //============================================
+// Definitions and Constants
+//============================================
+#define CACHE_SIZE 65536
+#define CACHE_BLOCK_SIZE 64
+#define CACHE_ACCESS_TICKS 10
+
+//============================================
 // Main Program
 //============================================
 int main(void){
@@ -27,13 +30,18 @@ int main(void){
     //TODO
 
     //build cores
-    //Empty. No cores needed
+    //No cores needed. Build fake request feeders
+    //TODO
 
     //build caches
-    vector<Cache> cache = {Cache("cache_0", 65536, 64, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_1", 65536, 64, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_2", 65536, 64, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_3", 65536, 64, ASSOCIATIVITY_2_WAY)};
+    vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_1", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_2", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_3", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY)};
+        //override automatic access time calculations
+        for(int i = 0; i < cache.size(); i++){
+            cache.at(i).set_access_time(CACHE_ACCESS_TICKS);
+        }
 
     //attach cores to caches
     //No cores needed. Use fake request feeders
