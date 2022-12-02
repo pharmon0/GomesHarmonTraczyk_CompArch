@@ -1,29 +1,32 @@
 /* ECGR 4181/5181 - Computer Architecture
  * Stanly Gomes, Phillip Harmon, Gibert Traczyk
- * Helper Functions Module */
+ * Definitions Module */
 
 // Start Header Guard
-#ifndef GHT_FUNCTIONS
-#define GHT_FUNCTIONS
+#ifndef GHT_HELPER_HEADER
+#define GHT_HELPER_HEADER
 
 //============================================
-// Libraries
+// Headers and Namespaces
 //============================================
-#include <cstdint>   //Standard Int Datatypes
-#include <string>    //String Datatype
+#include <string>
+#include <cstdint>
 using std::string;
 
 //============================================
-// Constants and Definitions
+// Constants and Macros
 //============================================
+#define SYSTEM_BITWIDTH 32
 
 //============================================
-// Function Prototypes
+// Datatypes
 //============================================
-string hexString(uint32_t);
-string hexString(uint32_t, uint8_t);
-int32_t memSignExtend(int32_t,bool,uint8_t);
-int32_t immSignExtendShift(int32_t,bool,bool);
+//response_t used to indicate completed results
+typedef struct{
+    uint32_t data;
+    string reason;
+    bool success;
+} response_t;
 
-// End Header Guard
+//End Header Guard
 #endif
