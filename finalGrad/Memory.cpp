@@ -3,3 +3,4 @@
  * Memory Module */
 #include "Memory.h"
 
+Memory::Memory(){}

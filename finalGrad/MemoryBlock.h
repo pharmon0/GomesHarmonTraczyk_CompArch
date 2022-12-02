@@ -1,35 +1,35 @@
 /* ECGR 4181/5181 - Computer Architecture
  * Stanly Gomes, Phillip Harmon, Gibert Traczyk
- * Memory Module */
+ * Memory Block Module */
 
 // Start Header Guard
-#ifndef GHT_MEMORY
-#define GHT_MEMORY
+#ifndef GHT_MEMORYBLOCK
+#define GHT_MEMORYBLOCK
 
 //==========================
 // Headers and Namespaces
 //==========================
-#include <vector>
 #include <cstdint>
-#include <string>
+#include <map>
+#include <vector>
 #include "Settings.h"
-#include "MemoryBlock.h"
-using std::string;
+using std::map;
 using std::vector;
 
-class Memory{
-
+class Block{
+    
     //Physical Components
-    map<uint32_t, Block> bank;
+    map<uint32_t, uint8_t> bank;
 
   public:
 
     //Constructor
-    Memory(); //TODO Memory::Memory()
+    Block();
 
     //Bank Access
-    Block memory_read(uint32_t address); //TODO memory_read()
-    void memory_write(uint32_t address, Block data); //TODO memory_write()
+    uint8_t read_byte(uint32_t offset);
+    void write_byte(uint32_t offset, uint8_t data);
+
 };
 
 // End Header Guard

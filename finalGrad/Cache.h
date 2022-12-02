@@ -6,7 +6,64 @@
 #ifndef GHT_CACHE
 #define GHT_CACHE
 
+//==========================
+// Headers and Namespaces
+//==========================
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <math.h>
+#include "Settings.h"
+#include "MemoryBlock.h"
+using std::log2;
+using std::ceil;
+using std::string;
+using std::vector;
+
+//==========================
+// Custom Definitions
+//==========================
+//Associativity Types
+#define ASSOCIATIVITY_FULL 0
+#define ASSOCIATIVITY_DIRECT 1
+#define ASSOCIATIVITY_2_WAY 2
+#define ASSOCIATIVITY_4_WAY 4
+
+
 class Cache{
+
+    //Physical Components
+    vector<vector<Block> > bank;
+
+    //Physical Properties
+    uint32_t tag_width;
+    uint32_t index_width;
+    uint32_t offset_width;
+
+    uint32_t bytes_in_block;
+    uint32_t blocks_in_set;
+    uint32_t bytes_in_cache;
+    uint32_t blocks_in_cache;
+    uint32_t sets_in_cache;
+    
+    //Timing
+    uint32_t access_counter;
+    uint32_t access_ticks;
+
+    //Metadata
+    string cache_name;
+
+  public:
+
+    //Constructor
+    Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t associativity);
+    
+    //Cache Setup Functions
+    void attach_cpu();//TODO attach_cpu()
+    void attach_bus();//TODO attach_bus()
+
+    //Mutators for Cache Properties
+    void set_access_time(uint32_t ticks);
 
 };
 

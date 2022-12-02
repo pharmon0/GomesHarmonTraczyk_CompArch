@@ -9,39 +9,80 @@
 //============================================
 // Constants and Definitions
 //============================================
+#include <cstdint>
+#include <string>
+#include "Settings.h"
+#include "Cache.h"
+#include "Memory.h"
+#include "Node.h"
+using std::string;
 
 //============================================
 // Main Program
 //============================================
 int main(void){
-    /*
-    Lab 6 - Directory Scheme
-    ========================
-    Data Structure
-    ---------------
-     * Nodes A, B, C, D
-       * Cache (Opteron: 64KB, 2-way, 64B blocks)
-       * Memory (256KB)
-     * Trace Vectors A, B, C, D
-    ------
-    Conops
-    ------
-     * All actions take a multiple of 10 ticks (1 cycle), as such, all timing is handled in cycles.
-    -------
-    Timings
-    -------
-     * Cache Access Time     : 1CC
-     * Memory Access Time    : 3CC
-     * P2P Latency           : 1CC
-     * Directory Update Time : 1CC
-    ----------------------
-    Main Program Algorithm
-    ----------------------
-     Initialize Data Structures
-     Read Memory Traces from Files
-     Loop until all traces finished
-        Check 
-    */
-   
+    //load program instructions
+    //TODO
+
+    //build cores
+    //Empty. No cores needed
+
+    //build caches
+    Cache cache_0 = Cache("cache_0", 65536, 64, ASSOCIATIVITY_2_WAY);
+    Cache cache_1 = Cache("cache_1", 65536, 64, ASSOCIATIVITY_2_WAY);
+    Cache cache_2 = Cache("cache_2", 65536, 64, ASSOCIATIVITY_2_WAY);
+    Cache cache_3 = Cache("cache_3", 65536, 64, ASSOCIATIVITY_2_WAY);
+
+    //attach cores to caches
+    //No cores needed. Use fake request feeders
+    //TODO
+
+    //build memory
+    //TODO
+    Memory memory_0 = Memory();
+    Memory memory_1 = Memory();
+    Memory memory_2 = Memory();
+    Memory memory_3 = Memory();
+
+    //build nodes
+    //TODO
+    Node node_0 = Node();
+    Node node_1 = Node();
+    Node node_2 = Node();
+    Node node_3 = Node();
+
+    //attach caches to nodes
+    node_0.attach_cache(&cache_0);
+    node_1.attach_cache(&cache_1);
+    node_2.attach_cache(&cache_2);
+    node_3.attach_cache(&cache_3);
+
+    //attach memory to nodes
+    node_0.attach_memory(&memory_0);
+    node_1.attach_memory(&memory_1);
+    node_2.attach_memory(&memory_2);
+    node_3.attach_memory(&memory_3);
+
+    //attach nodes to nodes
+    node_0.add_connection(&node_0);
+    node_0.add_connection(&node_1);
+    node_0.add_connection(&node_2);
+    node_0.add_connection(&node_3);
+    node_1.add_connection(&node_0);
+    node_1.add_connection(&node_1);
+    node_1.add_connection(&node_2);
+    node_1.add_connection(&node_3);
+    node_2.add_connection(&node_0);
+    node_2.add_connection(&node_1);
+    node_2.add_connection(&node_2);
+    node_2.add_connection(&node_3);
+    node_3.add_connection(&node_0);
+    node_3.add_connection(&node_1);
+    node_3.add_connection(&node_2);
+    node_3.add_connection(&node_3);
+
+    //run main program loop
+    //TODO
+
     return 0;
 }
