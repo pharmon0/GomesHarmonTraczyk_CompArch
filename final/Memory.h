@@ -12,15 +12,24 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <iostream>
+#include <bitset>
 #include "Definitions.h"
+#include "Datatypes.h"
 #include "MemoryBlock.h"
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
+using std::bitset;
 
 class Memory{
 
     //Physical Components
     map<uint32_t, Block> bank;
+
+    //Physical Properties
+    uint32_t address_mask;
 
     //Timing
     uint32_t access_ticks;
@@ -29,15 +38,17 @@ class Memory{
     //Metadata
     string memory_name;
     uint32_t bytes_in_memory;
+    uint32_t bytes_in_block;
+    uint32_t blocks_in_memory;
 
   public:
 
     //Constructor
-    Memory(string name, uint32_t bytes, uint32_t access_time); //TODO Memory::Memory()
+    Memory(string name, uint32_t memory_bytes, uint32_t block_bytes, uint32_t access_time);
 
     //Bank Access
-    Block memory_read(uint32_t address); //TODO memory_read()
-    void memory_write(uint32_t address, Block data); //TODO memory_write()
+    response_t memory_read(uint32_t address);
+    response_t memory_write(uint32_t address, Block data);
 };
 
 // End Header Guard

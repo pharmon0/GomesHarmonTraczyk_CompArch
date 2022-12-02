@@ -6,11 +6,33 @@
 //================================
 // Block Constructor
 //================================
-Block::Block(uint32_t tag){
-    this->block_tag = tag;
+//Default Constructor
+Block::Block(){
+    this->block_tag = 0;
     this->least_recent = false;
     this->cold_start = false;
     this->bank.clear();
+}
+
+//================================
+// Set Tag
+//================================
+void Block::set_tag(uint32_t tag){
+    this->block_tag = tag;
+}
+
+//================================
+// Set cold_start value
+//================================
+void Block::start_cold(void){
+    this->cold_start = true;
+}
+
+//================================
+// Get cold_start value
+//================================
+bool Block::is_cold(void) const{
+    return this->cold_start;
 }
 
 //================================

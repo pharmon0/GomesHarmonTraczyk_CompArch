@@ -8,22 +8,26 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "Definitions.h"
 #include "Cache.h"
 #include "Memory.h"
-#include "Node.h"
+#include "Bus.h"
 #include "Core.h"
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
 
 //============================================
 // Definitions and Constants
 //============================================
+#define BLOCK_SIZE 64
 #define CACHE_SIZE 65536
-#define CACHE_BLOCK_SIZE 64
+#define MEMORY_SIZE 262144
 #define CACHE_ACCESS_TICKS 10
-#define MEMORY_BANK_SIZE 262144
 #define MEMORY_ACCESS_TICKS 30
+#define BUS_ACCESS_TICKS 10
 
 //============================================
 // Main Program
@@ -35,16 +39,18 @@ int main(void){
     //build cores
     //No cores needed. Build fake request feeders
     //FIXME make this actually do stuff
+    cout << "Constructing Cores" << endl;
     vector<Core> core = {Core(),
                          Core(),
                          Core(),
                          Core()};
 
     //build caches
-    vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_1", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_2", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_3", CACHE_SIZE, CACHE_BLOCK_SIZE, ASSOCIATIVITY_2_WAY)};
+    cout << "Constructing Caches" << endl;
+    vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_DIRECT),
+                           Cache("cache_1", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_2", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_4_WAY),
+                           Cache("cache_3", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_FULL)};
         //override automatic access time calculations
         for(int i = 0; i < cache.size(); i++){
             cache.at(i).set_access_time(CACHE_ACCESS_TICKS);
@@ -53,22 +59,13 @@ int main(void){
         //No cores needed. Use fake request feeders
 
     //build memory
-    vector<Memory> memory = {Memory("memory_0", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
-                             Memory("memory_1", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
-                             Memory("memory_2", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS),
-                             Memory("memory_3", MEMORY_BANK_SIZE, MEMORY_ACCESS_TICKS)};
+    cout << "Constructing Memory" << endl;
+    Memory memory = Memory("main_memory", MEMORY_SIZE, BLOCK_SIZE, MEMORY_ACCESS_TICKS);
 
-    //build nodes
-    vector<Node> node = {Node("node_0", 0, &cache.at(0), &memory.at(0)),
-                         Node("node_1", 1, &cache.at(1), &memory.at(1)),
-                         Node("node_2", 2, &cache.at(2), &memory.at(2)),
-                         Node("node_3", 3, &cache.at(3), &memory.at(3))};
-        //interconnect nodes
-        for(int i = 0; i < node.size(); i++){
-            for(int j = 0; i < node.size(); i++){
-                node.at(i).add_connection(&node.at(j));
-            }
-        }
+    //build bus
+    cout << "Constructing Bus" << endl;
+    Bus bus = Bus("memory_bus", cache, &memory, BUS_ACCESS_TICKS);
+    //TODO assign any further pointer connections
 
     //run main program loop
     uint32_t tick = 0;
@@ -76,16 +73,12 @@ int main(void){
     do{
         //process clock tick
         //TODO ticks
-        //The plan here is that the core-level components will recieve the clock ticks
-        // and processes will propogate upwards through the stackup with pointers
-        halt = true; //halt will only stay true after this if all cores return true
-        for(int i = 0; i < core.size(); i++){
-            halt = halt && core.at(i).process(tick);
-        }
+        cout << "Tick " << tick << endl;
+        
 
         //Move to next tick
         tick++;
-        if(tick > 10000){
+        if(tick > 100){
             //DEBUG PROGRAM HALT
             halt = true;
         }

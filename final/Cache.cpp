@@ -28,6 +28,30 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
 
     this->offset_width = ceil(log2(block_bytes));
     this->tag_width = SYSTEM_BITWIDTH - this->offset_width - this->index_width;
+    
+    this->offset_mask = 0;
+    for(int i = 0; i < this->offset_width; i++){
+        this->offset_mask |= (1<<i);
+    }
+    cout << this->cache_name << "| offset_width=" << setw(2) << this->offset_width << " mask=" << bitset<32>(this->offset_mask) << endl;
+    
+    this->index_mask = 0;
+    for(int i = 0; i < this->index_width; i++){
+        this->index_mask |= (1<<i);
+    }
+    for(int i = 0; i < this->offset_width; i++){
+        this->index_mask = this->index_mask << 1;
+    }
+    cout << this->cache_name << "|  index_width=" << setw(2) << this->index_width << " mask=" << bitset<32>(this->index_mask) << endl;
+
+    this->tag_mask = 0;
+    for(int i = 0; i < this->tag_width; i++){
+        this->tag_mask |= (1<<i);
+    }
+    for(int i = 0; i < (this->offset_width + this->index_width); i++){
+        this->tag_mask = this->tag_mask << 1;
+    }
+    cout << this->cache_name << "|    tag_width=" << setw(2) << this->tag_width << " mask=" << bitset<32>(this->tag_mask) << endl;
 
     this->access_ticks = ceil(log2(this->bytes_in_cache/this->bytes_in_block));
     this->access_counter = this->access_ticks;
@@ -55,7 +79,6 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
         response.data = 0;
         response.success = false;
         response.reason = "waiting for cache access";
-        return response;
     }else{
         uint32_t tag = this->make_tag(address);
         uint32_t index = this->make_index(address);
@@ -63,28 +86,51 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
         int32_t entry = this->find_entry(index, tag);
 
         if(entry < 0){
-
+            int x = 0; //FIXME continue writing this function
         }
     }
+    return response;
 }
 
 //================================
 // Convert address to tag
 //================================
-uint32_t make_tag(uint32_t address);
+uint32_t Cache::make_tag(uint32_t address){
+    return address & this->tag_mask;
+}
 
 //================================
 // Convert address to index
 //================================
-uint32_t make_index(uint32_t address);
+uint32_t Cache::make_index(uint32_t address){
+    return address & this->index_mask;
+}
 
 //================================
 // Convert address to offset
 //================================
-uint32_t make_offset(uint32_t address);
+uint32_t Cache::make_offset(uint32_t address){
+    return address & this->offset_mask;
+}
 
 //================================
 // Search for tag within set
 //  returns -1 if missed
 //================================
-int32_t find_entry(uint32_t index, uint32_t tag); 
+int32_t Cache::find_entry(uint32_t index, uint32_t tag){
+    return 0; //FIXME make this do shit
+}
+
+//================================
+// Access Cache Name
+//================================
+string Cache::get_name(void) const{
+    return this->cache_name;
+}
+
+//================================
+// Compare equality of Caches
+//================================
+bool Cache::operator == (const Cache& rhs){
+    return this->cache_name == rhs.get_name();
+}

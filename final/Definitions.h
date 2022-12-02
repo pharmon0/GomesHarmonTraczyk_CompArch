@@ -9,24 +9,12 @@
 //============================================
 // Headers and Namespaces
 //============================================
-#include <string>
 #include <cstdint>
-using std::string;
 
 //============================================
 // Constants and Macros
 //============================================
 #define SYSTEM_BITWIDTH 32
-
-//============================================
-// Datatypes
-//============================================
-//response_t used to indicate completed results
-typedef struct{
-    uint32_t data;
-    string reason;
-    bool success;
-} response_t;
 
 //End Header Guard
 #endif

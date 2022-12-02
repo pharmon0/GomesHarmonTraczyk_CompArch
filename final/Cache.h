@@ -12,13 +12,22 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <iostream>
+#include <iomanip>
+#include <bitset>
 #include <math.h>
 #include "Definitions.h"
+#include "Datatypes.h"
 #include "MemoryBlock.h"
 using std::log2;
 using std::ceil;
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
+using std::bitset;
+using std::setw;
+using std::setfill;
 
 //==========================
 // Custom Definitions
@@ -47,6 +56,9 @@ class Cache{
     uint32_t tag_width;
     uint32_t index_width;
     uint32_t offset_width;
+    uint32_t tag_mask;
+    uint32_t index_mask;
+    uint32_t offset_mask;
 
     uint32_t bytes_in_block;
     uint32_t blocks_in_set;
@@ -66,12 +78,18 @@ class Cache{
     //Constructor
     Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t associativity);
     
+    //Cache Operators
+    bool operator == (const Cache& rhs);
+
     //Cache Setup Functions
     void attach_cpu();//TODO attach_cpu()
     void attach_bus();//TODO attach_bus()
 
     //Mutators for Cache Properties
     void set_access_time(uint32_t ticks);
+
+    //Accessors for Cache Metadata
+    string get_name(void) const;
 
     //Bank Access
     response_t cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width);

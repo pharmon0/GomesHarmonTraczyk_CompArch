@@ -29,7 +29,12 @@ class Block{
   public:
 
     //Constructor
-    Block(uint32_t tag);
+    Block();
+
+    //Block setup
+    void set_tag(uint32_t tag);
+    void start_cold(void);
+    bool is_cold(void) const;
 
     //Bank Access
     //untimed, uncontrolled accessors
