@@ -8,7 +8,9 @@
 //================================
 Memory::Memory(string name, uint32_t memory_bytes, uint32_t block_bytes, uint32_t access_time){
     this->memory_name = name;
-    this->access_ticks = access_time;
+    
+    this->access_ticks = access_time - 1;
+    this->access_counter = this->access_ticks;
 
     this->bytes_in_memory = memory_bytes;
     this->bytes_in_block = block_bytes;

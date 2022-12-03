@@ -81,7 +81,7 @@ int main(void){
     }
 
     //run main program loop
-    uint32_t tick = 0;
+    uint32_t tick = 1;
     bool halt = false;
     do{
         cout << setfill('=') << setw(80) << "" << endl;

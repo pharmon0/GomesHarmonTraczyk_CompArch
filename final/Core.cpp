@@ -10,6 +10,7 @@ Core::Core(string name, uint8_t id, Cache* mem){
     this->cache = mem;
     this->core_id = id;
     this->core_name = name;
+    this->tick_complete = 0;
 }
 
 //============================================
@@ -18,7 +19,10 @@ Core::Core(string name, uint8_t id, Cache* mem){
 bool Core::process(uint32_t tick){
     response_t response = this->cache->cache_access(0,0,false,0b11);
     if(response.success){
-        cout << this->core_name << " | Completed Request on tick " << tick << endl;
+        if(this->tick_complete == 0){
+            this->tick_complete = tick;
+        }
+        cout << this->core_name << " | Completed Request on tick " << tick_complete << endl;
     } else {
         cout << this->core_name << " | Incomplete Request on tick " << tick << ". Reason:\n\t" << response.reason << endl;
     }

@@ -29,6 +29,8 @@ class Core{
   string core_name;
   uint8_t core_id;
 
+  uint32_t tick_complete;
+
   public:
 
     //Constructor

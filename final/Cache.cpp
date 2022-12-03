@@ -53,7 +53,7 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
     }
     //cout << this->cache_name << "|    tag_width=" << setw(2) << this->tag_width << " mask=" << bitset<32>(this->tag_mask) << endl;
 
-    this->access_ticks = ceil(log2(this->bytes_in_cache/this->bytes_in_block));
+    this->access_ticks = ceil(log2(this->bytes_in_cache/this->bytes_in_block)) - 1;
     this->access_counter = this->access_ticks;
 
     for(int i = 0; i < this->sets_in_cache; i++){
@@ -71,8 +71,8 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
 // Manually change cache access time
 //================================
 void Cache::set_access_time(uint32_t ticks){
-    this->access_ticks = ticks;
-    this->access_counter = ticks;
+    this->access_ticks = ticks - 1;
+    this->access_counter = this->access_ticks;
 }
 
 //================================
@@ -95,7 +95,9 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
         int32_t entry = this->find_entry(index, tag);
         if(entry < 0){
         //tag not found in cache (MISS)
-            response = this->handle_miss(address, write);
+            response_t miss_response = this->handle_miss(address, write);
+            response.success = false;
+            response.reason = "Cache Miss | Miss:" + miss_response.reason;
         } else {
         //tag found in cache
             if(this->bank[index][entry].get_mesi() != MESI_I){
@@ -131,10 +133,9 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
                 }
             } else {
             //Block is invalid (MISS)
-                //TODO handle miss
-                this->miss_tick_counter++;
+                response_t miss_response = this->handle_miss(address, write);
                 response.success = false;
-                response.reason = "Cache Miss";
+                response.reason = "Cache Miss | Miss:" + miss_response.reason;
             }
         }
     }
@@ -313,6 +314,7 @@ response_t Cache::handle_miss(uint32_t address, bool write){
                 block.set_tag(this->make_tag(address));
                 block.set_mesi(MESI_M);
                 this->bank[index][replacement_entry] = block;
+                response.reason = "Cache Miss resolved. | Bus:" + bus_response.reason;
             } else{
             //waiting on bus
                 response.success = false;
@@ -334,6 +336,7 @@ response_t Cache::handle_miss(uint32_t address, bool write){
                     block.set_mesi(MESI_E);
                 }
                 this->bank[index][replacement_entry] = block;
+                response.reason = "Cache Miss resolved. | Bus:" + bus_response.reason;
             } else {
             //waiting on bus
                 response.success = false;

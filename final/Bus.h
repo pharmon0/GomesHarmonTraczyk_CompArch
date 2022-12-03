@@ -12,12 +12,15 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "Definitions.h"
 #include "Datatypes.h"
 #include "Cache.h"
 #include "Memory.h"
 using std::vector;
 using std::string;
+using std::cout;
+using std::endl;
 
 //==========================
 // Custom Definitions
