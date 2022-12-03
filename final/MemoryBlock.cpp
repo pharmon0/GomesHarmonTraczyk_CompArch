@@ -8,6 +8,7 @@
 //================================
 //Default Constructor
 Block::Block(){
+    this->mesi_flag = MESI_I;
     this->block_tag = 0;
     this->least_recent = false;
     this->cold_start = false;
@@ -56,4 +57,33 @@ void Block::write_byte(uint32_t offset, uint8_t data){
         return;
     }
     this->bank[offset] = data;
+}
+
+
+//================================
+// Set LRU
+//================================
+void Block::set_lru(bool lru){
+    this->least_recent = lru;
+}
+
+//================================
+// Set MESI
+//================================
+void Block::set_mesi(char mesi){
+    this->mesi_flag = mesi;
+}
+
+//================================
+// Get LRU
+//================================
+bool Block::get_lru(void) const{
+    return this->least_recent;
+}
+
+//================================
+// Get MESI
+//================================
+char Block::get_mesi(void) const{
+    return this->mesi_flag;
 }

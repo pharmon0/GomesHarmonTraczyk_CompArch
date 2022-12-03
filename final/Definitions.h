@@ -7,14 +7,22 @@
 #define GHT_HELPER_HEADER
 
 //============================================
-// Headers and Namespaces
-//============================================
-#include <cstdint>
-
-//============================================
 // Constants and Macros
 //============================================
 #define SYSTEM_BITWIDTH 32
+#define MESI_I 'I'
+#define MESI_E 'E'
+#define MESI_S 'S'
+#define MESI_M 'M'
+
+//============================================
+// Class Prototypes
+//============================================
+class Cache;
+class Core;
+class Bus;
+class Block;
+class Memory;
 
 //End Header Guard
 #endif

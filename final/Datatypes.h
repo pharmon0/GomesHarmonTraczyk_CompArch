@@ -3,15 +3,14 @@
  * Datatypes Module */
 
 // Start Header Guard
-#ifndef GHT_DATATYPES
-#define GHT_DATATYPES
+#ifndef GHT_DATATYPE
+#define GHT_DATATYPE
 
 //============================================
 // Headers and Namespaces
 //============================================
 #include <string>
 #include <cstdint>
-#include "Definitions.h"
 #include "MemoryBlock.h"
 using std::string;
 

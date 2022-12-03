@@ -14,6 +14,9 @@
 #include "Memory.h"
 #include "Bus.h"
 #include "Core.h"
+#include <iomanip>
+using std::setw;
+using std::setfill;
 using std::string;
 using std::vector;
 using std::cout;
@@ -38,10 +41,10 @@ int main(void){
 
     //build caches
     cout << "Constructing Caches" << endl;
-    vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_DIRECT),
+    vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
                            Cache("cache_1", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
-                           Cache("cache_2", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_4_WAY),
-                           Cache("cache_3", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_FULL)};
+                           Cache("cache_2", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
+                           Cache("cache_3", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY)};
         //override automatic access time calculations
         for(int i = 0; i < cache.size(); i++){
             cache.at(i).set_access_time(CACHE_ACCESS_TICKS);
@@ -51,10 +54,10 @@ int main(void){
     //No cores needed. Build fake request feeders
     //FIXME make this actually do stuff
     cout << "Constructing Cores" << endl;
-    vector<Core> core = {Core(&cache.at(0)),
-                         Core(&cache.at(1)),
-                         Core(&cache.at(2)),
-                         Core(&cache.at(3))};
+    vector<Core> core = {Core("core_0", 0, &cache.at(0)),
+                         Core("core_1", 1, &cache.at(1)),
+                         Core("core_2", 2, &cache.at(2)),
+                         Core("core_3", 3, &cache.at(3))};
 
     //attach cores to caches
     for(int i = 0; i < cache.size(); i++){
@@ -81,14 +84,22 @@ int main(void){
     uint32_t tick = 0;
     bool halt = false;
     do{
-        //process clock tick
-        //TODO ticks
+        cout << setfill('=') << setw(80) << "" << endl;
         cout << "Tick " << tick << endl;
+        cout << setfill('=') << setw(80) << "" << endl;
+
+        //process clock tick
+        halt = true;
         for(int i = 0; i < core.size(); i++){
-            core.at(i).process(tick);
+            bool state = core.at(i).process(tick);
+            halt = halt && state;
         }
         //Bus arbiter handoff
         bus.update_token(tick);
+
+        if(halt){
+            cout << "\nAll cores complete. Halting..." << endl;
+        }
 
         //Move to next tick
         tick++;

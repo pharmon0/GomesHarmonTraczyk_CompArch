@@ -97,6 +97,8 @@ class Cache{
 
     //Bank Access
     response_t cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width);
+    uint32_t read_from_block(uint32_t index, uint32_t entry, uint32_t offset, uint8_t data_width);
+    void write_to_block(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t data_width);
 
     //helper functions
     uint32_t make_tag(uint32_t address);

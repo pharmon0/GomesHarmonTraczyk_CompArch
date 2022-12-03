@@ -33,7 +33,7 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
     for(int i = 0; i < this->offset_width; i++){
         this->offset_mask |= (1<<i);
     }
-    cout << this->cache_name << "| offset_width=" << setw(2) << this->offset_width << " mask=" << bitset<32>(this->offset_mask) << endl;
+    //cout << this->cache_name << "| offset_width=" << setw(2) << this->offset_width << " mask=" << bitset<32>(this->offset_mask) << endl;
     
     this->index_mask = 0;
     for(int i = 0; i < this->index_width; i++){
@@ -42,7 +42,7 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
     for(int i = 0; i < this->offset_width; i++){
         this->index_mask = this->index_mask << 1;
     }
-    cout << this->cache_name << "|  index_width=" << setw(2) << this->index_width << " mask=" << bitset<32>(this->index_mask) << endl;
+    //cout << this->cache_name << "|  index_width=" << setw(2) << this->index_width << " mask=" << bitset<32>(this->index_mask) << endl;
 
     this->tag_mask = 0;
     for(int i = 0; i < this->tag_width; i++){
@@ -51,12 +51,20 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
     for(int i = 0; i < (this->offset_width + this->index_width); i++){
         this->tag_mask = this->tag_mask << 1;
     }
-    cout << this->cache_name << "|    tag_width=" << setw(2) << this->tag_width << " mask=" << bitset<32>(this->tag_mask) << endl;
+    //cout << this->cache_name << "|    tag_width=" << setw(2) << this->tag_width << " mask=" << bitset<32>(this->tag_mask) << endl;
 
     this->access_ticks = ceil(log2(this->bytes_in_cache/this->bytes_in_block));
     this->access_counter = this->access_ticks;
 
-    //TODO populate the bank
+    for(int i = 0; i < this->sets_in_cache; i++){
+        vector<Block> new_set;
+        for(int j = 0; j < this->blocks_in_set; j++){
+            Block new_block = Block();
+            new_block.start_cold();
+            new_set.push_back(new_block);
+        }
+        this->bank.push_back(new_set);
+    }
 }
 
 //================================
@@ -84,12 +92,66 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
         uint32_t index = this->make_index(address);
         uint32_t offset = this->make_offset(address);
         int32_t entry = this->find_entry(index, tag);
-
         if(entry < 0){
-            int x = 0; //FIXME continue writing this function
+        //tag not found in cache (MISS)
+            //TODO handle miss
+            response.success = false;
+            response.reason = "Cache Miss";
+        } else {
+        //tag found in cache
+            if(this->bank[index][entry].get_mesi() != MESI_I){
+            //Block is valid (HIT)
+                if(write){
+                //write data
+                    this->write_to_block(index,entry,offset,data,data_width);
+                    response.success = true;
+                } else {
+                //read data
+                    response.data = this->read_from_block(index,entry,offset,data_width);
+                    response.success = true;
+                }
+            } else {
+            //Block is invalid (MISS)
+                //TODO handle miss
+                response.success = false;
+                response.reason = "Cache Miss";
+            }
         }
     }
     return response;
+}
+
+//================================
+// Read data from a cache block
+//================================
+uint32_t Cache::read_from_block(uint32_t index, uint32_t entry, uint32_t offset, uint8_t data_width){
+    uint32_t data = 0;
+    switch(data_width){
+        case 0b11:
+            data |= this->bank[index][entry].read_byte(offset+3) << 24;
+            data |= this->bank[index][entry].read_byte(offset+2) << 16;
+        case 0b10:
+            data |= this->bank[index][entry].read_byte(offset+1) << 8;
+        default:
+            data |= this->bank[index][entry].read_byte(offset);
+        break;
+    }
+    return data;
+}
+
+//================================
+// Write data to a cache block
+//================================
+void Cache::write_to_block(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t data_width){
+    switch(data_width){
+        case 0b11:
+            this->bank[index][entry].write_byte(offset+3, (data>>24) & 0xFF);
+            this->bank[index][entry].write_byte(offset+2, (data>>16) & 0xFF);
+        case 0b10:
+            this->bank[index][entry].write_byte(offset+1, (data>>8) & 0xFF);
+        case 0b01:
+            this->bank[index][entry].write_byte(offset, data & 0xFF);
+    }
 }
 
 //================================

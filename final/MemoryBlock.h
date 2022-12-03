@@ -13,6 +13,9 @@
 #include <map>
 #include <vector>
 #include "Definitions.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 using std::map;
 using std::vector;
 
@@ -25,6 +28,7 @@ class Block{
     uint32_t block_tag;
     bool least_recent;
     bool cold_start;
+    char mesi_flag;
 
   public:
 
@@ -34,6 +38,12 @@ class Block{
     //Block setup
     void set_tag(uint32_t tag);
     void start_cold(void);
+
+    //control flag accessors
+    void set_mesi(char mesi);
+    char get_mesi(void) const;
+    void set_lru(bool lru);
+    bool get_lru(void) const;
     bool is_cold(void) const;
 
     //Bank Access
