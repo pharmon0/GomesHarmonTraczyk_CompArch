@@ -103,11 +103,30 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
             //Block is valid (HIT)
                 if(write){
                 //write data
-                    this->write_to_block(index,entry,offset,data,data_width);
-                    response.success = true;
+                    if(this->bank[index][entry].get_mesi() == MESI_E || this->bank[index][entry].get_mesi() == MESI_M){
+                    //Only I hold this data. I can write freely.
+                        this->bank[index][entry].set_mesi(MESI_M);
+                        this->write_to_block(index,entry,offset,data,data_width);
+                        this->update_lru(index,entry);
+                        response.success = true;
+                    } else { //this means MESI == S
+                    //I am shared, I need to invalidate this block on the bus
+                        response_t bus_response = this->bus->bus_request(this, BUS_INVALIDATE, address, Block());
+                        if(bus_response.success){
+                        //other caches successfully invalidated
+                            this->bank[index][entry].set_mesi(MESI_M);
+                            this->write_to_block(index,entry,offset,data,data_width);
+                            this->update_lru(index,entry);
+                            response.success = true;
+                        } else {
+                        //waiting for bus
+
+                        }
+                    }
                 } else {
                 //read data
                     response.data = this->read_from_block(index,entry,offset,data_width);
+                    this->update_lru(index,entry);
                     response.success = true;
                 }
             } else {
@@ -209,4 +228,20 @@ void Cache::attach_bus(Bus* memory_bus){
 //================================
 void Cache::attach_cpu(Core* processor){
     this->core = processor;
+}
+
+//================================
+// update LRU for a block/set
+//================================
+void Cache::update_lru(uint32_t index, uint32_t entry){
+    this->bank[index][entry].set_lru(true);
+    bool check = true;
+    for(int i = 0; i < this->bank[index].size(); i++){
+        check = check && this->bank[index][i].get_lru();
+    }
+    if(check){
+        for(int i = 0; i < this->bank[index].size(); i++){
+            this->bank[index][i].set_lru(false);
+        }
+    }
 }

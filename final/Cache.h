@@ -105,6 +105,7 @@ class Cache{
     uint32_t make_index(uint32_t address);
     uint32_t make_offset(uint32_t address);
     int32_t find_entry(uint32_t index, uint32_t tag);
+    void update_lru(uint32_t index, uint32_t entry);
 };
 
 // End Header Guard

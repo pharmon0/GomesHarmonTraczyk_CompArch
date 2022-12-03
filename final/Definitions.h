@@ -14,6 +14,7 @@
 #define MESI_E 'E'
 #define MESI_S 'S'
 #define MESI_M 'M'
+#define BUS_INVALIDATE "invalidate"
 
 //============================================
 // Class Prototypes
