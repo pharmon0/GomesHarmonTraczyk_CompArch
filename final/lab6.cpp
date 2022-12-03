@@ -36,7 +36,7 @@ using std::endl;
 // Main Program
 //============================================
 int main(void){
-    //load program instructions
+    //load program instructions (address traces)
     //TODO
 
     //build caches
@@ -52,12 +52,12 @@ int main(void){
 
     //build cores
     //No cores needed. Build fake request feeders
-    //FIXME make this actually do stuff
+    //TODO load the address traces into the cores
     cout << "Constructing Cores" << endl;
-    vector<Core> core = {Core("core_0", 0, &cache.at(0)),
-                         Core("core_1", 1, &cache.at(1)),
-                         Core("core_2", 2, &cache.at(2)),
-                         Core("core_3", 3, &cache.at(3))};
+    vector<Core> core = {Core("core_0", &cache.at(0)),
+                         Core("core_1", &cache.at(1)),
+                         Core("core_2", &cache.at(2)),
+                         Core("core_3", &cache.at(3))};
 
     //attach cores to caches
     for(int i = 0; i < cache.size(); i++){

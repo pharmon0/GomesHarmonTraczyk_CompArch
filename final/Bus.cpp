@@ -35,19 +35,72 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
             response.reason = "waiting for cache access";
         }else{
             //access time done
-            //FIXME put actual implementation here
+            
+            //the below is a temporary implementation
+            //TODO remove this temporary stuff
             response.block = Block();
             response.data = 0;
             response.success = true;
             response.reason = "PLACEHOLDER CODE";
             this->bus_active = false;
             this->access_counter = this->access_ticks;
+            goto TEMPORARY_GOTO;
+            //END temporary implementation
+
+            if(bus_message == BUS_INVALIDATE){
+                for(int i = 0; i < this->members.size(); i++){
+                    if(this->members.at(i)->get_name() != this->members.at(token)->get_name()){
+                        this->members.at(i)->set_remote_mesi(address, MESI_I);
+                    }
+                }
+                response.success = true;
+                response.reason = "all other members informed to invalidate";
+            } else if(bus_message == BUS_READ){
+                bool found_data = false;
+                for(int i = 0; i < this->members.size(); i++){
+                    if(!found_data){
+                        uint32_t index = this->members.at(i)->make_index(address);
+                        uint32_t tag = this->members.at(i)->make_tag(address);
+                        int32_t entry = this->members.at(i)->find_entry(index,tag);
+                        if(entry >= 0){
+                            char mesi = this->members.at(i)->get_remote_mesi(address);
+                            if(mesi == MESI_I){
+                            // doesn't count
+                                //TODO
+                            } else if(mesi == MESI_M){
+                            // send to the requester AND save to memory. set sender and requester to S
+                                found_data = true;
+                                //TODO
+                                //TODO figure out how to save to memory (has to stall everything for a long time)
+                            } else if(mesi == MESI_S){
+                            // send to the requester. set requester to S
+                                found_data = true;
+                                //TODO
+                            } else if(mesi == MESI_E){
+                            // send to the requester. set sender and requester to S
+                                found_data = true;
+                                //TODO
+                            }
+                        }
+                    }
+                }
+            } else if(bus_message == BUS_RWITM){
+                //TODO
+            } else if(bus_message == BUS_DUMP){
+                for(int i = 0; i < this->members.size(); i++){
+                    //TODO
+                }
+                //TODO
+            } else if(bus_message == BUS_SAVE){
+                //TODO
+            }
         }
     } else {
         //requester does not control the bus. wait.
         response.reason = "Member does not control the bus";
         response.success = false;
     }
+    TEMPORARY_GOTO: //TODO remove this when the implementation is finished
     return response;
 }
 

@@ -27,14 +27,13 @@ class Core{
   Cache* cache;
 
   string core_name;
-  uint8_t core_id;
 
   uint32_t tick_complete;
 
   public:
 
     //Constructor
-    Core(string name, uint8_t id, Cache* mem);
+    Core(string name, Cache* mem);
 
     //Tick Process
     bool process(uint32_t tick);

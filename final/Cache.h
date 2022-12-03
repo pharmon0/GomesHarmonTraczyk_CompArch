@@ -110,6 +110,10 @@ class Cache{
     int32_t find_entry(uint32_t index, uint32_t tag);
     void update_lru(uint32_t index, uint32_t entry);
     uint32_t get_lru_entry(uint32_t index);
+
+    //remote bus access functions
+    void set_remote_mesi(uint32_t address, char mesi);
+    char get_remote_mesi(uint32_t address);
 };
 
 // End Header Guard

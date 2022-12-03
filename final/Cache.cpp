@@ -346,3 +346,28 @@ response_t Cache::handle_miss(uint32_t address, bool write){
     }
     return response;
 }
+
+//================================
+// set the MESI status of an address (does nothing if block not present)
+//================================
+void Cache::set_remote_mesi(uint32_t address, char mesi){
+    uint32_t index = this->make_index(address);
+    uint32_t tag = this->make_tag(address);
+    int32_t entry = this->find_entry(index,tag);
+    if(entry >= 0){
+        this->bank[index][entry].set_mesi(mesi);
+    }
+}
+
+//================================
+// get the MESI status of an address (returns invalid if not found)
+//================================
+char Cache::get_remote_mesi(uint32_t address){
+    uint32_t index = this->make_index(address);
+    uint32_t tag = this->make_tag(address);
+    int32_t entry = this->find_entry(index,tag);
+    if(entry < 0){
+        return MESI_I;
+    }
+    return this->bank[index][entry].get_mesi();
+}

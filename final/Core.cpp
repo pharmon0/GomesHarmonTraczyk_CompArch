@@ -6,9 +6,8 @@
 //============================================
 // Core Constructor
 //============================================
-Core::Core(string name, uint8_t id, Cache* mem){
+Core::Core(string name, Cache* mem){
     this->cache = mem;
-    this->core_id = id;
     this->core_name = name;
     this->tick_complete = 0;
 }
