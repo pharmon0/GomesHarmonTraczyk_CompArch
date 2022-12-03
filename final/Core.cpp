@@ -3,6 +3,6 @@
  * Pseudo-Core Module */
 #include "Core.h"
 
-Core::Core(){
-    
+Core::Core(Cache* mem){
+    this->cache = mem;
 }

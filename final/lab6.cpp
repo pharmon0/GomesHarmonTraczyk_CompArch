@@ -36,15 +36,6 @@ int main(void){
     //load program instructions
     //TODO
 
-    //build cores
-    //No cores needed. Build fake request feeders
-    //FIXME make this actually do stuff
-    cout << "Constructing Cores" << endl;
-    vector<Core> core = {Core(),
-                         Core(),
-                         Core(),
-                         Core()};
-
     //build caches
     cout << "Constructing Caches" << endl;
     vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_DIRECT),
@@ -55,8 +46,20 @@ int main(void){
         for(int i = 0; i < cache.size(); i++){
             cache.at(i).set_access_time(CACHE_ACCESS_TICKS);
         }
-        //TODO attach cores to caches
-        //No cores needed. Use fake request feeders
+
+    //build cores
+    //No cores needed. Build fake request feeders
+    //FIXME make this actually do stuff
+    cout << "Constructing Cores" << endl;
+    vector<Core> core = {Core(&cache.at(0)),
+                         Core(&cache.at(1)),
+                         Core(&cache.at(2)),
+                         Core(&cache.at(3))};
+
+    //attach cores to caches
+    for(int i = 0; i < cache.size(); i++){
+        cache.at(i).attach_cpu(&core.at(i));
+    }
 
     //build memory
     cout << "Constructing Memory" << endl;
@@ -65,7 +68,14 @@ int main(void){
     //build bus
     cout << "Constructing Bus" << endl;
     Bus bus = Bus("memory_bus", cache, &memory, BUS_ACCESS_TICKS);
-    //TODO assign any further pointer connections
+    
+    //attach bus to memory
+    memory.attach_bus(&bus);
+
+    //attach bus to caches
+    for(int i = 0; i < cache.size(); i++){
+        cache.at(i).attach_bus(&bus);
+    }
 
     //run main program loop
     uint32_t tick = 0;
@@ -74,7 +84,11 @@ int main(void){
         //process clock tick
         //TODO ticks
         cout << "Tick " << tick << endl;
-        
+        for(int i = 0; i < core.size(); i++){
+            core.at(i).process(tick);
+        }
+        //Bus arbiter handoff
+        bus.update_token(tick);
 
         //Move to next tick
         tick++;

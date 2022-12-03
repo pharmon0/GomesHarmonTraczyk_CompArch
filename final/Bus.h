@@ -35,6 +35,7 @@ class Bus{
     //  token is the iterator), is the only
     //   member able to control the bus
     uint8_t token;
+    bool bus_active;
 
     //timing
     uint32_t access_ticks;
@@ -49,7 +50,10 @@ class Bus{
     Bus(string name, vector<Cache> caches, Memory* memory, uint32_t access_time);
 
     //Bus Access
-    response_t bus_request(Cache* requester);
+    response_t bus_request(Cache* requester, string bus_message, uint32_t address, Block data);
+
+    //Bus Token Handoff
+    void update_token(uint32_t tick);
 };
 
 // End Header Guard

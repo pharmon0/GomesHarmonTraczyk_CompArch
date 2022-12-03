@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string>
 #include "Definitions.h"
+#include "Cache.h"
 using std::string;
 
 //==========================
@@ -20,10 +21,12 @@ using std::string;
 
 class Core{
 
+  Cache* cache;
+
   public:
 
     //Constructor
-    Core();
+    Core(Cache* mem);
 
     //Tick Process
     bool process(uint32_t tick);

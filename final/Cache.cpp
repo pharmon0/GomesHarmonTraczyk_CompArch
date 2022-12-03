@@ -134,3 +134,17 @@ string Cache::get_name(void) const{
 bool Cache::operator == (const Cache& rhs){
     return this->cache_name == rhs.get_name();
 }
+
+//================================
+// attach bus pointer
+//================================
+void Cache::attach_bus(Bus* memory_bus){
+    this->bus = memory_bus;
+}
+
+//================================
+// attach core pointer
+//================================
+void Cache::attach_cpu(Core* processor){
+    this->core = processor;
+}

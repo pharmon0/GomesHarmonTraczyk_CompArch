@@ -58,3 +58,10 @@ response_t Memory::memory_write(uint32_t address, Block data){
     }
     return response;
 }
+
+//================================
+// Attach memory bus
+//================================
+void Memory::attach_bus(Bus* memory_bus){
+    this->bus = memory_bus;
+}

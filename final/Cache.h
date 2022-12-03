@@ -19,6 +19,8 @@
 #include "Definitions.h"
 #include "Datatypes.h"
 #include "MemoryBlock.h"
+#include "Bus.h"
+#include "Core.h"
 using std::log2;
 using std::ceil;
 using std::string;
@@ -51,6 +53,8 @@ class Cache{
     // set 3 || block(3,0) | block(3,1) | block(3,2)
     //----------------------------------------------
     vector<vector<Block> > bank;
+    Core* core;
+    Bus* bus;
 
     //Physical Properties
     uint32_t tag_width;
@@ -82,8 +86,8 @@ class Cache{
     bool operator == (const Cache& rhs);
 
     //Cache Setup Functions
-    void attach_cpu();//TODO attach_cpu()
-    void attach_bus();//TODO attach_bus()
+    void attach_cpu(Core* processor);
+    void attach_bus(Bus* memory_bus);
 
     //Mutators for Cache Properties
     void set_access_time(uint32_t ticks);

@@ -17,6 +17,7 @@
 #include "Definitions.h"
 #include "Datatypes.h"
 #include "MemoryBlock.h"
+#include "Bus.h"
 using std::string;
 using std::vector;
 using std::cout;
@@ -27,6 +28,7 @@ class Memory{
 
     //Physical Components
     map<uint32_t, Block> bank;
+    Bus* bus;
 
     //Physical Properties
     uint32_t address_mask;
@@ -49,6 +51,9 @@ class Memory{
     //Bank Access
     response_t memory_read(uint32_t address);
     response_t memory_write(uint32_t address, Block data);
+
+    //interconnection of components
+    void attach_bus(Bus* memory_bus);
 };
 
 // End Header Guard
