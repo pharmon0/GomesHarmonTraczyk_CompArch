@@ -87,12 +87,26 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
             } else if(bus_message == BUS_RWITM){
                 //TODO
             } else if(bus_message == BUS_DUMP){
+                int share_count = 0;
                 for(int i = 0; i < this->members.size(); i++){
-                    //TODO
+                    char mesi = this->members.at(i)->get_remote_mesi(address);
+                    if(mesi == MESI_S){
+                        share_count++;
+                    }
                 }
-                //TODO
+                if(share_count < 2){
+                    for(int i = 0; i < this->members.size(); i++){
+                        char mesi = this->members.at(i)->get_remote_mesi(address);
+                        if(mesi == MESI_S){
+                            this->members.at(i)->set_remote_mesi(address, MESI_E);
+                        }
+                    }
+                }
+                response.success = true;
+                response.reason = "Operation Complete";
             } else if(bus_message == BUS_SAVE){
-                //TODO
+                response_t memory_response = this->main_memory->memory_write(address, data);
+
             }
         }
     } else {
