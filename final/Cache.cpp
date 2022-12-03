@@ -80,6 +80,7 @@ void Cache::set_access_time(uint32_t ticks){
 //  - controlled and timed
 //================================
 response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width){
+    this->total_tick_counter++;
     response_t response;
     if(this->access_counter > 0){
         //still counting down.
@@ -94,9 +95,7 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
         int32_t entry = this->find_entry(index, tag);
         if(entry < 0){
         //tag not found in cache (MISS)
-            //TODO handle miss
-            response.success = false;
-            response.reason = "Cache Miss";
+            response = this->handle_miss(address, write);
         } else {
         //tag found in cache
             if(this->bank[index][entry].get_mesi() != MESI_I){
@@ -120,7 +119,8 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
                             response.success = true;
                         } else {
                         //waiting for bus
-
+                            response.success = false;
+                            response.reason = "Waiting for the bus | Bus:" + bus_response.reason;
                         }
                     }
                 } else {
@@ -132,6 +132,7 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
             } else {
             //Block is invalid (MISS)
                 //TODO handle miss
+                this->miss_tick_counter++;
                 response.success = false;
                 response.reason = "Cache Miss";
             }
@@ -177,14 +178,14 @@ void Cache::write_to_block(uint32_t index, uint32_t entry, uint32_t offset, uint
 // Convert address to tag
 //================================
 uint32_t Cache::make_tag(uint32_t address){
-    return address & this->tag_mask;
+    return (address & this->tag_mask) >> (this->index_width + this->offset_width);
 }
 
 //================================
 // Convert address to index
 //================================
 uint32_t Cache::make_index(uint32_t address){
-    return address & this->index_mask;
+    return (address & this->index_mask) >> this->offset_width;
 }
 
 //================================
@@ -199,7 +200,12 @@ uint32_t Cache::make_offset(uint32_t address){
 //  returns -1 if missed
 //================================
 int32_t Cache::find_entry(uint32_t index, uint32_t tag){
-    return 0; //FIXME make this do shit
+    for(int i = 0; i < this->bank[index].size(); i++){
+        if(this->bank[index].at(i).get_tag() == tag){
+            return i;
+        }
+    }
+    return -1;
 }
 
 //================================
@@ -244,4 +250,96 @@ void Cache::update_lru(uint32_t index, uint32_t entry){
             this->bank[index][i].set_lru(false);
         }
     }
+}
+
+//================================
+// Find the Least Recently Used entry in a set
+//================================
+uint32_t Cache::get_lru_entry(uint32_t index){
+    for(int i = 0; i < this->bank[index].size(); i++){
+        if(!this->bank[index].at(i).get_lru()){
+            return i;
+        }
+    }
+    //This should never happen, but it will recover from a fail case
+    for(int i = 0; i < this->bank[index].size(); i++){
+        this->bank[index].at(i).set_lru(false);
+    }
+    return 0;
+}
+
+//================================
+// Handle a cache miss
+//================================
+response_t Cache::handle_miss(uint32_t address, bool write){
+    response_t response;
+    response_t bus_response;
+    this->miss_tick_counter++;
+    uint32_t index = this->make_index(address);
+    uint32_t replacement_entry = this->get_lru_entry(index);
+    char mesi_status = this->bank[index][replacement_entry].get_mesi();
+    if(mesi_status == MESI_M){
+    //This block has been modified. It needs to be saved to memory.
+        response.success = false;
+        bus_response = this->bus->bus_request(this, BUS_SAVE, address, this->bank[index][replacement_entry]);
+        if(bus_response.success){
+        //block has been saved
+            response.reason = "Completed handling the replaced block. Still waiting to read new block";
+            this->bank[index][replacement_entry].set_mesi(MESI_I);
+        } else {
+        //waiting on bus
+            response.reason = "Waiting on bus | Bus:" + bus_response.reason;
+        }
+    } else if(mesi_status == MESI_S){
+    //This block has not been modified, but other sharers need to be informed.
+        response.success = false;
+        bus_response = this->bus->bus_request(this, BUS_DUMP, address, Block());
+        if(bus_response.success){
+        //dump acknowledged
+            response.reason = "Completed handling the replaced block. Still waiting to read new block";
+            this->bank[index][replacement_entry].set_mesi(MESI_I);
+        } else {
+        //waiting on bus
+            response.reason = "Waiting on bus | Bus:" + bus_response.reason;
+        }
+    } else {
+        if(write){
+        //write miss. send read with intent to write request
+            bus_response = this->bus->bus_request(this, BUS_RWITM, address, Block());
+            if(bus_response.success){
+            //block has been fetched
+                response.success = true;
+                Block block = bus_response.block;
+                block.set_tag(this->make_tag(address));
+                block.set_mesi(MESI_M);
+                this->bank[index][replacement_entry] = block;
+            } else{
+            //waiting on bus
+                response.success = false;
+                response.reason = "Waiting on the bus | Bus:" + bus_response.reason;
+            }
+        } else {
+        //read miss. send read request
+            bus_response = this->bus->bus_request(this, BUS_READ, address, Block());
+            if(bus_response.success){
+            //block has been fetched
+                response.success = true;
+                Block block = bus_response.block;
+                block.set_tag(this->make_tag(address));
+                if(bus_response.data){
+                //block was sent from another cache (shared)
+                    block.set_mesi(MESI_S);
+                } else {
+                //block was sent from memory directly (exclusive)
+                    block.set_mesi(MESI_E);
+                }
+                this->bank[index][replacement_entry] = block;
+            } else {
+            //waiting on bus
+                response.success = false;
+                response.reason = "Waiting on the bus | Bus:" + bus_response.reason;
+            }
+        }
+    }
+    return response;
 }

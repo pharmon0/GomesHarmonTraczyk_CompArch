@@ -15,6 +15,10 @@
 #define MESI_S 'S'
 #define MESI_M 'M'
 #define BUS_INVALIDATE "invalidate"
+#define BUS_RWITM "read_and_invalidate"
+#define BUS_READ "read"
+#define BUS_DUMP "dump"
+#define BUS_SAVE "save"
 
 //============================================
 // Class Prototypes

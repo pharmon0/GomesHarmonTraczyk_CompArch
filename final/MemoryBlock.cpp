@@ -87,3 +87,10 @@ bool Block::get_lru(void) const{
 char Block::get_mesi(void) const{
     return this->mesi_flag;
 }
+
+//================================
+// Get tag
+//================================
+uint32_t Block::get_tag(void) const{
+    return this->block_tag;
+}

@@ -76,6 +76,8 @@ class Cache{
 
     //Metadata
     string cache_name;
+    uint32_t total_tick_counter;
+    uint32_t miss_tick_counter;
 
   public:
 
@@ -99,6 +101,7 @@ class Cache{
     response_t cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width);
     uint32_t read_from_block(uint32_t index, uint32_t entry, uint32_t offset, uint8_t data_width);
     void write_to_block(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t data_width);
+    response_t handle_miss(uint32_t address, bool write);
 
     //helper functions
     uint32_t make_tag(uint32_t address);
@@ -106,6 +109,7 @@ class Cache{
     uint32_t make_offset(uint32_t address);
     int32_t find_entry(uint32_t index, uint32_t tag);
     void update_lru(uint32_t index, uint32_t entry);
+    uint32_t get_lru_entry(uint32_t index);
 };
 
 // End Header Guard

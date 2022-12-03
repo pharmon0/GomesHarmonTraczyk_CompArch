@@ -35,11 +35,10 @@ class Block{
     //Constructor
     Block();
 
-    //Block setup
-    void set_tag(uint32_t tag);
-    void start_cold(void);
-
     //control flag accessors
+    void set_tag(uint32_t tag);
+    uint32_t get_tag(void) const;
+    void start_cold(void);
     void set_mesi(char mesi);
     char get_mesi(void) const;
     void set_lru(bool lru);
