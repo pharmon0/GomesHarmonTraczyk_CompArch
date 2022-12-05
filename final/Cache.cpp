@@ -294,7 +294,7 @@ response_t Cache::handle_miss(uint32_t address, bool write){
     } else if(mesi_status == MESI_S){
     //This block has not been modified, but other sharers need to be informed.
         response.success = false;
-        bus_response = this->bus->bus_request(this, BUS_DUMP, address, Block());
+        bus_response = this->bus->bus_request(this, BUS_DUMP, address, Block()); //FIXME resolve removal of BUS_DUMP
         if(bus_response.success){
         //dump acknowledged
             response.reason = "Completed handling the replaced block. Still waiting to read new block";
@@ -370,4 +370,11 @@ char Cache::get_remote_mesi(uint32_t address){
         return MESI_I;
     }
     return this->bank[index][entry].get_mesi();
+}
+
+//================================
+// Bus Arbitrated Cache Snooping
+//================================
+response_t Cache::snooping(string bus_message, uint32_t address){
+
 }

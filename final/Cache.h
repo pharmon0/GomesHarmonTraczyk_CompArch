@@ -114,6 +114,7 @@ class Cache{
     //remote bus access functions
     void set_remote_mesi(uint32_t address, char mesi);
     char get_remote_mesi(uint32_t address);
+    response_t snooping(string bus_message, uint32_t address);
 };
 
 // End Header Guard

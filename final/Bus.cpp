@@ -35,6 +35,35 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
             response.reason = "waiting for cache access";
         }else{
             //access time done
+            for(int i = 0; i < this->members.size(); i++){
+                if(i != this->token){
+                    response_t snoop_response = this->members.at(i)->snooping(bus_message, address);
+                    if(snoop_response.success == true)
+                }
+            }
+        }
+    } else {
+        //requester does not control the bus. wait.
+        response.reason = "Member does not control the bus";
+        response.success = false;
+    }
+
+
+
+
+    /*
+    response_t response;
+    if(requester->get_name() == this->members.at(token)->get_name()){
+        //requester controls the bus. allow action.
+        this->bus_active = true;
+        if(this->access_counter > 0){
+            //still counting down.
+            this->access_counter--;
+            response.data = 0;
+            response.success = false;
+            response.reason = "waiting for cache access";
+        }else{
+            //access time done
             
             //the below is a temporary implementation
             //TODO remove this temporary stuff
@@ -116,6 +145,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
     }
     TEMPORARY_GOTO: //TODO remove this when the implementation is finished
     return response;
+    */
 }
 
 //============================================
