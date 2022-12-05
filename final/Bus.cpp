@@ -11,7 +11,10 @@ Bus::Bus(string name, vector<Cache> caches, Memory* memory, uint32_t access_time
     this->bus_name = name;
     this->main_memory = memory;
     for(int i = 0; i < caches.size(); i++){
+        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(&caches.at(i)) << endl;
         this->members.push_back(&caches.at(i));
+        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(&caches.at(i)) << endl;
+        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(this->members.at(i)) << endl;
     }
     this->access_ticks = access_time - 1;
     this->access_counter = this->access_ticks;
@@ -23,6 +26,7 @@ Bus::Bus(string name, vector<Cache> caches, Memory* memory, uint32_t access_time
 // Bus Access
 //============================================
 response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t address, Block data){
+    cout << "BUS::" << requester->get_name() << "| TEST" << this->members.at(0)->bank.size() << endl;
     response_t response;
     response_t snoop_response;
     response_t memory_response;

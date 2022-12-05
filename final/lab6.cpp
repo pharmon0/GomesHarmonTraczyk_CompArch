@@ -25,12 +25,6 @@ using std::endl;
 //============================================
 // Definitions and Constants
 //============================================
-#define BLOCK_SIZE 64
-#define CACHE_SIZE 65536
-#define MEMORY_SIZE 262144
-#define CACHE_ACCESS_TICKS 10
-#define MEMORY_ACCESS_TICKS 30
-#define BUS_ACCESS_TICKS 10
 
 //============================================
 // Main Program
@@ -62,7 +56,6 @@ int main(void){
     //attach cores to caches
     for(int i = 0; i < cache.size(); i++){
         cache.at(i).attach_cpu(&core.at(i));
-        cout << "DEBUG:" << cache.at(i).get_name() << ":" <<  long(&cache.at(i)) << endl;
     }
 
     //build memory

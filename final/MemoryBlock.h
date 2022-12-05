@@ -10,19 +10,17 @@
 // Headers and Namespaces
 //==========================
 #include <cstdint>
-#include <map>
 #include <vector>
 #include "Definitions.h"
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::map;
 using std::vector;
 
 class Block{
     
     //Physical Components
-    map<uint32_t, uint8_t> bank;
+    vector<uint8_t> bank;
 
     //Control Flags
     uint32_t block_tag;
@@ -30,10 +28,14 @@ class Block{
     bool cold_start;
     char mesi_flag;
 
+    //metadata
+    uint32_t block_size;
+
   public:
 
     //Constructor
     Block();
+    Block(uint32_t size);
 
     //control flag accessors
     void set_tag(uint32_t tag);

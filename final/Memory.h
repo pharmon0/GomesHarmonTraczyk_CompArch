@@ -10,6 +10,7 @@
 // Headers and Namespaces
 //==========================
 #include <vector>
+#include <map>
 #include <cstdint>
 #include <string>
 #include <iostream>
@@ -23,6 +24,7 @@ using std::vector;
 using std::cout;
 using std::endl;
 using std::bitset;
+using std::map;
 
 class Memory{
 

@@ -138,6 +138,7 @@ uint32_t Cache::make_offset(uint32_t address){
 //================================
 int32_t Cache::find_entry(uint32_t index, uint32_t tag){
     cout << "CACHE::" << this->get_name() << "::find_entry| entered with args: " << index << " " << tag << endl;
+    cout << "CACHE::" << this->get_name() << "::find_entry| pointer " << long(this) << endl;
     cout << "CACHE::" << this->get_name() << "::find_entry| size:" << this->bank.size() << endl;
     cout << "CACHE::" << this->get_name() << "::find_entry| size[index]:" << this->bank[index].size() << endl;
     for(int i = 0; i < this->bank[index].size(); i++){
