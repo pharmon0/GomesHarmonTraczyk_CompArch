@@ -54,5 +54,7 @@
         "new": "cpp",
         "numbers": "cpp",
         "stdexcept": "cpp"
+        "vector": "cpp",
+        "xstring": "cpp"
     }
 }

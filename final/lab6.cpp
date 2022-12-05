@@ -17,6 +17,7 @@
 #include <iomanip>
 using std::setw;
 using std::setfill;
+#include <fstream>
 using std::string;
 using std::vector;
 using std::cout;
@@ -30,8 +31,58 @@ using std::endl;
 // Main Program
 //============================================
 int main(void){
-    //load program instructions (address traces)
-    //TODO
+    //load program instructions
+    //
+    vector<int> addr1, addr2, addr3, addr4;
+    vector<bool> rw1, rw2, rw3, rw4;
+    std::ifstream is1("text/D1addresses.txt");
+    if (is1.is_open()) {
+        for (int i = 0; i < 100; i++) {
+            string temp;
+            std::getline(is1, temp);
+            bool rwTemp = (temp.substr(0) == "1") ? true : false;
+            rw1.push_back(rwTemp);
+            temp.erase(temp.begin());
+            addr1.push_back(std::stoi(temp, 0, 2));
+        }
+        is1.close();
+    }
+    std::ifstream is2("text/D2addresses.txt");
+    if (is2.is_open()) {
+        for (int i = 0; i < 100; i++) {
+            string temp;
+            std::getline(is2, temp);
+            bool rwTemp = (temp.substr(0) == "1") ? true : false;
+            rw2.push_back(rwTemp);
+            temp.erase(temp.begin());
+            addr2.push_back(std::stoi(temp, 0, 2));
+        }
+        is2.close();
+    }
+    std::ifstream is3("text/D3addresses.txt");
+    if (is3.is_open()) {
+        for (int i = 0; i < 100; i++) {
+            string temp;
+            std::getline(is3, temp);
+            bool rwTemp = (temp.substr(0) == "1") ? true : false;
+            rw3.push_back(rwTemp);
+            temp.erase(temp.begin());
+            addr3.push_back(std::stoi(temp, 0, 2));
+        }
+        is3.close();
+    }
+    std::ifstream is4("text/D4addresses.txt");
+    if (is4.is_open()) {
+        for (int i = 0; i < 100; i++) {
+            string temp;
+            std::getline(is4, temp);
+            bool rwTemp = (temp.substr(0) == "1") ? true : false;
+            rw4.push_back(rwTemp);
+            temp.erase(temp.begin());
+            addr4.push_back(std::stoi(temp, 0, 2));
+        }
+        is4.close();
+    }
 
     //build caches
     cout << "Constructing Caches" << endl;
