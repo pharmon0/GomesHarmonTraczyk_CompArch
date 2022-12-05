@@ -3,9 +3,9 @@
 01001000100011011001
 10111110100001011110
 00110011000011011110
-01011111001001111110
+01011111001001111110    //Local Read miss (D2 line 5): Several caches have S copy, S copy is copied to destination cache and state -> S #READ_MISS_3
 11111101000010111110    
-11011111001001111110
+11011111001001111110    //Local Write miss (D4 line 7): Another copy in state M, core issues RWITM which is blocked by core with M copy. M copy controls bus to write back to memory and sets state -> I. Local copy reissues RWITM and updates its value, state -> M #WRITE_MISS_3
 01110001101000101010    
 10011111001011101110
 00011000001001101000
