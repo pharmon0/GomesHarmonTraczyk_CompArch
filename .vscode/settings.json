@@ -12,6 +12,8 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "xlocbuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp"
     }
 }
