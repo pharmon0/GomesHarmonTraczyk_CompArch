@@ -29,7 +29,8 @@ using std::endl;
 class Bus{
 
     //Physical Components
-    vector<Cache*> members;
+    //vector<Cache*> members;
+    vector<Cache> members;
     Memory* main_memory;
 
     //Arbitration

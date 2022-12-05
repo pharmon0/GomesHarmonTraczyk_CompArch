@@ -13,14 +13,21 @@ Block::Block(){
     this->block_tag = 0;
     this->least_recent = false;
     this->cold_start = false;
-    this->bank.clear();
+    //this->bank.clear();
+    for(int i = 0; i < this->block_size; i++){
+        this->bank.push_back(0);
+    }
 }
 Block::Block(uint32_t size){
+    this->block_size = size;
     this->mesi_flag = MESI_I;
     this->block_tag = 0;
     this->least_recent = false;
     this->cold_start = false;
-    this->bank.clear();
+    //this->bank.clear();
+    for(int i = 0; i < this->block_size; i++){
+        this->bank.push_back(0);
+    }
 }
 
 //================================

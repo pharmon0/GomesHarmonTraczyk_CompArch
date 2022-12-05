@@ -11,10 +11,7 @@ Bus::Bus(string name, vector<Cache> caches, Memory* memory, uint32_t access_time
     this->bus_name = name;
     this->main_memory = memory;
     for(int i = 0; i < caches.size(); i++){
-        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(&caches.at(i)) << endl;
-        this->members.push_back(&caches.at(i));
-        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(&caches.at(i)) << endl;
-        cout << "DEBUG:Bus:" << caches.at(i).get_name() << ":" <<  long(this->members.at(i)) << endl;
+        this->members.push_back(caches.at(i));
     }
     this->access_ticks = access_time - 1;
     this->access_counter = this->access_ticks;
@@ -26,28 +23,26 @@ Bus::Bus(string name, vector<Cache> caches, Memory* memory, uint32_t access_time
 // Bus Access
 //============================================
 response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t address, Block data){
-    cout << "BUS::" << requester->get_name() << "| TEST" << this->members.at(0)->bank.size() << endl;
     response_t response;
     response_t snoop_response;
     response_t memory_response;
-    if(requester->get_name() == this->members.at(token)->get_name()){
+    if(requester->get_name() == this->members.at(token).get_name()){
         //requester controls the bus. allow action.
         this->bus_active = true;
         if(this->access_counter > 0){
         //still counting down.
-            cout << "BUS::" << requester->get_name() << "| counting down" << endl;
             this->access_counter--;
             response.data = 0;
             response.success = false;
             response.reason = "waiting for Bus access";
         }else{//access time done
-            cout << "BUS::" << requester->get_name() << "| processing" << endl;
             
             //saving to memory
             if(bus_message == BUS_SAVE){
                 memory_response = this->main_memory->memory_write(address, snoop_response.block);
                 if(memory_response.success){
                     response.success = true;
+                    this->bus_active = false;
                 } else {
                     response.success = false;
                     response.reason = "Saving to main memory | Memory:" + memory_response.reason;
@@ -60,13 +55,8 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
 
                 //iterate through every cache looking for data
                 for(int i = 0; i < this->members.size(); i++){
-                    cout << "BUS::" << requester->get_name() << "| snoop loop iteraton " << i << endl;
                     if(i != this->token){//skip current requester
-                        cout << "BUS::" << requester->get_name() << "| this iteration is not the token holder" << endl;
-                        cout << "BUS::" << requester->get_name() << "| pointer test " << this->members.at(i)->get_name() << " " << long(this->members.at(i)) << endl;
-                        cout << "BUS::" << requester->get_name() << "| TEST" << this->members.at(i)->bank.size() << endl;
-                        snoop_response = this->members.at(i)->snooping(bus_message, address);
-                        cout << "BUS::" << requester->get_name() << "| POST-SNOOP" << endl;
+                        snoop_response = this->members.at(i).snooping(bus_message, address);
                         
                         //If the data is found
                         if(snoop_response.success){
@@ -85,10 +75,9 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                             //if found data is shared and will be modified    
                             } else if((snoop_response.block.get_mesi() == MESI_S) && (bus_message == BUS_RWITM)){
                             //invalidate others
-                                cout << "BUS::" << requester->get_name() << "| before inner FOR" << endl;
                                 for(i=i; i < this->members.size(); i++){
                                     if(i != this->token){
-                                        this->members.at(i)->snooping(BUS_INVALIDATE, address);
+                                        this->members.at(i).snooping(BUS_INVALIDATE, address);
                                     }
                                 }
 
@@ -96,6 +85,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                                 response.block = snoop_response.block;
                                 response.success = true;
                                 response.block.set_mesi(MESI_M);
+                                this->bus_active = false;
                                 return response;
 
                             }
@@ -108,6 +98,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                                 response.block.set_mesi(MESI_S);
                             }
                             response.success = true;
+                            bus_active = false;
                             return response;
                             
                         }
@@ -122,6 +113,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                     memory_response = this->main_memory->memory_read(address);
                     if(memory_response.success){
                         response.success = true;
+                        this->bus_active = false;
                         response.block = memory_response.block;
                         if(bus_message == BUS_READ){
                             response.block.set_mesi(MESI_E);
@@ -140,6 +132,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                 if(memory_response.success){
                 //writeback complete
                     response.success - true;
+                    this->bus_active = false;
                     response.block = this->writeback_buffer;
                     if(bus_message == BUS_READ){
                         response.block.set_mesi(MESI_S);
@@ -161,6 +154,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
     }
     //should only ever get here on BUS_INVALIDATE
     response.success = true;
+    this->bus_active = false;
     return response;
 }
 
@@ -169,13 +163,13 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
 //============================================
 void Bus::update_token(uint32_t tick){
     cout << "Applying tick " << tick << " to bus\n\t"
-         << "current token holder is " << this->members.at(token)->get_name();
+         << "current token holder is " << this->members.at(token).get_name();
     if(!this->bus_active){
         this->token++;
         if(this->token >= this->members.size()){
             this->token = 0;
         }
-        cout << "\n\tToken handoff to " << this->members.at(token)->get_name();
+        cout << "\n\tToken handoff to " << this->members.at(token).get_name();
     } else {
         cout << "\n\tBus is Busy. Token handoff blocked";
     }

@@ -97,9 +97,10 @@ int main(void){
 
         //Move to next tick
         tick++;
-        if(tick > 100){
+        if(tick > 1000){
             //DEBUG PROGRAM HALT
             halt = true;
+            cout << "Halting with debug limit" << endl;
         }
     }while(!halt);
 

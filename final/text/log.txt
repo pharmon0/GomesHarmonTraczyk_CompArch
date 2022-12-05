@@ -1,0 +1,1802 @@
+Constructing Caches
+Constructing Cores
+Constructing Memory
+Constructing Bus
+================================================================================
+Tick 1
+================================================================================
+core_0 | Incomplete Request on tick 1. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 1. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 1. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 1. Reason:
+	waiting for cache access
+Applying tick 1 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 2
+================================================================================
+core_0 | Incomplete Request on tick 2. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 2. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 2. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 2. Reason:
+	waiting for cache access
+Applying tick 2 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 3
+================================================================================
+core_0 | Incomplete Request on tick 3. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 3. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 3. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 3. Reason:
+	waiting for cache access
+Applying tick 3 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 4
+================================================================================
+core_0 | Incomplete Request on tick 4. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 4. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 4. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 4. Reason:
+	waiting for cache access
+Applying tick 4 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 5
+================================================================================
+core_0 | Incomplete Request on tick 5. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 5. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 5. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 5. Reason:
+	waiting for cache access
+Applying tick 5 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 6
+================================================================================
+core_0 | Incomplete Request on tick 6. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 6. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 6. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 6. Reason:
+	waiting for cache access
+Applying tick 6 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 7
+================================================================================
+core_0 | Incomplete Request on tick 7. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 7. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 7. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 7. Reason:
+	waiting for cache access
+Applying tick 7 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 8
+================================================================================
+core_0 | Incomplete Request on tick 8. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 8. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 8. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 8. Reason:
+	waiting for cache access
+Applying tick 8 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 9
+================================================================================
+core_0 | Incomplete Request on tick 9. Reason:
+	waiting for cache access
+core_1 | Incomplete Request on tick 9. Reason:
+	waiting for cache access
+core_2 | Incomplete Request on tick 9. Reason:
+	waiting for cache access
+core_3 | Incomplete Request on tick 9. Reason:
+	waiting for cache access
+Applying tick 9 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 10
+================================================================================
+core_0 | Incomplete Request on tick 10. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 10. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_2 | Incomplete Request on tick 10. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 10. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 10 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 11
+================================================================================
+core_0 | Incomplete Request on tick 11. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 11. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 11. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_3 | Incomplete Request on tick 11. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 11 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 12
+================================================================================
+core_0 | Incomplete Request on tick 12. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 12. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 12. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 12. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+Applying tick 12 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 13
+================================================================================
+core_0 | Incomplete Request on tick 13. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_1 | Incomplete Request on tick 13. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 13. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 13. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 13 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 14
+================================================================================
+core_0 | Incomplete Request on tick 14. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 14. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_2 | Incomplete Request on tick 14. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 14. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 14 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 15
+================================================================================
+core_0 | Incomplete Request on tick 15. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 15. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 15. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_3 | Incomplete Request on tick 15. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 15 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 16
+================================================================================
+core_0 | Incomplete Request on tick 16. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 16. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 16. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 16. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+Applying tick 16 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 17
+================================================================================
+core_0 | Incomplete Request on tick 17. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_1 | Incomplete Request on tick 17. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 17. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 17. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 17 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 18
+================================================================================
+core_0 | Incomplete Request on tick 18. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 18. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:waiting for Bus access
+core_2 | Incomplete Request on tick 18. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 18. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 18 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 19
+================================================================================
+core_0 | Incomplete Request on tick 19. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 19. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 19. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Incomplete Request on tick 19. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+Applying tick 19 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 20
+================================================================================
+core_0 | Incomplete Request on tick 20. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 20. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 20. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 20. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 20 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 21
+================================================================================
+core_0 | Incomplete Request on tick 21. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 21. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 21. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 21. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 21 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 22
+================================================================================
+core_0 | Incomplete Request on tick 22. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 22. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 22. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 22. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 22 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 23
+================================================================================
+core_0 | Incomplete Request on tick 23. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 23. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 23. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 23. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 23 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 24
+================================================================================
+core_0 | Incomplete Request on tick 24. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 24. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 24. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 24. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 24 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 25
+================================================================================
+core_0 | Incomplete Request on tick 25. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 25. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 25. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 25. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 25 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 26
+================================================================================
+core_0 | Incomplete Request on tick 26. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 26. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 26. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 26. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 26 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 27
+================================================================================
+core_0 | Incomplete Request on tick 27. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 27. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 27. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 27. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 27 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 28
+================================================================================
+core_0 | Incomplete Request on tick 28. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 28. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 28. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 28. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 28 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 29
+================================================================================
+core_0 | Incomplete Request on tick 29. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 29. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 29. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 29. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 29 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 30
+================================================================================
+core_0 | Incomplete Request on tick 30. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 30. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 30. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 30. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 30 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 31
+================================================================================
+core_0 | Incomplete Request on tick 31. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 31. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 31. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 31. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 31 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 32
+================================================================================
+core_0 | Incomplete Request on tick 32. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 32. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 32. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 32. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 32 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 33
+================================================================================
+core_0 | Incomplete Request on tick 33. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 33. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 33. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 33. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 33 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 34
+================================================================================
+core_0 | Incomplete Request on tick 34. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 34. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 34. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 34. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 34 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 35
+================================================================================
+core_0 | Incomplete Request on tick 35. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 35. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 35. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 35. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 35 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 36
+================================================================================
+core_0 | Incomplete Request on tick 36. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 36. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 36. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 36. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 36 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 37
+================================================================================
+core_0 | Incomplete Request on tick 37. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 37. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 37. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 37. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 37 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 38
+================================================================================
+core_0 | Incomplete Request on tick 38. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 38. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 38. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 38. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 38 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 39
+================================================================================
+core_0 | Incomplete Request on tick 39. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 39. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 39. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 39. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 39 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 40
+================================================================================
+core_0 | Incomplete Request on tick 40. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 40. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 40. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 40. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 40 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 41
+================================================================================
+core_0 | Incomplete Request on tick 41. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 41. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 41. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 41. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 41 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 42
+================================================================================
+core_0 | Incomplete Request on tick 42. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 42. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 42. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 42. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 42 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 43
+================================================================================
+core_0 | Incomplete Request on tick 43. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 43. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 43. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 43. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 43 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 44
+================================================================================
+core_0 | Incomplete Request on tick 44. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 44. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 44. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 44. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 44 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 45
+================================================================================
+core_0 | Incomplete Request on tick 45. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 45. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 45. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 45. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 45 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 46
+================================================================================
+core_0 | Incomplete Request on tick 46. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 46. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 46. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 46. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 46 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 47
+================================================================================
+core_0 | Incomplete Request on tick 47. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 47. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 47. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 47. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+Applying tick 47 to bus
+	current token holder is cache_3
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 48
+================================================================================
+core_0 | Incomplete Request on tick 48. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 48. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 48. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Incomplete Request on tick 48. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:
+Applying tick 48 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 49
+================================================================================
+core_0 | Incomplete Request on tick 49. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Incomplete Request on tick 49. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 49. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Completed Request on tick 49
+Applying tick 49 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 50
+================================================================================
+core_0 | Incomplete Request on tick 50. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 50. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Incomplete Request on tick 50. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_3 | Completed Request on tick 49
+Applying tick 50 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 51
+================================================================================
+core_0 | Incomplete Request on tick 51. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 51. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 51. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 51 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 52
+================================================================================
+core_0 | Incomplete Request on tick 52. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 52. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 52. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 52 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 53
+================================================================================
+core_0 | Incomplete Request on tick 53. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 53. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 53. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 53 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 54
+================================================================================
+core_0 | Incomplete Request on tick 54. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 54. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 54. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 54 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 55
+================================================================================
+core_0 | Incomplete Request on tick 55. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 55. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 55. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 55 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 56
+================================================================================
+core_0 | Incomplete Request on tick 56. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 56. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 56. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 56 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 57
+================================================================================
+core_0 | Incomplete Request on tick 57. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 57. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 57. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 57 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 58
+================================================================================
+core_0 | Incomplete Request on tick 58. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 58. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 58. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 58 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 59
+================================================================================
+core_0 | Incomplete Request on tick 59. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 59. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 59. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 59 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 60
+================================================================================
+core_0 | Incomplete Request on tick 60. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 60. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 60. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 60 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 61
+================================================================================
+core_0 | Incomplete Request on tick 61. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 61. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 61. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 61 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 62
+================================================================================
+core_0 | Incomplete Request on tick 62. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 62. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 62. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 62 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 63
+================================================================================
+core_0 | Incomplete Request on tick 63. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 63. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 63. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 63 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 64
+================================================================================
+core_0 | Incomplete Request on tick 64. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 64. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 64. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 64 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 65
+================================================================================
+core_0 | Incomplete Request on tick 65. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 65. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 65. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 65 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 66
+================================================================================
+core_0 | Incomplete Request on tick 66. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 66. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 66. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 66 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 67
+================================================================================
+core_0 | Incomplete Request on tick 67. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 67. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 67. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 67 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 68
+================================================================================
+core_0 | Incomplete Request on tick 68. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 68. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 68. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 68 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 69
+================================================================================
+core_0 | Incomplete Request on tick 69. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 69. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 69. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 69 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 70
+================================================================================
+core_0 | Incomplete Request on tick 70. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 70. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 70. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 70 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 71
+================================================================================
+core_0 | Incomplete Request on tick 71. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 71. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 71. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 71 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 72
+================================================================================
+core_0 | Incomplete Request on tick 72. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 72. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 72. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 72 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 73
+================================================================================
+core_0 | Incomplete Request on tick 73. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 73. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 73. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 73 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 74
+================================================================================
+core_0 | Incomplete Request on tick 74. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 74. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 74. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 74 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 75
+================================================================================
+core_0 | Incomplete Request on tick 75. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 75. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 75. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 75 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 76
+================================================================================
+core_0 | Incomplete Request on tick 76. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 76. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 76. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 76 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 77
+================================================================================
+core_0 | Incomplete Request on tick 77. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 77. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 77. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_3 | Completed Request on tick 49
+Applying tick 77 to bus
+	current token holder is cache_2
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 78
+================================================================================
+core_0 | Incomplete Request on tick 78. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 78. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Incomplete Request on tick 78. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:
+core_3 | Completed Request on tick 49
+Applying tick 78 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 79
+================================================================================
+core_0 | Incomplete Request on tick 79. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 79. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 79 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 80
+================================================================================
+core_0 | Incomplete Request on tick 80. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Incomplete Request on tick 80. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 80 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 81
+================================================================================
+core_0 | Incomplete Request on tick 81. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 81. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 81 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 82
+================================================================================
+core_0 | Incomplete Request on tick 82. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 82. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 82 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 83
+================================================================================
+core_0 | Incomplete Request on tick 83. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 83. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 83 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 84
+================================================================================
+core_0 | Incomplete Request on tick 84. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 84. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 84 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 85
+================================================================================
+core_0 | Incomplete Request on tick 85. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 85. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 85 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 86
+================================================================================
+core_0 | Incomplete Request on tick 86. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 86. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 86 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 87
+================================================================================
+core_0 | Incomplete Request on tick 87. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 87. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 87 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 88
+================================================================================
+core_0 | Incomplete Request on tick 88. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 88. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 88 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 89
+================================================================================
+core_0 | Incomplete Request on tick 89. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 89. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 89 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 90
+================================================================================
+core_0 | Incomplete Request on tick 90. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 90. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 90 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 91
+================================================================================
+core_0 | Incomplete Request on tick 91. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 91. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 91 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 92
+================================================================================
+core_0 | Incomplete Request on tick 92. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 92. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 92 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 93
+================================================================================
+core_0 | Incomplete Request on tick 93. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 93. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 93 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 94
+================================================================================
+core_0 | Incomplete Request on tick 94. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 94. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 94 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 95
+================================================================================
+core_0 | Incomplete Request on tick 95. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 95. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 95 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 96
+================================================================================
+core_0 | Incomplete Request on tick 96. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 96. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 96 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 97
+================================================================================
+core_0 | Incomplete Request on tick 97. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 97. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 97 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 98
+================================================================================
+core_0 | Incomplete Request on tick 98. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 98. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 98 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 99
+================================================================================
+core_0 | Incomplete Request on tick 99. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 99. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 99 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 100
+================================================================================
+core_0 | Incomplete Request on tick 100. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 100. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 100 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 101
+================================================================================
+core_0 | Incomplete Request on tick 101. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 101. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 101 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 102
+================================================================================
+core_0 | Incomplete Request on tick 102. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 102. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 102 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 103
+================================================================================
+core_0 | Incomplete Request on tick 103. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 103. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 103 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 104
+================================================================================
+core_0 | Incomplete Request on tick 104. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 104. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 104 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 105
+================================================================================
+core_0 | Incomplete Request on tick 105. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 105. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 105 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 106
+================================================================================
+core_0 | Incomplete Request on tick 106. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 106. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 106 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 107
+================================================================================
+core_0 | Incomplete Request on tick 107. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 107. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 107 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 108
+================================================================================
+core_0 | Incomplete Request on tick 108. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 108. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 108 to bus
+	current token holder is cache_1
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 109
+================================================================================
+core_0 | Incomplete Request on tick 109. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Incomplete Request on tick 109. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 109 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+================================================================================
+Tick 110
+================================================================================
+core_0 | Incomplete Request on tick 110. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 110 to bus
+	current token holder is cache_2
+	Token handoff to cache_3
+================================================================================
+Tick 111
+================================================================================
+core_0 | Incomplete Request on tick 111. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:Member does not control the bus
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 111 to bus
+	current token holder is cache_3
+	Token handoff to cache_0
+================================================================================
+Tick 112
+================================================================================
+core_0 | Incomplete Request on tick 112. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 112 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 113
+================================================================================
+core_0 | Incomplete Request on tick 113. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 113 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 114
+================================================================================
+core_0 | Incomplete Request on tick 114. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 114 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 115
+================================================================================
+core_0 | Incomplete Request on tick 115. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 115 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 116
+================================================================================
+core_0 | Incomplete Request on tick 116. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 116 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 117
+================================================================================
+core_0 | Incomplete Request on tick 117. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 117 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 118
+================================================================================
+core_0 | Incomplete Request on tick 118. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 118 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 119
+================================================================================
+core_0 | Incomplete Request on tick 119. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 119 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 120
+================================================================================
+core_0 | Incomplete Request on tick 120. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 120 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 121
+================================================================================
+core_0 | Incomplete Request on tick 121. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 121 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 122
+================================================================================
+core_0 | Incomplete Request on tick 122. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 122 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 123
+================================================================================
+core_0 | Incomplete Request on tick 123. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 123 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 124
+================================================================================
+core_0 | Incomplete Request on tick 124. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 124 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 125
+================================================================================
+core_0 | Incomplete Request on tick 125. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 125 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 126
+================================================================================
+core_0 | Incomplete Request on tick 126. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 126 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 127
+================================================================================
+core_0 | Incomplete Request on tick 127. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 127 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 128
+================================================================================
+core_0 | Incomplete Request on tick 128. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 128 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 129
+================================================================================
+core_0 | Incomplete Request on tick 129. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 129 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 130
+================================================================================
+core_0 | Incomplete Request on tick 130. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 130 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 131
+================================================================================
+core_0 | Incomplete Request on tick 131. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 131 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 132
+================================================================================
+core_0 | Incomplete Request on tick 132. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 132 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 133
+================================================================================
+core_0 | Incomplete Request on tick 133. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 133 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 134
+================================================================================
+core_0 | Incomplete Request on tick 134. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 134 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 135
+================================================================================
+core_0 | Incomplete Request on tick 135. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 135 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 136
+================================================================================
+core_0 | Incomplete Request on tick 136. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 136 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 137
+================================================================================
+core_0 | Incomplete Request on tick 137. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 137 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 138
+================================================================================
+core_0 | Incomplete Request on tick 138. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 138 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 139
+================================================================================
+core_0 | Incomplete Request on tick 139. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 139 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 140
+================================================================================
+core_0 | Incomplete Request on tick 140. Reason:
+	Cache Miss | Miss:Waiting on the bus | Bus:Reading from main memory | Memory:Waiting for Memory
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 140 to bus
+	current token holder is cache_0
+	Bus is Busy. Token handoff blocked
+================================================================================
+Tick 141
+================================================================================
+core_0 | Incomplete Request on tick 141. Reason:
+	Cache Miss | Miss:Cache Miss resolved. | Bus:
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 141 to bus
+	current token holder is cache_0
+	Token handoff to cache_1
+================================================================================
+Tick 142
+================================================================================
+core_0 | Completed Request on tick 142
+core_1 | Completed Request on tick 110
+core_2 | Completed Request on tick 79
+core_3 | Completed Request on tick 49
+Applying tick 142 to bus
+	current token holder is cache_1
+	Token handoff to cache_2
+
+All cores complete. Halting...

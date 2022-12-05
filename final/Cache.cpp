@@ -65,8 +65,6 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
         }
         this->bank.push_back(new_set);
     }
-    cout << "Cache." << this->cache_name << "::bank.size = " << this->bank.size() << endl;
-    cout << "Cache." << this->cache_name << "::bank[0].size = " << this->bank[0].size() << endl;
 }
 
 //================================
@@ -137,18 +135,11 @@ uint32_t Cache::make_offset(uint32_t address){
 //  returns -1 if missed
 //================================
 int32_t Cache::find_entry(uint32_t index, uint32_t tag){
-    cout << "CACHE::" << this->get_name() << "::find_entry| entered with args: " << index << " " << tag << endl;
-    cout << "CACHE::" << this->get_name() << "::find_entry| pointer " << long(this) << endl;
-    cout << "CACHE::" << this->get_name() << "::find_entry| size:" << this->bank.size() << endl;
-    cout << "CACHE::" << this->get_name() << "::find_entry| size[index]:" << this->bank[index].size() << endl;
     for(int i = 0; i < this->bank[index].size(); i++){
-        cout << "CACHE::" << this->get_name() << "::find_entry| iteration " << i << endl;
         if(this->bank[index].at(i).get_tag() == tag){
-            cout << "CACHE::" << this->get_name() << "::find_entry| RETURN, i=" << i << endl;
             return i;
         }
     }
-    cout << "CACHE::" << this->get_name() << "::find_entry| Not Found" << endl;
     return -1;
 }
 
@@ -300,16 +291,10 @@ response_t Cache::handle_miss(uint32_t address, bool write){
 // Bus Arbitrated Cache Snooping
 //================================
 response_t Cache::snooping(string bus_message, uint32_t address){
-    cout << "CACHE::" << this->get_name() << "::SNOOP| entered. args = " << bus_message << " , " << address << endl;
-    cout << "CACHE::" << this->get_name() << "::SNOOP| size=" << this->bank.size() << endl;
     response_t response;
     uint32_t tag = this->make_tag(address);
     uint32_t index = this->make_index(address);
-    cout << "CACHE::" << this->get_name() << "::SNOOP| before find_entry index,tag=" << index << "," << tag << endl;
-    cout << "CACHE::" << this->get_name() << "::SNOOP| size=" << this->bank.size() << endl;
-    cout << "CACHE::" << this->get_name() << "::SNOOP| size[index]=" << this->bank[index].size() << endl;
     int32_t entry = this->find_entry(index, tag);
-    cout << "CACHE::" << this->get_name() << "::SNOOP| after find_entry" << endl;
 
     if(entry < 0){
     //Requested block not found
