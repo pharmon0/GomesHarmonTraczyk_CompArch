@@ -29,12 +29,16 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
     if(requester->get_name() == this->members.at(token).get_name()){
         //requester controls the bus. allow action.
         this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::1BUS_ACTIVE=" << this->bus_active << endl;
         if(this->access_counter > 0){
         //still counting down.
             this->access_counter--;
             response.data = 0;
             response.success = false;
+            this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::2BUS_ACTIVE=" << this->bus_active << endl;
             response.reason = "waiting for Bus access";
+            return response;
         }else{//access time done
             
             //saving to memory
@@ -43,8 +47,11 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                 if(memory_response.success){
                     response.success = true;
                     this->bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::3BUS_ACTIVE=" << this->bus_active << endl;
                 } else {
                     response.success = false;
+                    this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::4BUS_ACTIVE=" << this->bus_active << endl;
                     response.reason = "Saving to main memory | Memory:" + memory_response.reason;
                 }
                 return response;
@@ -69,6 +76,8 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                                 memory_response = this->main_memory->memory_write(address, snoop_response.block);
                                 //This will always be a memory response false
                                 response.success = false;
+                                this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::5BUS_ACTIVE=" << this->bus_active << endl;
                                 response.reason = "Buffering Modified Read to Main Memory";
                                 return response;
                                 
@@ -86,6 +95,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                                 response.success = true;
                                 response.block.set_mesi(MESI_M);
                                 this->bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::6BUS_ACTIVE=" << this->bus_active << endl;
                                 return response;
 
                             }
@@ -99,6 +109,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                             }
                             response.success = true;
                             bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::7BUS_ACTIVE=" << this->bus_active << endl;
                             return response;
                             
                         }
@@ -114,6 +125,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                     if(memory_response.success){
                         response.success = true;
                         this->bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::8BUS_ACTIVE=" << this->bus_active << endl;
                         response.block = memory_response.block;
                         if(bus_message == BUS_READ){
                             response.block.set_mesi(MESI_E);
@@ -122,6 +134,8 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                         }
                     } else {
                         response.success = false;
+                        this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::9BUS_ACTIVE=" << this->bus_active << endl;
                         response.reason = "Reading from main memory | Memory:" + memory_response.reason;
                     }
                     return response;
@@ -133,6 +147,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                 //writeback complete
                     response.success - true;
                     this->bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::10BUS_ACTIVE=" << this->bus_active << endl;
                     response.block = this->writeback_buffer;
                     if(bus_message == BUS_READ){
                         response.block.set_mesi(MESI_S);
@@ -142,6 +157,8 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
                     writeback_pending = false;
                 } else{
                     response.success = false;
+                    this->bus_active = true;
+        //cout << requester->get_name() <<  "::DEBUG::11BUS_ACTIVE=" << this->bus_active << endl;
                     response.reason = "Buffering Modified Read to Main Memory | Memory:" + memory_response.reason;
                 }
                 return response;
@@ -156,6 +173,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
     //should only ever get here on BUS_INVALIDATE
     response.success = true;
     this->bus_active = false;
+        //cout << requester->get_name() <<  "::DEBUG::12BUS_ACTIVE=" << this->bus_active << endl;
     return response;
 }
 

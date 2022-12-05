@@ -371,6 +371,7 @@ response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint
 
         } else {
         //tag found in cache
+            cout << "Cache::" << this->cache_name << "|MESI of block at " << address << " is intially " << this->bank[index][entry].get_mesi() << endl;
             if(this->bank[index][entry].get_mesi() != MESI_I){
             //Block is valid (HIT)
                 if(write){
