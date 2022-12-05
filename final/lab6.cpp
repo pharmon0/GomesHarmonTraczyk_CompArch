@@ -84,9 +84,6 @@ int main(void){
         is4.close();
     }
     
-    cout << "DEBUG sizeof rw1: " << rw1.size() << " rw2: " << rw2.size() << " rw3: " << rw3.size() << " rw4: " << rw4.size() << endl;
-    cout << "DEBUG sizeof addr1: " << addr1.size() << " addr2: " << addr2.size() << " addr3: " << addr3.size() << " addr4: " << addr4.size() << endl;
-
     //build caches
     cout << "Constructing Caches" << endl;
     vector<Cache> cache = {Cache("cache_0", CACHE_SIZE, BLOCK_SIZE, ASSOCIATIVITY_2_WAY),
@@ -100,7 +97,6 @@ int main(void){
 
     //build cores
     //No cores needed. Build fake request feeders
-    //TODO load the address traces into the cores
     cout << "Constructing Cores" << endl;
     vector<Core> core = {Core("core_0", &cache.at(0), addr1, rw1),
                          Core("core_1", &cache.at(1), addr2, rw2),
