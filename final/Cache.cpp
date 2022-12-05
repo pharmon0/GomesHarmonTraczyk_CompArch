@@ -364,6 +364,9 @@ char Cache::get_remote_mesi(uint32_t address){
 // Bus Arbitrated Cache Snooping
 //================================
 response_t Cache::snooping(string bus_message, uint32_t address){
-    
+        uint32_t tag = this->make_tag(address);
+        uint32_t index = this->make_index(address);
+        uint32_t offset = this->make_offset(address);
+        int32_t entry = this->find_entry(index, tag);
 }
 
