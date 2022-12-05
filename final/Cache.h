@@ -12,13 +12,24 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <iostream>
+#include <iomanip>
+#include <bitset>
 #include <math.h>
 #include "Definitions.h"
+#include "Datatypes.h"
 #include "MemoryBlock.h"
+#include "Bus.h"
+#include "Core.h"
 using std::log2;
 using std::ceil;
 using std::string;
 using std::vector;
+using std::cout;
+using std::endl;
+using std::bitset;
+using std::setw;
+using std::setfill;
 
 //==========================
 // Custom Definitions
@@ -42,11 +53,16 @@ class Cache{
     // set 3 || block(3,0) | block(3,1) | block(3,2)
     //----------------------------------------------
     vector<vector<Block> > bank;
+    Core* core;
+    Bus* bus;
 
     //Physical Properties
     uint32_t tag_width;
     uint32_t index_width;
     uint32_t offset_width;
+    uint32_t tag_mask;
+    uint32_t index_mask;
+    uint32_t offset_mask;
 
     uint32_t bytes_in_block;
     uint32_t blocks_in_set;
@@ -60,27 +76,45 @@ class Cache{
 
     //Metadata
     string cache_name;
+    uint32_t total_tick_counter;
+    uint32_t miss_tick_counter;
 
   public:
 
     //Constructor
     Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t associativity);
     
+    //Cache Operators
+    bool operator == (const Cache& rhs);
+
     //Cache Setup Functions
-    void attach_cpu();//TODO attach_cpu()
-    void attach_bus();//TODO attach_bus()
+    void attach_cpu(Core* processor);
+    void attach_bus(Bus* memory_bus);
 
     //Mutators for Cache Properties
     void set_access_time(uint32_t ticks);
 
+    //Accessors for Cache Metadata
+    string get_name(void) const;
+
     //Bank Access
     response_t cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width);
+    uint32_t read_from_block(uint32_t index, uint32_t entry, uint32_t offset, uint8_t data_width);
+    void write_to_block(uint32_t index, uint32_t entry, uint32_t offset, uint32_t data, uint8_t data_width);
+    response_t handle_miss(uint32_t address, bool write);
 
     //helper functions
     uint32_t make_tag(uint32_t address);
     uint32_t make_index(uint32_t address);
     uint32_t make_offset(uint32_t address);
     int32_t find_entry(uint32_t index, uint32_t tag);
+    void update_lru(uint32_t index, uint32_t entry);
+    uint32_t get_lru_entry(uint32_t index);
+
+    //remote bus access functions
+    void set_remote_mesi(uint32_t address, char mesi);
+    char get_remote_mesi(uint32_t address);
+    response_t snooping(string bus_message, uint32_t address);
 };
 
 // End Header Guard

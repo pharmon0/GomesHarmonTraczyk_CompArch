@@ -7,26 +7,35 @@
 #define GHT_HELPER_HEADER
 
 //============================================
-// Headers and Namespaces
-//============================================
-#include <string>
-#include <cstdint>
-using std::string;
-
-//============================================
 // Constants and Macros
 //============================================
+#define BLOCK_SIZE 64
+#define CACHE_SIZE 65536
+#define MEMORY_SIZE 262144
+#define CACHE_ACCESS_TICKS 10
+#define MEMORY_ACCESS_TICKS 30
+#define BUS_ACCESS_TICKS 10
+
 #define SYSTEM_BITWIDTH 32
 
+#define MESI_I 'I'
+#define MESI_E 'E'
+#define MESI_S 'S'
+#define MESI_M 'M'
+
+#define BUS_INVALIDATE "invalidate"
+#define BUS_RWITM "read_and_invalidate"
+#define BUS_READ "read"
+#define BUS_SAVE "save"
+
 //============================================
-// Datatypes
+// Class Prototypes
 //============================================
-//response_t used to indicate completed results
-typedef struct{
-    uint32_t data;
-    string reason;
-    bool success;
-} response_t;
+class Cache;
+class Core;
+class Bus;
+class Block;
+class Memory;
 
 //End Header Guard
 #endif

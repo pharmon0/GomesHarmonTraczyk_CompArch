@@ -9,10 +9,14 @@
 //==========================
 // Headers and Namespaces
 //==========================
+#include <iostream>
 #include <cstdint>
 #include <string>
 #include "Definitions.h"
+#include "Cache.h"
 using std::string;
+using std::cout;
+using std::endl;
 
 //==========================
 // Custom Definitions
@@ -20,10 +24,16 @@ using std::string;
 
 class Core{
 
+  Cache* cache;
+
+  string core_name;
+
+  uint32_t tick_complete;
+
   public:
 
     //Constructor
-    Core();
+    Core(string name, Cache* mem);
 
     //Tick Process
     bool process(uint32_t tick);
