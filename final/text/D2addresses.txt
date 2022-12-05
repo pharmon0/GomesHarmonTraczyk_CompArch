@@ -1,10 +1,10 @@
 10100000110101100111
 00111110111110000011
 11111111011100000000
-01000000011110000111
-01011101111111000011
-10011101111101000100
-00000010111111000111
+01001000001111111010    //Local Read miss (D1 line 3): One cache has M copy, M copy is copied back to memory, states of both caches = S (both have M copy ) #READ_MISS_4
+01011111001001111110    //Local Read miss (D1 line 1): One cache has E copy, E copy is copied to destination cache and both caches state -> S #READ_MISS_2
+11001000001111111010    //Local Write hit (D2 line 4): Invalidate caches with address (S -> I), local state change S -> M #WRITE_HIT_S
+11001000001111111010    //Local Write hit (D2 line 6): Update cache value, no state change #WRITE_HIT_M
 01010111011100100001
 11011000011010110100
 01101000111000110011
