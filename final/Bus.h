@@ -40,6 +40,9 @@ class Bus{
     uint8_t token;
     bool bus_active;
 
+    bool writeback_pending;
+    Block writeback_buffer;
+
     //timing
     uint32_t access_ticks;
     uint32_t access_counter;
