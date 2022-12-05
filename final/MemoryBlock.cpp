@@ -93,6 +93,7 @@ void Block::set_lru(bool lru){
 // Set MESI
 //================================
 void Block::set_mesi(char mesi){
+    cout << "Block::set_mesi|mesi changing from " << this->mesi_flag << " -> " << mesi << endl;
     this->mesi_flag = mesi;
 }
 
