@@ -42,7 +42,7 @@ int main(void){
             bool rwTemp = (temp.substr(0) == "1") ? true : false;
             rw1.push_back(rwTemp);
             temp.erase(temp.begin());
-            addr1.push_back(std::stoi(temp));
+            addr1.push_back(std::stoi(temp, 0, 2));
         }
         is1.close();
     }
@@ -54,7 +54,7 @@ int main(void){
             bool rwTemp = (temp.substr(0) == "1") ? true : false;
             rw2.push_back(rwTemp);
             temp.erase(temp.begin());
-            addr2.push_back(std::stoi(temp));
+            addr2.push_back(std::stoi(temp, 0, 2));
         }
         is2.close();
     }
@@ -66,7 +66,7 @@ int main(void){
             bool rwTemp = (temp.substr(0) == "1") ? true : false;
             rw3.push_back(rwTemp);
             temp.erase(temp.begin());
-            addr3.push_back(std::stoi(temp));
+            addr3.push_back(std::stoi(temp, 0, 2));
         }
         is3.close();
     }
@@ -78,7 +78,7 @@ int main(void){
             bool rwTemp = (temp.substr(0) == "1") ? true : false;
             rw4.push_back(rwTemp);
             temp.erase(temp.begin());
-            addr4.push_back(std::stoi(temp));
+            addr4.push_back(std::stoi(temp, 0, 2));
         }
         is4.close();
     }
