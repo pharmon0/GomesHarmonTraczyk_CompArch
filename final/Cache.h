@@ -76,8 +76,7 @@ class Cache{
 
     //Metadata
     string cache_name;
-    uint32_t total_tick_counter;
-    uint32_t miss_tick_counter;
+    uint32_t misses;
 
   public:
 
@@ -115,6 +114,9 @@ class Cache{
     void set_remote_mesi(uint32_t address, char mesi);
     char get_remote_mesi(uint32_t address);
     response_t snooping(string bus_message, uint32_t address);
+
+    //meta
+    void print_miss_rate(void);
 };
 
 // End Header Guard

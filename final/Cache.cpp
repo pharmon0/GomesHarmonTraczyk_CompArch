@@ -8,6 +8,7 @@
 //================================
 Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t associativity){
     this->cache_name = name;
+    this->misses = 0;
 
     this->bytes_in_cache = cache_bytes;
     this->bytes_in_block = block_bytes;
@@ -172,6 +173,13 @@ void Cache::attach_cpu(Core* processor){
 }
 
 //================================
+// print miss rate
+//================================
+void Cache::print_miss_rate(void){
+    cout << this->cache_name << "'s miss rate is " << float(this->misses)/100.0 << " (" << this->misses << "/100)" << endl; 
+}
+
+//================================
 // update LRU for a block/set
 //================================
 void Cache::update_lru(uint32_t index, uint32_t entry){
@@ -234,7 +242,6 @@ char Cache::get_remote_mesi(uint32_t address){
 response_t Cache::handle_miss(uint32_t address, bool write){
     response_t response;
     response_t bus_response;
-    this->miss_tick_counter++;
     uint32_t index = this->make_index(address);
     uint32_t replacement_entry = this->get_lru_entry(index);
     char mesi_status = this->bank[index][replacement_entry].get_mesi();
@@ -262,6 +269,7 @@ response_t Cache::handle_miss(uint32_t address, bool write){
                 block.set_mesi(MESI_M);
                 this->bank[index][replacement_entry] = block;
                 response.reason = "Cache Miss resolved. | Bus:" + bus_response.reason;
+                this->misses++;
             } else{
             //waiting on bus
                 response.success = false;
@@ -277,6 +285,7 @@ response_t Cache::handle_miss(uint32_t address, bool write){
                 block.set_tag(this->make_tag(address));
                 this->bank[index][replacement_entry] = block;
                 response.reason = "Cache Miss resolved. | Bus:" + bus_response.reason;
+                this->misses++;
             } else {
             //waiting on bus
                 response.success = false;
