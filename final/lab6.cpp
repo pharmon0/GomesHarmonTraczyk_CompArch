@@ -62,6 +62,7 @@ int main(void){
     //attach cores to caches
     for(int i = 0; i < cache.size(); i++){
         cache.at(i).attach_cpu(&core.at(i));
+        cout << "DEBUG:" << cache.at(i).get_name() << ":" <<  long(&cache.at(i)) << endl;
     }
 
     //build memory

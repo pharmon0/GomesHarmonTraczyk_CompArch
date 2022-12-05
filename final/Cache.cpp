@@ -65,6 +65,8 @@ Cache::Cache(string name, uint32_t cache_bytes, uint32_t block_bytes, uint8_t as
         }
         this->bank.push_back(new_set);
     }
+    cout << "Cache." << this->cache_name << "::bank.size = " << this->bank.size() << endl;
+    cout << "Cache." << this->cache_name << "::bank[0].size = " << this->bank[0].size() << endl;
 }
 
 //================================
@@ -75,72 +77,6 @@ void Cache::set_access_time(uint32_t ticks){
     this->access_counter = this->access_ticks;
 }
 
-//================================
-// Cache Access by CPU
-//  - controlled and timed
-//================================
-response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width){
-    this->total_tick_counter++;
-    response_t response;
-    if(this->access_counter > 0){
-        //still counting down.
-        this->access_counter--;
-        response.data = 0;
-        response.success = false;
-        response.reason = "waiting for cache access";
-    }else{
-        uint32_t tag = this->make_tag(address);
-        uint32_t index = this->make_index(address);
-        uint32_t offset = this->make_offset(address);
-        int32_t entry = this->find_entry(index, tag);
-        if(entry < 0){
-        //tag not found in cache (MISS)
-            response_t miss_response = this->handle_miss(address, write);
-            response.success = false;
-            response.reason = "Cache Miss | Miss:" + miss_response.reason;
-        } else {
-        //tag found in cache
-            if(this->bank[index][entry].get_mesi() != MESI_I){
-            //Block is valid (HIT)
-                if(write){
-                //write data
-                    if(this->bank[index][entry].get_mesi() == MESI_E || this->bank[index][entry].get_mesi() == MESI_M){
-                    //Only I hold this data. I can write freely.
-                        this->bank[index][entry].set_mesi(MESI_M);
-                        this->write_to_block(index,entry,offset,data,data_width);
-                        this->update_lru(index,entry);
-                        response.success = true;
-                    } else { //this means MESI == S
-                    //I am shared, I need to invalidate this block on the bus
-                        response_t bus_response = this->bus->bus_request(this, BUS_INVALIDATE, address, Block());
-                        if(bus_response.success){
-                        //other caches successfully invalidated
-                            this->bank[index][entry].set_mesi(MESI_M);
-                            this->write_to_block(index,entry,offset,data,data_width);
-                            this->update_lru(index,entry);
-                            response.success = true;
-                        } else {
-                        //waiting for bus
-                            response.success = false;
-                            response.reason = "Waiting for the bus | Bus:" + bus_response.reason;
-                        }
-                    }
-                } else {
-                //read data
-                    response.data = this->read_from_block(index,entry,offset,data_width);
-                    this->update_lru(index,entry);
-                    response.success = true;
-                }
-            } else {
-            //Block is invalid (MISS)
-                response_t miss_response = this->handle_miss(address, write);
-                response.success = false;
-                response.reason = "Cache Miss | Miss:" + miss_response.reason;
-            }
-        }
-    }
-    return response;
-}
 
 //================================
 // Read data from a cache block
@@ -201,11 +137,17 @@ uint32_t Cache::make_offset(uint32_t address){
 //  returns -1 if missed
 //================================
 int32_t Cache::find_entry(uint32_t index, uint32_t tag){
+    cout << "CACHE::" << this->get_name() << "::find_entry| entered with args: " << index << " " << tag << endl;
+    cout << "CACHE::" << this->get_name() << "::find_entry| size:" << this->bank.size() << endl;
+    cout << "CACHE::" << this->get_name() << "::find_entry| size[index]:" << this->bank[index].size() << endl;
     for(int i = 0; i < this->bank[index].size(); i++){
+        cout << "CACHE::" << this->get_name() << "::find_entry| iteration " << i << endl;
         if(this->bank[index].at(i).get_tag() == tag){
+            cout << "CACHE::" << this->get_name() << "::find_entry| RETURN, i=" << i << endl;
             return i;
         }
     }
+    cout << "CACHE::" << this->get_name() << "::find_entry| Not Found" << endl;
     return -1;
 }
 
@@ -270,6 +212,31 @@ uint32_t Cache::get_lru_entry(uint32_t index){
 }
 
 //================================
+// set the MESI status of an address (does nothing if block not present)
+//================================
+void Cache::set_remote_mesi(uint32_t address, char mesi){
+    uint32_t index = this->make_index(address);
+    uint32_t tag = this->make_tag(address);
+    int32_t entry = this->find_entry(index,tag);
+    if(entry >= 0){
+        this->bank[index][entry].set_mesi(mesi);
+    }
+}
+
+//================================
+// get the MESI status of an address (returns invalid if not found)
+//================================
+char Cache::get_remote_mesi(uint32_t address){
+    uint32_t index = this->make_index(address);
+    uint32_t tag = this->make_tag(address);
+    int32_t entry = this->find_entry(index,tag);
+    if(entry < 0){
+        return MESI_I;
+    }
+    return this->bank[index][entry].get_mesi();
+}
+
+//================================
 // Handle a cache miss
 //================================
 response_t Cache::handle_miss(uint32_t address, bool write){
@@ -316,13 +283,6 @@ response_t Cache::handle_miss(uint32_t address, bool write){
                 response.success = true;
                 Block block = bus_response.block;
                 block.set_tag(this->make_tag(address));
-                if(bus_response.data){
-                //block was sent from another cache (shared)
-                    block.set_mesi(MESI_S);
-                } else {
-                //block was sent from memory directly (exclusive)
-                    block.set_mesi(MESI_E);
-                }
                 this->bank[index][replacement_entry] = block;
                 response.reason = "Cache Miss resolved. | Bus:" + bus_response.reason;
             } else {
@@ -336,37 +296,124 @@ response_t Cache::handle_miss(uint32_t address, bool write){
 }
 
 //================================
-// set the MESI status of an address (does nothing if block not present)
-//================================
-void Cache::set_remote_mesi(uint32_t address, char mesi){
-    uint32_t index = this->make_index(address);
-    uint32_t tag = this->make_tag(address);
-    int32_t entry = this->find_entry(index,tag);
-    if(entry >= 0){
-        this->bank[index][entry].set_mesi(mesi);
-    }
-}
-
-//================================
-// get the MESI status of an address (returns invalid if not found)
-//================================
-char Cache::get_remote_mesi(uint32_t address){
-    uint32_t index = this->make_index(address);
-    uint32_t tag = this->make_tag(address);
-    int32_t entry = this->find_entry(index,tag);
-    if(entry < 0){
-        return MESI_I;
-    }
-    return this->bank[index][entry].get_mesi();
-}
-
-//================================
 // Bus Arbitrated Cache Snooping
 //================================
 response_t Cache::snooping(string bus_message, uint32_t address){
+    cout << "CACHE::" << this->get_name() << "::SNOOP| entered. args = " << bus_message << " , " << address << endl;
+    cout << "CACHE::" << this->get_name() << "::SNOOP| size=" << this->bank.size() << endl;
+    response_t response;
+    uint32_t tag = this->make_tag(address);
+    uint32_t index = this->make_index(address);
+    cout << "CACHE::" << this->get_name() << "::SNOOP| before find_entry index,tag=" << index << "," << tag << endl;
+    cout << "CACHE::" << this->get_name() << "::SNOOP| size=" << this->bank.size() << endl;
+    cout << "CACHE::" << this->get_name() << "::SNOOP| size[index]=" << this->bank[index].size() << endl;
+    int32_t entry = this->find_entry(index, tag);
+    cout << "CACHE::" << this->get_name() << "::SNOOP| after find_entry" << endl;
+
+    if(entry < 0){
+    //Requested block not found
+        response.success = false;
+        response.reason = "Block not found in " + this->cache_name;
+    } else {
+    //THIS CACHE HAS THE REQUESTED BLOCK
+        if(this->bank[index][entry].get_mesi() == MESI_I){
+        //Requested block not valid
+            response.success = false;
+            response.reason = "Block not valid in " + this->cache_name;
+        }else{
+            
+            //invalidate current data
+            if(bus_message == BUS_INVALIDATE){
+                response.success = false;
+                response.reason = "Block invalidated in " + this->cache_name;
+                this->bank[index][entry].set_mesi(MESI_I);
+            
+            //Read Request
+            }else if(bus_message == BUS_READ){
+                response.success = true;
+                response.block = this->bank[index][entry];
+                this->bank[index][entry].set_mesi(MESI_S);
+           
+            //Read with intent to modify request
+            }else if(bus_message == BUS_RWITM){
+                response.success = true;
+                response.block = this->bank[index][entry];
+                this->bank[index][entry].set_mesi(MESI_I);
+            }
+        }
+    }
+
+    return response;
+
+}
+
+//================================
+// Cache Access by CPU
+//  - controlled and timed
+//================================
+response_t Cache::cache_access(uint32_t address, uint32_t data, bool write, uint8_t data_width){
+
+    response_t response;
+    response.success = false;
+    if(this->access_counter > 0){
+        //still counting down.
+        this->access_counter--;
+        response.data = 0;
+        response.success = false;
+        response.reason = "waiting for cache access";
+    }else{
+
         uint32_t tag = this->make_tag(address);
         uint32_t index = this->make_index(address);
         uint32_t offset = this->make_offset(address);
         int32_t entry = this->find_entry(index, tag);
-}
 
+        if(entry < 0){
+        //tag not found in cache (MISS)
+            response_t miss_response = this->handle_miss(address, write);
+            response.success = false;
+            response.reason = "Cache Miss | Miss:" + miss_response.reason;
+
+        } else {
+        //tag found in cache
+            if(this->bank[index][entry].get_mesi() != MESI_I){
+            //Block is valid (HIT)
+                if(write){
+                //write data
+                    if(this->bank[index][entry].get_mesi() == MESI_E || this->bank[index][entry].get_mesi() == MESI_M){
+                    //Only I hold this data. I can write freely.
+                        this->bank[index][entry].set_mesi(MESI_M);
+                        this->write_to_block(index,entry,offset,data,data_width);
+                        this->update_lru(index,entry);
+                        response.success = true;
+                    } else { //this means MESI == S
+                    //I am shared, I need to invalidate this block on the bus
+                        response_t bus_response = this->bus->bus_request(this, BUS_INVALIDATE, address, Block());
+                        if(bus_response.success){
+                        //other caches successfully invalidated
+                            this->bank[index][entry].set_mesi(MESI_M);
+                            this->write_to_block(index,entry,offset,data,data_width);
+                            this->update_lru(index,entry);
+                            response.success = true;
+                        } else {
+                        //waiting for bus
+                            response.success = false;
+                            response.reason = "Waiting for the bus | Bus:" + bus_response.reason;
+                        }
+                    }
+                } else {
+                //read data
+                    response.data = this->read_from_block(index,entry,offset,data_width);
+                    this->update_lru(index,entry);
+                    response.success = true;
+                }
+            } else {
+            //Block is invalid (MISS)
+                response_t miss_response = this->handle_miss(address, write);
+                response.success = false;
+                response.reason = "Cache Miss | Miss:" + miss_response.reason;
+            }
+        }
+    }
+    return response;
+}

@@ -52,7 +52,9 @@ class Cache{
     // set 2 || block(2,0) | block(2,1) | block(2,2)
     // set 3 || block(3,0) | block(3,1) | block(3,2)
     //----------------------------------------------
+    public:
     vector<vector<Block> > bank;
+    private:
     Core* core;
     Bus* bus;
 
