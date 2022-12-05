@@ -151,6 +151,7 @@ response_t Bus::bus_request(Cache* requester, string bus_message, uint32_t addre
         //requester does not control the bus. wait.
         response.reason = "Member does not control the bus";
         response.success = false;
+        return response;
     }
     //should only ever get here on BUS_INVALIDATE
     response.success = true;

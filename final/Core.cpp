@@ -37,10 +37,11 @@ bool Core::process(uint32_t tick){
                 this->tick_complete = tick;
             }
             cout << this->core_name << " | Completed Final Request on tick " << tick_complete << endl;
+        return true;
         }
     } else {
         cout << this->core_name << " | Incomplete Request (Number " << this->iterator << ") on tick " << tick << ". Reason:\n\t" << response.reason << endl;
     }
     
-    return response.success;
+    return false;
 }
